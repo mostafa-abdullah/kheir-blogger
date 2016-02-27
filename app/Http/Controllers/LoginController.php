@@ -48,7 +48,7 @@ class LoginController extends Controller
 
             if ($auth->attempt($credentials)) {
                 $organization = Organization::where('email','=',$input['email'])->first();
-                Auth::login($organization);
+                auth()->guard('organization')->login($organization);
                 return redirect('/home');
             } else {
                 echo 'Error';
