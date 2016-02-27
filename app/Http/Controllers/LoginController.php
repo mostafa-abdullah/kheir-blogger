@@ -13,27 +13,27 @@ use App\Organization;
 
 class LoginController extends Controller
 {
-    public function userLogin(){
-        $input = Input::all();
-        if(count($input) > 0){
-            $auth = auth()->guard('user');
-
-            $credentials = [
-                'email' =>  $input['email'],
-                'password' =>  $input['password'],
-            ];
-
-            if ($auth->attempt($credentials)) {
-                $user = User::where('email','=',$input['email'])->first();
-                Auth::login($user);
-                return redirect('/home');
-            } else {
-                echo 'Error';
-            }
-        } else {
-            return view('auth.login');
-        }
-    }
+//    public function userLogin(){
+//        $input = Input::all();
+//        if(count($input) > 0){
+//            $auth = auth()->guard('user');
+//
+//            $credentials = [
+//                'email' =>  $input['email'],
+//                'password' =>  $input['password'],
+//            ];
+//
+//            if ($auth->attempt($credentials)) {
+//                $user = User::where('email','=',$input['email'])->first();
+//                Auth::login($user);
+//                return redirect('/home');
+//            } else {
+//                echo 'Error';
+//            }
+//        } else {
+//            return view('auth.login');
+//        }
+//    }
 
     public function organizationLogin(){
         $input = Input::all();

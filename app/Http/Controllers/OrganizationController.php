@@ -17,7 +17,7 @@ class OrganizationController extends Controller
         $organization = new Organization;
         $organization->name = $request->name;
         $organization->email = $request->email;
-        $organization->password = Hash::make($request->password);
+        $organization->password = bcrypt($request->password);
         $organization->save();
     }
 

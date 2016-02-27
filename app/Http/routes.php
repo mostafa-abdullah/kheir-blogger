@@ -33,11 +33,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     });
 
-    Route::get('/login',function(){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
-        return view('auth.login');
-    });
+
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
@@ -52,6 +48,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/logout_organization','OrganizationController@logout');
 
     Route::auth();
+    Route::get('/login',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
+        return view('auth.login');
+    });
 
     Route::get('/home', 'HomeController@index');
 });
