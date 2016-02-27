@@ -26,6 +26,7 @@
 //Route::group(['middleware' => ['web']], function () {
 //    //
 //});
+use Auth;
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
@@ -33,16 +34,20 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/login',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
         return view('auth.login');
     });
     Route::get('login_organization',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
        return view('auth.login_organization');
     });
     Route::get('/register_organization',function(){
         return view('auth.register_organization');
     });
     Route::post('/register_organization','OrganizationController@register');
-    Route::post('/login_user','LoginController@userLogin');
+//    Route::post('/login_user','LoginController@userLogin');
     Route::post('/login_organization','LoginController@organizationLogin');
     Route::get('/logout_organization','OrganizationController@logout');
 

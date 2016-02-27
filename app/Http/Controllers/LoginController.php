@@ -54,7 +54,7 @@ class LoginController extends Controller
                 echo 'Error';
             }
         } else {
-            return view('auth.login_organization');
+            return redirect('/login_organization');
         }
     }
 
