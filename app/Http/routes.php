@@ -26,7 +26,7 @@
 //Route::group(['middleware' => ['web']], function () {
 //    //
 //});
-use Auth;
+
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
