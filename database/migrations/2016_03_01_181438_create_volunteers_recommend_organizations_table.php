@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteersSendRecommendationsToOrganizationTable extends Migration
+class CreateVolunteersRecommendOrganizationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateVolunteersSendRecommendationsToOrganizationTable extends Migration
      */
     public function up()
     {
-        Schema::create('volunteers_send_recommendations_to_organization', function (Blueprint $table) {
+        Schema::create('volunteers_recommend_organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('organization_id')->unsigned();
-            $table->foreign('organization_id' , 'org_id')->references('id')->on('organizations')->onDelete('cascade');
-            $table->longText('recommendation');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
+            $table->text('recommendation');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateVolunteersSendRecommendationsToOrganizationTable extends Migration
      */
     public function down()
     {
-        Schema::drop('volunteers_send_recommendations_to_organization');
+        Schema::drop('volunteers_recommend_organizations');
     }
 }
