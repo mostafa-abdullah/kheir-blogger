@@ -54,5 +54,6 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
 
+    Route::get('profile/edit',  'OrganizationController@edit');
     Route::get('/home', 'HomeController@index');
 });

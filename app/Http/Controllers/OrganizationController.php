@@ -21,6 +21,16 @@ class OrganizationController extends Controller
         $organization->save();
     }
 
+    public function edit(){
+      if(Auth::user() || auth()->guard('organization')->check()){
+        $id = auth()->guard('organization')->id();
+        $information = Organization::findorfail($id);
+        return view('organization.edit');
+      }else{
+        return redirect('login_organization');
+      }
+    }
+
     public function logout(){
 
         Auth::guard('organization')->logout();
