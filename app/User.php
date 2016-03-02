@@ -23,4 +23,33 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get list of Organizations which the user is subscribed to.
+     */
+    public function subscribedOrganizations()
+    {
+      return $this->belongsToMany("App\Organization",
+        "volunteers_subscribe_organizations")->withTimestamps();
+
+    }
+
+    /**
+     * Subscribe to an Organization.
+     */
+    public function subscribe($org_id)
+    {
+      return $this->subscribedOrganizations()->attach($org_id);
+
+    }
+
+    /**
+     * Unsubscribe from an Organization.
+     */
+    public function unsubscribe($org_id)
+    {
+      return $this->subscribedOrganizations()->detach($org_id);
+
+    }
+
 }
