@@ -37,18 +37,18 @@ class User extends Authenticatable
     /**
      * Subscribe to an Organization.
      */
-    public function subscribe($org_id)
+    public function subscribe($organization_id)
     {
-      return $this->subscribedOrganizations()->attach($org_id);
+      return $this->subscribedOrganizations()->attach($organization_id);
 
     }
 
     /**
      * Unsubscribe from an Organization.
      */
-    public function unsubscribe($org_id)
+    public function unsubscribe($organization_id)
     {
-      return $this->subscribedOrganizations()->detach($org_id);
+      return $this->subscribedOrganizations()->detach($organization_id);
 
     }
 
