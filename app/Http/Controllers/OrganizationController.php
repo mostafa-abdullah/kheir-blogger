@@ -25,7 +25,7 @@ class OrganizationController extends Controller
       if(Auth::user() || auth()->guard('organization')->check()){
         $id = auth()->guard('organization')->id();
         $information = Organization::findorfail($id);
-        return view('organization.edit');
+        return view('organization.edit' , compact('information'));
       }else{
         return redirect('login_organization');
       }
