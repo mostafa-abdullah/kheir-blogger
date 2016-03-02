@@ -23,4 +23,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function show($id)
+    {
+
+        $volunteer = self::findOrFail($id);
+        return view('volunteer.show', compact('volunteer'));
+    }
 }
