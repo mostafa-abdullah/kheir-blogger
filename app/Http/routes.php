@@ -37,9 +37,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
+        if(isset($errors))
+            var_dump($errors);
        return view('auth.login_organization');
     });
     Route::get('/register_organization',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
         return view('auth.register_organization');
     });
     Route::post('/register_organization','OrganizationController@register');

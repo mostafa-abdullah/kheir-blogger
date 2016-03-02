@@ -24,9 +24,9 @@ class RegisterOrganizationRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'email|required',
-            'password' => 'required|confirmed'
+            'name' => 'required|max:255',
+            'email' => 'email|required|unique:users|unique:organizations|max:255',
+            'password' => 'required|confirmed|min:6'
         ];
     }
 }
