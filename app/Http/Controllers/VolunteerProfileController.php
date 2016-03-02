@@ -11,8 +11,6 @@ class VolunteerProfileController extends Controller
 {
     public function show($id)
     {
-
-        $volunteer = User::findOrFail($id);
-        return view('volunteer.show', compact('volunteer'));
+        return User::show($id);
     }
 }
