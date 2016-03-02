@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Organization;
 use Hash;
 use Auth;
+use Requests;
+
 
 class OrganizationController extends Controller
 {
@@ -22,7 +24,7 @@ class OrganizationController extends Controller
     }
 
     public function edit(){
-      if(Auth::user() || auth()->guard('organization')->check()){
+      if(auth()->guard('organization')->check()){
         $id = auth()->guard('organization')->id();
         $information = Organization::findorfail($id);
         return view('organization.edit' , compact('information'));
@@ -30,6 +32,17 @@ class OrganizationController extends Controller
         return redirect('login_organization');
       }
     }
+    public function update(){
+
+      if(auth()->guard('organization')->check()  ){
+        $id = auth()->guard('organization')->id();
+        $information = Organization::findorfail($id);
+        return view('organization.edit' , compact('information'));
+      }else{
+        return redirect('login_organization');
+      }
+    }
+
 
     public function logout(){
 

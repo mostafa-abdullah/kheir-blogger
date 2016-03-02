@@ -55,5 +55,6 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('profile/edit',  'OrganizationController@edit');
+    Route::put('profile',  'OrganizationController@update');
     Route::get('/home', 'HomeController@index');
 });
