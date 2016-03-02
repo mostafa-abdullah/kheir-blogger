@@ -38,6 +38,7 @@ class User extends Authenticatable
         return view('volunteer.show', compact('volunteer'));
     }
 
+
     /**
      * Get list of Organizations which the user is subscribed to.
      */
@@ -65,6 +66,5 @@ class User extends Authenticatable
       return $this->subscribedOrganizations()->detach($organization_id);
 
     }
-
 
 }
