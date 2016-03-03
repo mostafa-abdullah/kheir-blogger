@@ -54,7 +54,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
     Route::resource('organization', 'OrganizationController', ['only' => [
-        'update', 'edit'
+        'update', 'edit' ,'store'
     ]]);
     Route::get('/home', 'HomeController@index');
 });

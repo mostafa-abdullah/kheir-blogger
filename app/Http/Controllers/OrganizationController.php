@@ -42,7 +42,7 @@ class OrganizationController extends Controller
     *
     * @return redirect
     */
-    public function update($id , Request $request){
+    public function update($id ,Requests\OrganizationRequest $request){
 
       $organization = Organization::findorfail($id);
       $organization->update($request->all());
