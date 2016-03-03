@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-  {!! Form::model($organization,array('action' =>array('OrganizationController@update',$organization->id))) !!}
+  //add  'method' => 'put' to action
+  {!! Form::model($organization,array( 'method' => 'put','action' =>array('OrganizationController@update',$organization->id))) !!}
     <div class="form-group">
       {!!Form::label('solegan', 'Organization solegan :');!!}
       {!!Form::text('solegan',null,array('class' => 'form-control'));!!}

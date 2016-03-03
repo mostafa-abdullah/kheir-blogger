@@ -22,15 +22,13 @@ class OrganizationController extends Controller
         $organization->save();
     }
 
-    public function store(){
-      if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
-        $organization = Organization::findorfail($id);
-        return view('organization.edit' , compact('organization'));
-      }else{
-        return redirect('login_organization');
-      }
-    }
+    /**
+    * edit to edit the profile of organization.
+    *
+    * @return view
+    */
     public function edit($id){
+
       if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
         $organization = Organization::findorfail($id);
         return view('organization.edit' , compact('organization'));
@@ -39,17 +37,17 @@ class OrganizationController extends Controller
       }
     }
 
-//     $flight = App\Flight::find(1);
-//
-// $flight->name = 'New Flight Name';
-//
-// $flight->save();
-    public function update($id , Request $rq){
+    /**
+    * update to update the profile of organization.
+    *
+    * @return redirect
+    */
+    public function update($id , Request $request){
 
-      return "g";
-
+      $organization = Organization::findorfail($id);
+      $organization->update($request->all());
+      return redirect('organization/'.$id);
     }
-//
 
     public function logout(){
 

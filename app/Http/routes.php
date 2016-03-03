@@ -53,16 +53,8 @@ Route::group(['middleware' => ['web']], function () {
             return redirect('home');
         return view('auth.login');
     });
-
-    // Route::get('profile/edit',  'OrganizationController@edit');
-    // Route::resource('organization', 'OrganizationController');
     Route::resource('organization', 'OrganizationController', ['only' => [
-        'update', 'edit' ,'store'
+        'update', 'edit'
     ]]);
-    // Route::put('profile',  'OrganizationController@update');
-    // Route::post('profile',  'OrganizationController@update');
-
-    // Route::patch('profile',  'OrganizationController@update');
-
     Route::get('/home', 'HomeController@index');
 });
