@@ -13,12 +13,15 @@ use Auth;
 class OrganizationController extends Controller
 {
     public function register(Requests\RegisterOrganizationRequest $request){
-
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
         $organization = new Organization;
         $organization->name = $request->name;
         $organization->email = $request->email;
         $organization->password = bcrypt($request->password);
         $organization->save();
+        auth()->guard('organization')->login($organization);
+        return redirect('/home');
     }
 
     public function logout(){

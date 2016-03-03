@@ -36,6 +36,8 @@ class LoginController extends Controller
 //    }
 
     public function organizationLogin(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('home');
         $input = Input::all();
         if(count($input) > 0){
             $auth = auth()->guard('organization');
@@ -51,7 +53,7 @@ class LoginController extends Controller
                 auth()->guard('organization')->login($organization);
                 return redirect('/home');
             } else {
-                echo 'Error';
+                return redirect('/login_organization')->withErrors(['Login'=>'These credentials do not match our records.']);
             }
         } else {
             return redirect('/login_organization');
