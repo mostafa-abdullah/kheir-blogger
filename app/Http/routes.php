@@ -59,4 +59,5 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/home', 'HomeController@index');
+    Route::get('event/{id}','EventController@show');
 });
