@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Organization;
 use Hash;
 use Auth;
-use Requests;
 
 
 class OrganizationController extends Controller
@@ -23,26 +22,34 @@ class OrganizationController extends Controller
         $organization->save();
     }
 
-    public function edit(){
-      if(auth()->guard('organization')->check()){
-        $id = auth()->guard('organization')->id();
-        $information = Organization::findorfail($id);
-        return view('organization.edit' , compact('information'));
+    public function store(){
+      if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
+        $organization = Organization::findorfail($id);
+        return view('organization.edit' , compact('organization'));
       }else{
         return redirect('login_organization');
       }
     }
-    public function update(){
-
-      if(auth()->guard('organization')->check()  ){
-        $id = auth()->guard('organization')->id();
-        $information = Organization::findorfail($id);
-        return view('organization.edit' , compact('information'));
+    public function edit($id){
+      if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
+        $organization = Organization::findorfail($id);
+        return view('organization.edit' , compact('organization'));
       }else{
         return redirect('login_organization');
       }
     }
 
+//     $flight = App\Flight::find(1);
+//
+// $flight->name = 'New Flight Name';
+//
+// $flight->save();
+    public function update($id , Request $rq){
+
+      return "g";
+
+    }
+//
 
     public function logout(){
 
