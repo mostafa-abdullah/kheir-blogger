@@ -58,5 +58,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
 
+    Route::get('/notifications', 'NotificationsController@show');
+
     Route::get('/home', 'HomeController@index');
 });
