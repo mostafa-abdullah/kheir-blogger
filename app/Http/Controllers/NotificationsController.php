@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,8 +16,15 @@ class NotificationsController extends Controller
 	}
 
 
-    public function show()
+    /**
+     * show all notifications for the authenticated user.
+     * @return string
+     * @internal param $request
+     */
+	public function show()
     {
-    	return 'NotificationsController';
+		$notifications = Auth::user()->notifications()->unseen()->get();
+
+    	return $notifications;
     }
 }

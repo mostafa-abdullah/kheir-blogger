@@ -52,4 +52,14 @@ class User extends Authenticatable
 
     }
 
+    /**
+     * get all notifications associated with this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification');
+    }
+
 }
