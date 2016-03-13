@@ -59,5 +59,5 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/home', 'HomeController@index');
-    Route::get('volunteer/{id}','VolunteerProfileController@show');
+    Route::get('volunteer/{id}','VolunteerController@show');
 });
