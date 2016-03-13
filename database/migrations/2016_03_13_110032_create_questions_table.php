@@ -11,7 +11,8 @@ class CreateQuestionsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   
+        // A question is identified by its id, event's id and the organization's id.
         Schema::create('questions', function (Blueprint $table)
         {   
             $table->increments('id');
@@ -20,9 +21,12 @@ class CreateQuestionsTable extends Migration
             ->onDelete('cascade');
             $table->integer('organization_id')->unsigned()->index();
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
-            $table->text('question');
-            $table->text('answer');
-            $table->dateTime('answered_at');
+            $table->integer('event_id')->unsigned()->index();
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->string('question');
+            $table->text('question_body')->nullable();
+            $table->text('answer')->nullable();
+            $table->dateTime('answered_at')->nullable();
             $table->timestamps();
         });
     }
