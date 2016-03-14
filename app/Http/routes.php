@@ -58,7 +58,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
     Route::resource('organization', 'OrganizationController', ['only' => [
-        'update', 'edit' ,'store'
+        'update', 'edit','show'
     ]]);
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');

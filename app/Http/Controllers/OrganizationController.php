@@ -41,12 +41,22 @@ class OrganizationController extends Controller
     }
 
     /**
+    * show to show the profile of organization.
+    *
+    * @return view
+    */
+    public function show($id){
+      return "The profile";
+
+    }
+
+
+    /**
     * update to update the profile of organization.
     *
     * @return redirect
     */
     public function update($id ,Requests\OrganizationRequest $request){
-
       $organization = Organization::findorfail($id);
       $organization->update($request->all());
       return redirect('organization/'.$id);
