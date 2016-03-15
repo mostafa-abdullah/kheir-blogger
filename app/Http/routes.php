@@ -61,4 +61,6 @@ Route::group(['middleware' => ['web']], function () {
     ]]);
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');
+
+    Route::get('events/create','EventController@create');
 });
