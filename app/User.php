@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
     /**
      * Get list of Organizations which the user is subscribed to.
      */

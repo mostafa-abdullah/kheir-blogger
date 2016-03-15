@@ -73,11 +73,14 @@
                                 </button>
                             </div>
                         </div>
+                        @include('errors')  
                     </form>
                 </div>
             </div>
         </div>
+
     </div>
+
 </div>
-    @include('errors')
+    
 @endsection
