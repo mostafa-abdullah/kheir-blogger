@@ -11,5 +11,13 @@
        <li>{{ $volunteer -> email }}</li>
         <li>{{ $volunteer ->  id}}</li>
     </ul>
+
+    <h1>Events</h1>
+    <ul>
+        @foreach($events as $event)
+            <li>{{ $event }}</li>
+        @endforeach
+    </ul>
+
 </body>
 </html>

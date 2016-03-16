@@ -53,4 +53,14 @@ class User extends Authenticatable
 
     }
 
+    /**
+    * Get events attended by user
+    */
+    public function events()
+    {
+      return $this->belongsToMany('App\Event');
+    }
+
+
+
 }
