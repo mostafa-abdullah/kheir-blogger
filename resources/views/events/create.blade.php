@@ -20,11 +20,17 @@
 		</div>
 		<div class="form-group">	
 			{!! Form::label('Timing','Timing:');!!}
-			{!! Form::input('datetime','Timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
+			{!! Form::input('timing','Timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
 		</div>
 		<div class="form-group">
 			{!! Form::submit('Create Event',array('class'=>'btn btn-default'));!!}
 		</div>
 	{!! Form::close() !!}
-
+	@if ($errors->any())
+		<div class="alert alert-danger">
+			@foreach($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</div>
+	@endif
 @stop
