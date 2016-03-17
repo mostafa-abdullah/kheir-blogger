@@ -50,13 +50,17 @@ Route::group(['middleware' => ['web']], function () {
 //    Route::post('/login_user','LoginController@userLogin');
     Route::post('/login_organization','LoginController@organizationLogin');
     Route::get('/logout_organization','OrganizationController@logout');
-
     Route::auth();
     Route::get('/login',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
         return view('auth.login');
     });
-
+    Route::resource('organization', 'OrganizationController', ['only' => [
+        'update', 'edit','show'
+    ]]);
     Route::get('/home', 'HomeController@index');
+    Route::get('volunteer/{id}','VolunteerController@show');
+
+    Route::get('events/create','EventController@create');
 });
