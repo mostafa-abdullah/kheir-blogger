@@ -53,4 +53,8 @@ class User extends Authenticatable
 
     }
 
+    public function notifications (){
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+    }
+
 }
