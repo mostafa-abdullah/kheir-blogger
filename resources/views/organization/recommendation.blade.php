@@ -6,9 +6,8 @@
 
 @section('content')
 
-    <h1>Send us a recommendation</h1>
 
-    {!! Form::open(['action' => 'OrganizationController@storeRecommendation']) !!}
+    {!! Form::open(['action' => ['OrganizationController@storeRecommendation' , $id]]) !!}
 
         <div class = "form-group">
             {!! Form::label('recommendation' , 'Recommendation') !!}
@@ -22,5 +21,6 @@
 
     {!! Form::close() !!}
 
+    @include('errors')
 
 @stop
