@@ -20,4 +20,9 @@ class Organization extends Authenticatable
 
     }
 
+    public function recommendations()
+    {
+        $this->hasMany('App\Recommendation');
+    }
+
 }
