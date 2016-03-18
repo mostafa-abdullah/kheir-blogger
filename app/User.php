@@ -57,8 +57,26 @@ class User extends Authenticatable
 
     }
 
+    /**
+     * users can receive many notifications and there are property read which specifies if user read notification or still not
+     * @return $this
+     */
+
     public function notifications (){
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps()->withPivot('read');
     }
+
+    /*
+     * users can volunteer in many events
+     *
+     */
+
+
+    public function events (){
+        return $this->belongsToMany('App\Event','volunteerInEvent')->withTimestamps()->withPivot('volunteering_type');
+
+    }
+
+
 
 }
