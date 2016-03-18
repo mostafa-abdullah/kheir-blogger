@@ -63,4 +63,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('volunteer/{id}','VolunteerController@show');
 
     Route::get('events/create','EventController@create');
+
+
+    //Recommendation Routes!
+    Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organization/{id}' , 'OrganizationController@storeRecommendation');
 });
