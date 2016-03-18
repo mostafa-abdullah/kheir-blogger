@@ -10,31 +10,37 @@ class Question extends Model
 	*	Attributes to be mass filled.
 	*/
     protected $fillable = [
-        'user_id', 'organization_id', 'event_id', 'question', 
-        'question_body', 'answer', 'answered_at'
+         'question', 'question_body', 'answer', 'answered_at'
     ];
     /**
     *	Attribute(s) not to be mass filled.
     */
-    protected $guarded = array('id');
+    protected $guarded = array('id','user_id', 'organization_id', 'event_id',);
+
+    protected $dates = ['answered_at']; 
 
     /**
     *	A question belongs to a single event.
     */
     public function event()
     {
-    	return $this->belongsTo('Event');
+    	return $this->belongsTo('App\Event');
     }
 
     /**
     *	Fetches the answered questions that would be presented in the events page.
     */
-    public function showQuestions()
+    public function scopeAnswered($query) { 
+    	$query->whereNotNull('answer'); 
+    }
+
+    /**
+    *	Fetches the unanswered questions to be displayed to the organization with 
+    *	the intention to answer them.
+    */
+    public function scopeUnanswered($query)
     {
-    	// may be changed to take(10) depending on the layout of the 'event' view.
-    	return DB::table('questions')
-    					->whereNotNull('answer')
-    					->get();
+    	$query->whereNull('answer');
     }
 
     /**
@@ -43,15 +49,5 @@ class Question extends Model
     public function showQuestion($id)
     {
     	return Question::find($id);
-    }
-
-    /**
-    *	Adds a new question to the database by taking individual attributes.
-    */
-    public function askQuestion($user_id, $organization_id, $event_id,
-    	$question, $question_body)
-    {
-    	Question::create(array('user_id' => $user_id, 'organization_id' => $organization_id, 'event_id' => $event_id, 'question' => $question,
-    		'question_body' => $question_body));
     }
 }
