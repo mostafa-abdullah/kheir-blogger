@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Users represent the volunteers
+ */
 class User extends Authenticatable
 {
+
     /**
      * The attributes that are mass assignable.
      *
