@@ -17,8 +17,8 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
-
-        return view('events.event', compact('event'));
+        $announcement = ['1st announcement','2nd announcement','3rd announcement'];
+        return view('events.event', compact('event','announcement'));
     }
 
 }
