@@ -10,7 +10,6 @@ use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    //
 
 	/**
     *	Adds a new question to the database.
@@ -19,7 +18,7 @@ class EventController extends Controller
     {
     	Question::create(Request::all()$input);
     }
-
+    
     public function answerQuestion()
     {
     	$input = Request::all();
@@ -27,4 +26,8 @@ class EventController extends Controller
 
     	Question::create($input);
     }
+	public function create()
+	{
+		return view('events.create');
+	}
 }
