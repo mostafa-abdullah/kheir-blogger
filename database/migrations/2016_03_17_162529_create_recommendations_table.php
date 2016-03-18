@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteersRecommendOrganizationsTable extends Migration
+class CreateRecommendationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -30,6 +30,6 @@ class CreateVolunteersRecommendOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('volunteers_recommend_organizations');
+        Schema::drop('recommendations');
     }
 }

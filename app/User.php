@@ -41,7 +41,6 @@ class User extends Authenticatable
     public function subscribe($organization_id)
     {
       return $this->subscribedOrganizations()->attach($organization_id);
-
     }
 
     /**
@@ -53,32 +52,10 @@ class User extends Authenticatable
 
     }
 
-    /**
-     * Get list of Organizations which the user sent recommendations to.
-     */
-    public function recommendedOrganizations()
+    public function recommendations()
     {
-        return $this->belongsToMany("Organization",
-            "volunteers_recommend_organizations")->withTimestamps();
-
+        return $this->hasMany('App\Recommendation');
     }
 
-    /**
-     * send recommendation to an Organization.
-     */
-    public function recommend($organization_id)
-    {
-        return $this->recommendedOrganizations()->attach($organization_id);
-
-    }
-
-    /**
-     * Delete recommendation sent to Organization.
-     */
-    public function deleteRecommendation($organization_id)
-    {
-        return $this->recommendedOrganizations()->detach($organization_id);
-
-    }
 
 }

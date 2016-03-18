@@ -20,13 +20,4 @@ class Organization extends Authenticatable
 
     }
 
-    /**
-     * Get list of Users sent recommendations to an Organization.
-     */
-    public function usersSentRecommendations()
-    {
-      return $this->belongsToMany("App\User",
-        "volunteers_recommend_organizations")->withTimestamps();
-
-    }
 }
