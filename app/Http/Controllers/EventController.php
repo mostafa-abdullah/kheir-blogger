@@ -9,6 +9,7 @@ use App\Http\Requests;
 
 class EventController extends Controller
 {
+
     /**
      * show method to show an event
      * @param $id : the id of a certain event
@@ -18,7 +19,13 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $announcement = ['1st announcement','2nd announcement','3rd announcement'];
-        return view('events.event', compact('event','announcement'));
+        return view('event.event', compact('event','announcement'));
     }
+
+
+	public function create()
+	{
+		return view('event.create');
+	}
 
 }
