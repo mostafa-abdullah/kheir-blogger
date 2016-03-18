@@ -17,6 +17,10 @@ class Organization extends Authenticatable
     {
       return $this->belongsToMany("App\User",
         "volunteers_subscribe_organizations")->withTimestamps();
+    }
 
+    public function events()
+    {
+      return $this->hasMany('App\Event');
     }
 }

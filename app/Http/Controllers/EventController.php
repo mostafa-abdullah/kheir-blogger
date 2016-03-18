@@ -14,7 +14,7 @@ class EventController extends Controller
 	{
 		return view('event.create');
 	}
-	public function store(Requests\CreateEventRequest $request)
+	public function store(Requests\EventRequest $request)
 	{
 		
 		Event::createEvent($request);

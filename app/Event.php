@@ -21,4 +21,9 @@ class Event extends Model
     {
         return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
     }
+
+    public function organization()
+    {
+    	return $this->belongsTo('App\Organization');
+    }
 }

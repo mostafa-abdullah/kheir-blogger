@@ -5,7 +5,7 @@
 @section('content')
 
 	<h1> Create A New Event </h1>
-	{!! Form::open() !!}
+	{!! Form::open(['url' => 'event']) !!}
 		<div class="form-group">	
 			{!! Form::label('name','Event Name:');!!}
 			{!! Form::text('name',null,array('class' => 'form-control'));!!}
