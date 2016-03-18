@@ -6,16 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-	/**
-	*	Attributes to be mass filled.
-	*/
-    protected $fillable = [
-         'question', 'question_body', 'answer', 'answered_at'
-    ];
+	
     /**
-    *	Attribute(s) not to be mass filled.
+    *	Attribute not to be mass filled.
     */
-    protected $guarded = array('id','user_id', 'organization_id', 'event_id',);
+    protected $guarded = array('id','user_id', 'event_id',);
 
     protected $dates = ['answered_at']; 
 
