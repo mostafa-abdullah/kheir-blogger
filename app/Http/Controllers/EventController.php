@@ -10,10 +10,9 @@ use App\Event;
 
 class EventController extends Controller
 {
-    //
 	public function create()
 	{
-		return view('events.create');
+		return view('event.create');
 	}
 	public function store(Requests\CreateEventRequest $request)
 	{

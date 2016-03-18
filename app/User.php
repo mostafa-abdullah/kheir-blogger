@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Users represent the volunteers
+ */
 class User extends Authenticatable
 {
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,6 +55,10 @@ class User extends Authenticatable
     {
       return $this->subscribedOrganizations()->detach($organization_id);
 
+    }
+
+    public function notifications (){
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
     }
 
 }

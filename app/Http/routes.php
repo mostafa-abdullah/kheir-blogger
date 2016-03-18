@@ -23,17 +23,28 @@
 |
 */
 
-//Route::group(['middleware' => ['web']], function () {
-//    //
-//});
-
-
 Route::group(['middleware' => ['web']], function () {
+
+    /**
+     *	Welcome page (for not logged-in volunteers/organizations)
+     */
     Route::get('/', function () {
+        if(Auth::user() || auth()->guard('organization')->check())
+            return view('home');
         return view('welcome');
     });
 
-
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+|
+| These routes are related to the authentication of volunteers and organizations
+|
+*/
+    /**
+     *	Login page for organizations
+     */
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
@@ -41,27 +52,87 @@ Route::group(['middleware' => ['web']], function () {
             var_dump($errors);
        return view('auth.login_organization');
     });
+
+    /**
+     *	Login an organization with a request containing email and password
+     */
+    Route::post('/login_organization','LoginController@organizationLogin');
+
+    /**
+     * 	Register page for organizations
+     */
     Route::get('/register_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
         return view('auth.register_organization');
     });
+
+    /**
+     *	Register an organization with a request containing name, email and password
+     */
     Route::post('/register_organization','OrganizationController@register');
-//    Route::post('/login_user','LoginController@userLogin');
-    Route::post('/login_organization','LoginController@organizationLogin');
+
+    /**
+     *	Logout organization
+     */
     Route::get('/logout_organization','OrganizationController@logout');
+
+    /**
+     *	Authentication related to the user (volunteer)
+     */
     Route::auth();
+
+    /**
+     *	Login a user(volunter) - Added to guard from a logged in user
+     *	or organization
+     */
     Route::get('/login',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
         return view('auth.login');
     });
-    Route::resource('organization', 'OrganizationController', ['only' => [
-        'update', 'edit','show'
-    ]]);
-    Route::get('/home', 'HomeController@index');
-    Route::get('volunteer/{id}','VolunteerController@show');
 
-    Route::get('events/create','EventController@create');
-    Route::post('events/create','EventController@store');
+/*
+|--------------------------------------------------------------------------
+| Functional Routes
+|--------------------------------------------------------------------------
+|
+| These routes are related to the main actions of the applications
+| associated with volunteers, organizations or events.
+| For the resource, use the following functions:
+|       index   => view page for all models
+|       show    => view page for a single model
+|       create  => view page for creating a model
+|       store   => create a model with the passed request
+|       edit    => view page for updaing a model
+|       update  => update a model with the passed request
+|       destroy => delete a model
+*/
+    /**
+     * Routes related to the organization
+     */
+    Route::resource('organizations', 'OrganizationController', ['only' => [
+        'show', 'edit','update'
+    ]]);
+
+    /**
+     *	Homepage (for logged-in volunteers/organizations)
+     */
+    Route::get('home', 'HomeController@index');
+
+    /**
+     *	Routes related to the volunteer
+     */
+    Route::resource('volunteer','VolunteerController', ['only' => [
+        'show'
+    ]]);
+
+
+    /**
+     *	Routes related to the event
+     */
+     Route::resource('event','EventController', ['only' => [
+         'create'
+     ]]);
+
 });
