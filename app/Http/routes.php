@@ -131,8 +131,8 @@ Route::group(['middleware' => ['web']], function () {
 
 
     //Recommendation Routes!
-    Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
-    Route::post('organization/{id}' , 'OrganizationController@storeRecommendation');
+    Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
 
     /**
      *	Routes related to the event

@@ -92,7 +92,7 @@ class OrganizationController extends Controller
         $recommendation->organization_id = $id;
         $recommendation->recommendation = $request->recommendation;
         $recommendation->save();
-        return redirect('organization/'.$id);
+        return redirect('organizations/'.$id);
     }
 
 
