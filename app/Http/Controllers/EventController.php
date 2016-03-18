@@ -18,14 +18,16 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
-        $announcement = ['1st announcement','2nd announcement','3rd announcement'];
-        return view('event.event', compact('event','announcement'));
+        $announcement = ['1st announcement', '2nd announcement', '3rd announcement'];
+        $questions = [['question' => 'When the event will be Held', 'answer' => 'In 12 pm sharp'], ['question' => 'When the event will be Held', 'answer' => 'In 12 pm sharp']];
+        $reviews=[['writen_by'=>'HOssam','Body'=>'la bla bla'],['writen_by'=>'Ahmed','Body'=>'It is very Best =)']];
+        return view('event.event', compact('event', 'announcement', 'questions','reviews'));
     }
 
 
-	public function create()
-	{
-		return view('event.create');
-	}
+    public function create()
+    {
+        return view('event.create');
+    }
 
 }

@@ -4,12 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "81e96ce3885b0d4066ae384d7a90aaf1",
-    "content-hash": "8b1485987e7c5949da82435d403e52e8",
-=======
-    "hash": "537d863bd06eb0cf155f96e501acf359",
->>>>>>> bca223b96a09591267919b6d91b9325bf72c3743
+    "hash": "59d2e1449618c70606869d73fdc7ebcf",
+    "content-hash": "a1beee763d451b89bd40daef56392ca1",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -979,18 +975,6 @@
         },
         {
             "name": "monolog/monolog",
-<<<<<<< HEAD
-            "version": "1.18.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
-=======
             "version": "1.18.1",
             "source": {
                 "type": "git",
@@ -1001,7 +985,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Seldaek/monolog/zipball/a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
                 "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
->>>>>>> bca223b96a09591267919b6d91b9325bf72c3743
                 "shasum": ""
             },
             "require": {
@@ -1066,11 +1049,7 @@
                 "logging",
                 "psr-3"
             ],
-<<<<<<< HEAD
-            "time": "2016-03-01 18:00:40"
-=======
             "time": "2016-03-13 16:08:35"
->>>>>>> bca223b96a09591267919b6d91b9325bf72c3743
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1216,16 +1195,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v1.2.2",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "b3313b618f4edd76523572531d5d7e22fe747430"
+                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b3313b618f4edd76523572531d5d7e22fe747430",
-                "reference": "b3313b618f4edd76523572531d5d7e22fe747430",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/ff76e1a660669bb56ba74ba0583fd8d41417bf39",
+                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1239,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-03-11 19:54:08"
+            "time": "2016-03-17 16:11:57"
         },
         {
             "name": "psr/log",

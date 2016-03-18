@@ -31,5 +31,32 @@
                  </ul>
              @endforeach
         </div>
+
+        <div class="col-md-5">
+            <h3>Questions and answers</h3>
+            @foreach($questions as $question)
+                <ul>
+                    <li>{{$question['question'] .'?'}}</li>
+                     <h4>{{$question['answer']}}</h4>
+                </ul>
+            @endforeach
+        </div>
+        <div class="col-md-5">
+            <h3>Reviews</h3>
+            @foreach($reviews as $review)
+                <div class="jumbotron">
+
+                    <h3>
+                        {{$review['Body']}}
+                    </h3>
+                        <h5>By {{$review['writen_by']}}</h5>
+
+                </div>
+            @endforeach
+        </div>
+
+        <div class ="col-md-5">
+
+        </div>
     </div>
 @stop
