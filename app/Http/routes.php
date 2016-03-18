@@ -133,4 +133,14 @@ Route::group(['middleware' => ['web']], function () {
      Route::resource('event','EventController', ['only' => [
          'show'
      ]]);
+
+    /**
+     *	Routes related to the organization_review
+     */
+
+        Route::get('organizations/{id}/review','OrganizationReviewController@create');
+      //  Route::post('organizations/{id}','OrganizationReviewController@store');
+
+    Route::post('/organizations/{id}/review','OrganizationReviewController@store');
+
 });
