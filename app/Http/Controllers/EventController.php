@@ -46,6 +46,7 @@ class EventController extends Controller
             $question->answered_at = $input['answered_at'];
             $question->save();
             // redirect the organization to the page that contains the un-answered questions
+            //notify the asker using his 'user_id'
         }else{
             //redirect to the event page
         }
