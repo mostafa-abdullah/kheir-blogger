@@ -22,7 +22,7 @@ class OrganizationController extends Controller
         $organization->password = bcrypt($request->password);
         $organization->save();
         auth()->guard('organization')->login($organization);
-        return redirect('/home');
+        return redirect('home');
     }
 
     /**
