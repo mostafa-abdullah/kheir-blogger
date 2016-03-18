@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterOrganizationRequest;
 use App\Organization;
-use Hash;
 use Auth;
+use Hash;
 
 
 class OrganizationController extends Controller
 {
-    public function register(Requests\RegisterOrganizationRequest $request){
+    public function register(RegisterOrganizationRequest $request){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
         $organization = new Organization;
@@ -26,10 +24,11 @@ class OrganizationController extends Controller
     }
 
     /**
-    * edit to edit the profile of organization.
-    *
-    * @return view
-    */
+     * edit to edit the profile of organization.
+     *
+     * @param $id
+     * @return view
+     */
     public function edit($id){
 
       if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
@@ -47,7 +46,6 @@ class OrganizationController extends Controller
     */
     public function show($id){
       return "The profile";
-
     }
 
 

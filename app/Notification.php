@@ -17,6 +17,26 @@ class Notification extends Model
     }
 
     /**
+     * Get all the not read notifications.
+     * @param $query
+     * @return mixed
+     */
+    public function scopeUnread($query)
+    {
+        return $query->where('read', '=', '0');
+    }
+
+    /**
+     * Get all the read notifications.
+     * @param $query
+     * @return mixed
+     */
+    public function scopeRead($query)
+    {
+        return $query->where('read', '=', '1');
+    }
+
+    /**
      *  Users can receive many notifications
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -28,7 +48,8 @@ class Notification extends Model
     /**
      *
      */
-    public function addNotification ($inputUsersArray , $event , $Description , $link){
+    public function addNotification($inputUsersArray , $event , $Description , $link)
+    {
 
 
         /**

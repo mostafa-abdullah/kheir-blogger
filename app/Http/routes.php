@@ -104,7 +104,7 @@ Route::group(['middleware' => ['web']], function () {
 |       show    => view page for a single model
 |       create  => view page for creating a model
 |       store   => create a model with the passed request
-|       edit    => view page for updaing a model
+|       edit    => view page for updating a model
 |       update  => update a model with the passed request
 |       destroy => delete a model
 */
@@ -133,4 +133,6 @@ Route::group(['middleware' => ['web']], function () {
      Route::resource('event','EventController', ['only' => [
          'show'
      ]]);
+
+    Route::get('notifications', 'NotificationsController@index');
 });

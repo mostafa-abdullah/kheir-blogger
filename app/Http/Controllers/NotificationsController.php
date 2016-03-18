@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Notification;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Auth;
 
@@ -21,9 +18,14 @@ class NotificationsController extends Controller
      * @return string
      * @internal param $request
      */
-	public function show()
+	public function index()
     {
-		$notifications = Auth::user()->notifications()->unseen()->get();
+		$notifications = Auth::user()->notifications()->unread()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 1;
+            $notification->push();
+        }
 
     	return $notifications;
     }

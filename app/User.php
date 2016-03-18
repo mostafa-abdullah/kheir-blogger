@@ -54,11 +54,11 @@ class User extends Authenticatable
     public function unsubscribe($organization_id)
     {
       return $this->subscribedOrganizations()->detach($organization_id);
-
     }
 
-    public function notifications(){
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+    public function notifications()
+    {
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps()->withPivot('read');
     }
 
 }
