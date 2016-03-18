@@ -19,8 +19,10 @@ class VolunteerController extends Controller
     {
 
         $volunteer = User::findOrFail($id);
-        $events = Event::lists('name');
-        return view('volunteer.show', compact('volunteer','events'));
+
+
+
+        return view('volunteer.show', compact('volunteer'));
     }
 
 }

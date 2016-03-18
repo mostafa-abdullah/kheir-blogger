@@ -3,28 +3,27 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventsUsersTable extends Migration
+class CreateEventsNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * migration for event_notification table
      *
      * @return void
      */
     public function up()
     {
-        /**
-         *Pivot table for event user relation
-         */
-        Schema::create('event_user',function(Blueprint $table)
-        {
-            $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        Schema::create('event_notification', function (Blueprint $table) {
+            $table->increments('id');
 
             $table->integer('event_id')->unsigned()->index();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
 
-            $table->timestamps();
+            $table->integer('notification_id')->unsigned()->index();
+            $table->foreign('notification_id')->references('id')->on('notifications')->onDelete('cascade');
 
+            $table->timestamps();
         });
     }
 
@@ -35,6 +34,6 @@ class CreateEventsUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('event_user');
+        Schema::drop('event_notification');
     }
 }

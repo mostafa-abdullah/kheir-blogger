@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Users represent the volunteers
+ */
 class User extends Authenticatable
 {
+
     /**
      * The attributes that are mass assignable.
      *
@@ -53,14 +57,28 @@ class User extends Authenticatable
 
     }
 
+
     /**
     * Get events attended by user
     */
     public function events()
     {
-      return $this->belongsToMany('App\Event');
+      return $this->belongsToMany('App\Event')->withTimestamps();
     }
 
 
 
+
+    public function notifications (){
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+    }
+
+    /**
+     * Get reviews made by user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reviews()
+    {
+        return $this->hasMany('App\Review');
+    }
 }
