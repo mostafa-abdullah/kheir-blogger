@@ -61,6 +61,12 @@ Route::group(['middleware' => ['web']], function () {
     ]]);
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');
-
+    Route::get('organization/{id}/recommendations', function ($id)
+    {
+        if(auth()->guard('organization')->check())
+            return view("organization.recommendation", compact($id));
+        else
+            return redirect('/login_organization');
+    });
     Route::get('events/create','EventController@create');
 });
