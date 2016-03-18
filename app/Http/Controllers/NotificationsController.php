@@ -27,6 +27,6 @@ class NotificationsController extends Controller
             $notification->push();
         }
 
-    	return $notifications;
+    	return view('notifications.show', compact('notifications'));
     }
 }
