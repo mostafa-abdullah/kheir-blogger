@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 class EventController extends Controller
 {
-    //
-
+	public function create()
+	{
+		return view('event.create');
+	}
 }

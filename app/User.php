@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Users represent the volunteers
+ */
 class User extends Authenticatable
 {
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +27,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 
     /**
      * Get list of Organizations which the user is subscribed to.
@@ -52,14 +57,8 @@ class User extends Authenticatable
 
     }
 
-    /**
-     * get all notifications associated with this user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function notifications()
-    {
-        return $this->hasMany('App\Notification');
+    public function notifications(){
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
     }
 
 }
