@@ -11,11 +11,7 @@ class Event extends Model
     ];
 
 
-    public static function createEvent($request)
-    {
-    	# code...
-    	print_r($request->all());
-    }
+
 
     public function  notifications()
     {

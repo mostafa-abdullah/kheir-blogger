@@ -19,11 +19,11 @@
 			{!! Form::text('location',null,array('class' => 'form-control'));!!}
 		</div>
 		<div class="form-group">	
-			{!! Form::label('Timing','Timing:');!!}
-			{!! Form::input('timing','Timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
+			{!! Form::label('timing','Timing:');!!}
+			{!! Form::input('timing','timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
 		</div>
 		<div class="form-group">
-			{!! Form::submit('Create Event',array('class'=>'btn btn-default'));!!}
+			{!! Form::submit('Create Event',array('class'=>'btn btn-success'));!!}
 		</div>
 	{!! Form::close() !!}
 	@if ($errors->any())

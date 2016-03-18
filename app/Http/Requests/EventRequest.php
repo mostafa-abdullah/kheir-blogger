@@ -28,7 +28,7 @@ class EventRequest extends Request
             'name' => 'required',
             'description' => 'required',
             'location' => 'required',
-            //'timing' => 'required',
+            'timing' => 'required',
         ];
     }
 }
