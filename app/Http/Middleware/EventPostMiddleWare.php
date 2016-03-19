@@ -22,11 +22,15 @@ class EventPostMiddleWare
         }
 
         $organization_id = auth()->guard('organization')->user()->id;
-        $event_id = $request->id;
+        $event_id = $request->event_id;
         
         $ev = Event::where('id', '=', $event_id)->where('organization_id', '=', 1)->exists();
         if(!$ev){
-           return redirect('home');
+            // echo var_dump($request)."<br />";
+            // echo $request->event_id;
+            // echo $event_id . " - " . $organization_id;
+            // die();
+            return redirect('home');
         }
 
         return $next($request);

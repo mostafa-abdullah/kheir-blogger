@@ -14,13 +14,12 @@ class EventPostController extends Controller
 	* Return view for creating Post.
 	* 
 	*/
-    public function createPost($id)
+    public function createPost($event_id)
     {
-    	
-    	return view('post.createPost')->with('id',$id);
+    	return view('post.createPost')->with('id',$event_id);
     }
 
-    /*
+    /* 
 	* Add a new Post to the Event and Notify Users.
 	* 
 	*/
@@ -33,6 +32,7 @@ class EventPostController extends Controller
     	$eventPost->event_id = $request->event_id;
     	$eventPost->organization_id = $organization_id;
     	$eventPost->save();
+        return redirect('home');
 
     }
 }
