@@ -38,7 +38,6 @@ class CreateVolunteersRateReviewOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('volunteers_rate_review_organizations');
+        Schema::drop('organization_reviews');  
     }
 }
-
