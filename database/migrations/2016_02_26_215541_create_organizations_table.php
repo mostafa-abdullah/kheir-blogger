@@ -18,6 +18,10 @@ class CreateOrganizationsTable extends Migration
             $table->string('email')->unique();
             $table->string('password', 60);
             $table->text('bio')->nullable();
+            $table->string('slogan', 50)->nullable();
+            $table->string('phone', 11)->nullable();
+            $table->string('location', 100)->nullable();
+            $table->double('rate', 15, 8)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
