@@ -22,6 +22,7 @@
 <div class="form-group" style="margin-left: 20px;">
 {!! Form::label("Title") !!} <br />
 {!! Form::text("title") !!}
+{!! Form::hidden("event_id",$id) !!}
 </div>
 
 <div class="form-group" style="margin-left: 20px;">

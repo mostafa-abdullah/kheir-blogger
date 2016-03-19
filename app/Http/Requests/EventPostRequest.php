@@ -13,7 +13,7 @@ class EventPostRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->guard('organization')->user();
     }
 
     /**
