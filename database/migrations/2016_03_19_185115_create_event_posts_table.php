@@ -21,7 +21,7 @@ class CreateEventPostsTable extends Migration
         $table->integer('organization_id')->unsigned()->index();
         $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
-        $table->string('name');
+        $table->string('title');
         $table->text('description');
 
         $table->timestamps();

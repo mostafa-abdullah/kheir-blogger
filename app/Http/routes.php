@@ -141,4 +141,10 @@ Route::group(['middleware' => ['web']], function () {
          'create'
      ]]);
 
+     /**
+     *  Routes related to the event post
+     */
+    Route::get('/event/{id}/post/create','EventPostController@createPost');
+    Route::post('/event/post/publish','EventPostController@storePost');
+    
 });
