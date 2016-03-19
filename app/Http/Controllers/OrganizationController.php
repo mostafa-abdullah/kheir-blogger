@@ -9,7 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Organization;
 use Hash;
 use Auth;
-
+use App\Recommendation;
+use App\Http\Requests\RecommendationRequest;
 
 class OrganizationController extends Controller
 {
@@ -68,4 +69,32 @@ class OrganizationController extends Controller
         Auth::guard('user')->logout();
         return redirect('/');
     }
+
+    /**
+     * recommend to view the recommendation form
+     */
+
+    public function recommend($id)
+    {
+
+        return view('organization.recommendation' , compact('id'));
+    }
+
+
+    /**
+     * to store the sent recommendation and insert it to the database
+     */
+    public function storeRecommendation(RecommendationRequest $request , $id)
+    {
+        $user_id = Auth::user()->id;
+        $recommendation = new Recommendation;
+        $recommendation->user_id = $user_id;
+        $recommendation->organization_id = $id;
+        $recommendation->recommendation = $request->recommendation;
+        $recommendation->save();
+        return redirect('organizations/'.$id);
+    }
+
+
+
 }

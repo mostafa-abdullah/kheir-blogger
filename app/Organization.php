@@ -43,4 +43,10 @@ class Organization extends Authenticatable
       return $event->id;
       //print_r($request->all());
     }
+
+    public function recommendations()
+    {
+        $this->hasMany('App\Recommendation');
+    }
+
 }
