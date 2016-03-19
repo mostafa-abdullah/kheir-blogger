@@ -17,8 +17,8 @@ class CreateVolunteersRateReviewEventsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->integer('events_id')->unsigned()->index();
-            $table->foreign('events_id')->references('id')->on('events')->onDelete('cascade');
+            $table->integer('event_id')->unsigned()->index();
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
 
 
 

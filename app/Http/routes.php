@@ -150,7 +150,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *	Routes related to the Event Review
      */
-    Route::resource('organizations/{id}/reviews','EventController', ['only' => [
+    Route::resource('events/{id}/reviews','EventReviewController', ['only' => [
          'index' , 'create' ,'store'
      ]]);
 
