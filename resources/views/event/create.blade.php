@@ -4,21 +4,22 @@
 </header>
 @section('content')
 
-	<h1> Create A New Event </h1>
+	<h1>Create A New Event</h1>
+	{{--  TODO: Make a redirect to the event's page (Esraa) --}}
 	{!! Form::open() !!}
-		<div class="form-group">	
+		<div class="form-group">
 			{!! Form::label('name','Event Name:');!!}
 			{!! Form::text('name',null,array('class' => 'form-control'));!!}
 		</div>
-		<div class="form-group">	
+		<div class="form-group">
 			{!! Form::label('description','Description:');!!}
 			{!! Form::textArea('description',null,array('class' => 'form-control'));!!}
 		</div>
-		<div class="form-group">	
+		<div class="form-group">
 			{!! Form::label('location','Location:');!!}
 			{!! Form::text('location',null,array('class' => 'form-control'));!!}
 		</div>
-		<div class="form-group">	
+		<div class="form-group">
 			{!! Form::label('Timing','Timing:');!!}
 			{!! Form::input('datetime','Timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
 		</div>

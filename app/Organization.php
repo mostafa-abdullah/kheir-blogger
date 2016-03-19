@@ -16,9 +16,8 @@ class Organization extends Authenticatable
     {
       return $this->belongsToMany("App\User",
         "volunteers_subscribe_organizations")->withTimestamps();
-
     }
-
+// ------------- Unseen ---------------------------
     public function recommendations()
     {
         $this->hasMany('App\Recommendation');

@@ -7,15 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-        'name', 'description', 'timing','location','required_contact_info','needed_membership'
+        'name', 'description', 'timing', 'location',
+        'required_contact_info','needed_membership'
     ];
 
+// ------------- Unseen ---------------------------
     /**
      * Event can have many notifications
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-
     public function  notifications()
     {
         return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();

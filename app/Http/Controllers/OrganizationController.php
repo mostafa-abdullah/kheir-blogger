@@ -24,7 +24,7 @@ class OrganizationController extends Controller
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'register',
+            'register', 'edit',
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -50,24 +50,17 @@ class OrganizationController extends Controller
     }
 
     /**
-    * edit to edit the profile of organization.
-    *
-    * @return view
-    */
-    public function edit($id){
+     * logout the logged-in organization
+     */
+    public function logout(){
 
-      if(auth()->guard('organization')->check() && auth()->guard('organization')->id()==$id){
-        $organization = Organization::findorfail($id);
-        return view('organization.edit' , compact('organization'));
-      }else{
-        return redirect('login_organization');
-      }
+        Auth::guard('organization')->logout();
+        Auth::guard('user')->logout();
+        return redirect('/');
     }
-
+// ------------- Unseen ---------------------------
     /**
-    * show to show the profile of organization.
-    *
-    * @return view
+    * show the profile of organization.
     */
     public function show($id){
 
@@ -78,9 +71,21 @@ class OrganizationController extends Controller
 
 
     /**
-    * update to update the profile of organization.
-    *
-    * @return redirect
+    * edit the profile of organization.
+    */
+    public function edit($id){
+
+      if(auth()->guard('organization')->id()==$id){
+          $organization = Organization::findorfail($id);
+          return view('organization.edit' , compact('organization'));
+      }
+      else{
+        return redirect('home');
+      }
+    }
+
+    /**
+    * update the profile of organization.
     */
     public function update($id ,Requests\OrganizationRequest $request){
       $organization = Organization::findorfail($id);
@@ -88,17 +93,9 @@ class OrganizationController extends Controller
       return redirect('organization/'.$id);
     }
 
-    public function logout(){
-
-        Auth::guard('organization')->logout();
-        Auth::guard('user')->logout();
-        return redirect('/');
-    }
-
     /**
      * recommend to view the recommendation form
      */
-
     public function recommend($id)
     {
 
@@ -107,7 +104,7 @@ class OrganizationController extends Controller
 
 
     /**
-     * to store the sent recommendation and insert it to the database
+     * store the sent recommendation and insert it to the database
      */
     public function storeRecommendation(RecommendationRequest $request , $id)
     {

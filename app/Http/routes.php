@@ -131,7 +131,7 @@ Route::group(['middleware' => ['web']], function () {
 
 
 
-
+// ------------- Unseen ---------------------------
     //Recommendation Routes!
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}' , 'OrganizationController@storeRecommendation');
@@ -140,7 +140,7 @@ Route::group(['middleware' => ['web']], function () {
      *	Routes related to the event
      */
     Route::resource('event','EventController', ['only' => [
-         'create'
+         'create',
      ]]);
 
 
