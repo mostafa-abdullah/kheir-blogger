@@ -13,8 +13,20 @@ class CreateVolunteersRateReviewEventsTable extends Migration
     public function up()
     {
         Schema::create('event_reviews', function (Blueprint $table) {
-            $table->increments('id');
+
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->integer('events_id')->unsigned()->index();
+            $table->foreign('events_id')->references('id')->on('events')->onDelete('cascade');
+
+
+
+            $table->text('review');
+            $table->integer('rate');
+
             $table->timestamps();
+
         });
     }
 
