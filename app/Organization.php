@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 class Organization extends Authenticatable
 {
     protected $fillable = [
@@ -17,7 +18,20 @@ class Organization extends Authenticatable
       return $this->belongsToMany("App\User",
         "volunteers_subscribe_organizations")->withTimestamps();
     }
+
 // ------------- Unseen ---------------------------
+    public function events()
+    {
+      return $this->hasMany('App\Event');
+    }
+
+    public function createEvent($request){
+
+      $event = new Event($request->all());
+      $this->events()->save($event);
+      return $event->id;
+    }
+
     public function recommendations()
     {
         $this->hasMany('App\Recommendation');

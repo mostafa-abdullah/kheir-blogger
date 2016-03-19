@@ -121,7 +121,7 @@ Route::group(['middleware' => ['web']], function () {
      *	Homepage (for logged-in volunteers/organizations)
      */
     Route::get('home', 'HomeController@index');
-
+// ------------- Unseen ---------------------------
     /**
      *	Routes related to the volunteer
      */
@@ -131,17 +131,24 @@ Route::group(['middleware' => ['web']], function () {
 
 
 
-// ------------- Unseen ---------------------------
-    //Recommendation Routes!
-    Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
-    Route::post('organization/{id}' , 'OrganizationController@storeRecommendation');
+
+
 
     /**
      *	Routes related to the event
      */
-    Route::resource('event','EventController', ['only' => [
-         'create',
+     Route::resource('event','EventController', ['only' => [
+         'create','store','show'
      ]]);
+
+
+
+
+
+    //Recommendation Routes!
+    Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organization/{id}' , 'OrganizationController@storeRecommendation');
+
 
 
     /**
@@ -149,5 +156,6 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/review','OrganizationReviewController@create');
     Route::post('organization/{id}/review','OrganizationReviewController@store');
+
 
 });
