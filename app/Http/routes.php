@@ -147,5 +147,12 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organizations/{id}/review','OrganizationReviewController@create');
     Route::post('/organizations/{id}/review','OrganizationReviewController@store');
+    /**
+     *	Routes related to the Event Review
+     */
+    Route::resource('organizations/{id}/reviews','EventController', ['only' => [
+         'index' , 'create' ,'store'
+     ]]);
+
 
 });
