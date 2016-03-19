@@ -28,32 +28,30 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-
     /**
      * Get list of Organizations which the user is subscribed to.
      */
     public function subscribedOrganizations()
     {
-      return $this->belongsToMany("App\Organization",
-        "volunteers_subscribe_organizations")->withTimestamps();
-
+      return $this->belongsToMany('App\Organization',
+        'volunteers_subscribe_organizations')->withTimestamps();
     }
 
     /**
-     * Subscribe to an Organization.
+     * Subscribe to an organization.
      */
     public function subscribe($organization_id)
     {
-      return $this->subscribedOrganizations()->attach($organization_id);
+        if(!$this->subscribedOrganizations()->find($organization_id))
+            $this->subscribedOrganizations()->attach($organization_id);
     }
 
     /**
-     * Unsubscribe from an Organization.
+     * Unsubscribe from an organization.
      */
     public function unsubscribe($organization_id)
     {
       return $this->subscribedOrganizations()->detach($organization_id);
-
     }
 
 

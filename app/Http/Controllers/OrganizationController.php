@@ -3,18 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\RegisterOrganizationRequest;
+use App\Http\Requests\RecommendationRequest;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Organization;
+use App\Recommendation;
+
 use Hash;
 use Auth;
-use App\Recommendation;
-use App\Http\Requests\RecommendationRequest;
+
 
 class OrganizationController extends Controller
 {
-    public function register(Requests\RegisterOrganizationRequest $request){
+
+    public function __construct(){
+        $this->middleware('auth_volunteer', ['only' => [
+            // Add all functions that are allowed for volunteers only
+        ]]);
+
+        $this->middleware('auth_organization', ['only' => [
+            // Add all functions that are allowed for organizations only
+            'register',
+        ]]);
+
+        $this->middleware('auth_both', ['only' => [
+            // Add all functions that are allowed for volunteers/organizations only
+
+        ]]);
+
+    }
+
+    /**
+     * registers a new organization
+     */
+    public function register(RegisterOrganizationRequest $request){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('home');
         $organization = new Organization;
@@ -47,8 +70,10 @@ class OrganizationController extends Controller
     * @return view
     */
     public function show($id){
-      return "The profile";
 
+        //TODO: return a view with the organization profile (Badry)
+        $organization = Organization::findOrFail($id);
+        return $organization;
     }
 
 
