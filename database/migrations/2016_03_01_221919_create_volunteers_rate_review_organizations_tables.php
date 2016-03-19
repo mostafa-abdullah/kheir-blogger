@@ -13,18 +13,18 @@ class CreateVolunteersRateReviewOrganizationsTables extends Migration
     public function up()
     {
 
-            Schema::create('volunteers_rate_review_organizations', function (Blueprint $table) {
-                $table->integer('user_id')->unsigned()->index();
-                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        Schema::create('volunteers_rate_review_organizations', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-                $table->integer('organization_id')->unsigned()->index();
-                $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
+            $table->integer('organization_id')->unsigned()->index();
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
 
-                $table->text('review');
-                $table->integer('rate');
+            $table->text('review');
+            $table->integer('rate');
 
-                $table->timestamps();
+            $table->timestamps();
         });
     }
 

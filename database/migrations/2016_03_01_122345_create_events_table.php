@@ -23,7 +23,6 @@ class CreateEventsTable extends Migration
             $table->boolean('required_contact_info');
             $table->boolean('needed_membership');
             $table->timestamps();
-
         });
 
     }

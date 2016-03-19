@@ -12,7 +12,7 @@ class AddColumnsToOrganizationsTable extends Migration
      */
     public function up()
     {
-     Schema::table('organizations', function ($table) {
+     Schema::table('organizations', function (Blueprint $table) {
 
        $table->string('slogan', 50)->nullable();
        $table->string('phone', 11)->nullable();
@@ -29,10 +29,8 @@ class AddColumnsToOrganizationsTable extends Migration
      */
     public function down()
     {
-      Schema::table('organizations', function ($table) {
-          $table->dropColumn('slogan');
-          $table->dropColumn('phone');
-          $table->dropColumn('location');
+      Schema::table('organizations', function (Blueprint $table) {
+          $table->dropColumn(['slogan', 'phone', 'location']);
       });
     }
 }

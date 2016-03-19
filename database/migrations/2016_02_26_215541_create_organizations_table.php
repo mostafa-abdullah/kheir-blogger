@@ -17,7 +17,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->text('bio');
+            $table->text('bio')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
