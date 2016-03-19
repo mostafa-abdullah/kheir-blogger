@@ -19,4 +19,10 @@ class Organization extends Authenticatable
         "volunteers_subscribe_organizations")->withTimestamps();
 
     }
+
+    public function recommendations()
+    {
+        $this->hasMany('App\Recommendation');
+    }
+
 }
