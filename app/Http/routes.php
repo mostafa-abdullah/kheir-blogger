@@ -127,10 +127,18 @@ Route::group(['middleware' => ['web']], function () {
         'show'
     ]]);
 
+
+
+
+    //Recommendation Routes!
+    Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
+
     /**
      *	Routes related to the event
      */
      Route::resource('event','EventController', ['only' => [
-         'show'
+         'create'
      ]]);
+
 });
