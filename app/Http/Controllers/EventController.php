@@ -41,6 +41,7 @@ class EventController extends Controller
 	 */
 	public function show($id){
 		// TODO: show the event's page (Hossam Ahmad)
+        // hint: to display question use the scope methods in the Question model
 		return Event::find($id);
 	}
 
@@ -94,28 +95,28 @@ class EventController extends Controller
     /**
     *   Adds a new question to the database.
     */
-    public function askQuestion()
+    public function askQuestion($id)
     {
         if(Auth::user()){
             $input = Input::all();
             $question = new Question;
             $question->user_id = Auth::user()->id;
-            $question->event_id = $input['event_id'];
+            $question->event_id = $id;
             $question->question = $input['question'];
             $question->question_body = $input['question_body'];
             $question->save();
-            return redirect(url('/events/'.$input['event_id']));
+            return redirect(url('/event/'.$input['event_id']));
         }else{
-            return redirect(url('/events/'.$input['event_id']))->withErrors(['Permission' => 'You have to be logged in to ask a question']);
+            return redirect(url('/event/'.$input['event_id']))->withErrors(['Permission' => 'You have to be logged in to ask a question']);
         }
         
     }
 
-    public function answerQuestion($id)
+    public function answerQuestion($id, $q_id)
     {
         $input = Request::all();
         $input['answered_at'] = Carbon::now();
-        $question = Question::findorfail($id);
+        $question = Question::findorfail($q_id);
         if(auth()->guard('organization')->check() && $question->event()->organization()->id == auth()->guard('organization')->id){ 
                 $question->answer = $input['answer'];
                 $question->answered_at = $input['answered_at'];
