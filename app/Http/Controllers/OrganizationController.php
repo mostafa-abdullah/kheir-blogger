@@ -22,7 +22,7 @@ class OrganizationController extends Controller
         $organization->password = bcrypt($request->password);
         $organization->save();
         auth()->guard('organization')->login($organization);
-        return redirect('/home');
+        return redirect('home');
     }
 
     /**
@@ -67,5 +67,13 @@ class OrganizationController extends Controller
         Auth::guard('organization')->logout();
         Auth::guard('user')->logout();
         return redirect('/');
+    }
+
+   public function viewRecommendations($id)
+    {
+        if(auth()->guard('organization')->check())
+            return view("organization.recommendation", compact($id));
+        else
+            return redirect('/login_organization');
     }
 }

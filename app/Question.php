@@ -10,7 +10,7 @@ class Question extends Model
     /**
     *	Attribute not to be mass filled.
     */
-    protected $guarded = array('id','user_id', 'event_id',);
+    protected $guarded = array('id','user_id', 'event_id', 'answered_at');
 
     protected $dates = ['answered_at']; 
 
