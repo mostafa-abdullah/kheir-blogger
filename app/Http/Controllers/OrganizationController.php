@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
+use App\Http\Requests\OrganizationRequest;
 
 use App\Http\Controllers\Controller;
 use App\Organization;
 use App\Recommendation;
 
+use Gate;
 use Hash;
 use Auth;
 
@@ -24,7 +26,7 @@ class OrganizationController extends Controller
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'register', 'edit',
+            'edit', 'update'
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -58,7 +60,7 @@ class OrganizationController extends Controller
         Auth::guard('user')->logout();
         return redirect('/');
     }
-// ------------- Unseen ---------------------------
+
     /**
     * show the profile of organization.
     */
@@ -87,12 +89,13 @@ class OrganizationController extends Controller
     /**
     * update the profile of organization.
     */
-    public function update($id ,Requests\OrganizationRequest $request){
-      $organization = Organization::findorfail($id);
-      $organization->update($request->all());
-      return redirect('organization/'.$id);
-    }
+    public function update(OrganizationRequest $request, $id){
 
+        $organization = Organization::findorfail($id);
+        $organization->update($request->all());
+        return redirect()->action('OrganizationController@show', [$organization->id]);
+    }
+// ------------- Unseen ---------------------------
     /**
      * recommend to view the recommendation form
      */

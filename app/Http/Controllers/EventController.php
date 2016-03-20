@@ -30,6 +30,14 @@ class EventController extends Controller
     }
 
 	/**
+	 * show the event's page
+	 */
+	public function show($id){
+		// TODO: show the event's page (Hossam Ahmad)
+		return Event::find($id);
+	}
+
+	/**
 	 * returns a form to create a new event
 	 */
 	public function create(){
@@ -46,13 +54,5 @@ class EventController extends Controller
 		$event_id = $organization->createEvent($request);
 		//TODO: notify subscribers and nearby volunteers (Esraa)
 		return redirect()->action('EventController@show', [$event_id]);
-	}
-
-	/**
-	 * show the event's page
-	 */
-	public function show($id){
-		// TODO: show the event's page (Hossam Ahmad)
-		return Event::find($id);
 	}
 }
