@@ -11,10 +11,11 @@ class Notification extends Model
     /**
      * Event has many notifications
      */
-    public function events(){
+     public function events(){
 
-        return $this->belongsTo('App\Event');
-    }
+         return $this->belongsToMany('App\Event')->withTimestamps();
+     }
+
 
     /**
      *  Users can receive many notifications
