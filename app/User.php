@@ -43,7 +43,6 @@ class User extends Authenticatable
 
       return $this->subscribedOrganizations()->detach($organization_id);
     }
-
     public function recommendations(){
 
         return $this->hasMany('App\Recommendation');
@@ -66,7 +65,8 @@ class User extends Authenticatable
                     ->withTimestamps()->withPivot('type');
     }
 
+    public function eventReviews(){
 
-
-
+        return $this->hasMany('App\Review');
+    }
 }

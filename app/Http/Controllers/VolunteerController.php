@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
+<<<<<<< HEAD
 
 use Auth;
+=======
+use App\Event;
+use App\Http\Requests;
+>>>>>>> origin/master
 
 class VolunteerController extends Controller
 {
@@ -52,6 +57,9 @@ class VolunteerController extends Controller
     public static function show($id)
     {
         $volunteer = User::findOrFail($id);
+
+
+
         return view('volunteer.show', compact('volunteer'));
     }
 

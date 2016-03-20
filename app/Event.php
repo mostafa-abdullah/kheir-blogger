@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+
     protected $fillable = [
         'name', 'description', 'timing', 'location',
         'required_contact_info','needed_membership'
@@ -15,7 +16,6 @@ class Event extends Model
     {
     	return $this->belongsTo('App\Organization');
 	}
-
     public function  notifications(){
 
         return $this->hasMany('App\Notification');
@@ -36,4 +36,10 @@ class Event extends Model
 
         return $this->users()->where('type','=','2');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany('App\EventReview');
+    }
+
 }
