@@ -29,7 +29,7 @@ class OrganizationController extends Controller
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'edit', 'update',
+            'edit', 'update', 'viewRecommendations'
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -139,5 +139,15 @@ class OrganizationController extends Controller
         $organization = Organization::findorfail($id);
         $organization->reviews()->save($review);
         return redirect()->action('OrganizationController@show', [$id]);
+    }
+
+   public function viewRecommendations($id)
+    {
+        if(auth()->guard('organization')->id == $id){
+            $organization = Organization::findorfail($id);
+            $recommendations = $organization->recommendations();
+            return view("organization.recommendation", compact('recommendations'));
+        }
+        return redirect('/');
     }
 }

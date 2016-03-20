@@ -1201,6 +1201,20 @@
         },
         {
             "name": "paragonie/random_compat",
+<<<<<<< HEAD
+<<<<<<< HEAD
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/ff76e1a660669bb56ba74ba0583fd8d41417bf39",
+                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39",
+=======
+=======
 
             "version": "v1.2.0",
             "source": {
@@ -1213,6 +1227,7 @@
                 "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b0e69d10852716b2ccbdff69c75c477637220790",
                 "reference": "b0e69d10852716b2ccbdff69c75c477637220790",
 
+>>>>>>> 3793af0a5dd342093a702f458f76e43931aaf3f5
             "version": "v1.2.2",
 
             "version": "v1.3.0",
@@ -1227,10 +1242,14 @@
 
                 "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b3313b618f4edd76523572531d5d7e22fe747430",
                 "reference": "b3313b618f4edd76523572531d5d7e22fe747430",
+<<<<<<< HEAD
+>>>>>>> bca223b96a09591267919b6d91b9325bf72c3743
+=======
 
                 "url": "https://api.github.com/repos/paragonie/random_compat/zipball/ff76e1a660669bb56ba74ba0583fd8d41417bf39",
                 "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39",
 
+>>>>>>> 3793af0a5dd342093a702f458f76e43931aaf3f5
                 "shasum": ""
             },
             "require": {
@@ -1265,6 +1284,13 @@
                 "pseudorandom",
                 "random"
             ],
+<<<<<<< HEAD
+<<<<<<< HEAD
+            "time": "2016-03-17 16:11:57"
+=======
+            "time": "2016-03-11 19:54:08"
+>>>>>>> bca223b96a09591267919b6d91b9325bf72c3743
+=======
 
             "time": "2016-02-06 03:52:05"
 
@@ -1272,6 +1298,7 @@
 
             "time": "2016-03-17 16:11:57"
 
+>>>>>>> 3793af0a5dd342093a702f458f76e43931aaf3f5
         },
         {
             "name": "psr/log",
