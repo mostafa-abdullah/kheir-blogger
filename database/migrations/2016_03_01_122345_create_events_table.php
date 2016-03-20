@@ -22,8 +22,8 @@ class CreateEventsTable extends Migration
             $table->string('location');
             $table->boolean('required_contact_info');
             $table->boolean('needed_membership');
+            $table->double('rate', 15, 8)->nullable();
             $table->timestamps();
-
         });
 
 

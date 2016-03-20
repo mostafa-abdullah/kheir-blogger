@@ -3,16 +3,12 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteerSubscribeAnEventTable extends Migration
+class CreateVolunteersInEventsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
-        Schema::create('volunteerInEvent', function (Blueprint $table) {
+        Schema::create('volunteers_in_events', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('user_id')->unsigned()->index();
@@ -21,20 +17,15 @@ class CreateVolunteerSubscribeAnEventTable extends Migration
             $table->integer('event_id')->unsigned()->index();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
 
-            $table->integer('volunteering_type')->unsigned();
+            $table->integer('type')->unsigned();    //1 for followers, 2 for registered
 
             $table->timestamps();
 
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::drop('volunteerInEvent');
+        Schema::drop('volunteers_in_events');
     }
 }

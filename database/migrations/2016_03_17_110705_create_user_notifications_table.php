@@ -5,16 +5,9 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUserNotificationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * migration for user_notification table
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('user_notification', function (Blueprint $table) {
+        Schema::create('user_notifications', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('notification_id')->unsigned()->index();
@@ -29,13 +22,8 @@ class CreateUserNotificationsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::drop('user_notification');
+        Schema::drop('user_notifications');
     }
 }
