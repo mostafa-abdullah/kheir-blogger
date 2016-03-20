@@ -12,7 +12,7 @@
                      {{--, [$organization->id]}}"> {{$organization->name}}--}}
                     {{--</a>--}}
 
-                    Route::get('organizations\(id)' , 'OrganizationReviewController@showReviews');
+                    {{$organization->name}}
 
                 </h2>
 
