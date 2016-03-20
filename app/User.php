@@ -55,8 +55,7 @@ class User extends Authenticatable
       return $this->subscribedOrganizations()->detach($organization_id);
 
     }
-
-
+    
     public function recommendations()
     {
         return $this->hasMany('App\Recommendation');
@@ -68,8 +67,19 @@ class User extends Authenticatable
      * @return $this
      */
 
+
     public function notifications (){
         return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps()->withPivot('read');
+    }
+
+
+    /**
+     * Get reviews made by user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reviews()
+    {
+        return $this->hasMany('App\Review');
     }
 
     /*
@@ -82,6 +92,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Event','volunteerInEvent')->withTimestamps()->withPivot('volunteering_type');
 
     }
+
 
 
 

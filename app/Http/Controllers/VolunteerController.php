@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-
+use App\Event;
 use App\Http\Requests;
 
 class VolunteerController extends Controller
@@ -19,6 +19,9 @@ class VolunteerController extends Controller
     {
 
         $volunteer = User::findOrFail($id);
+
+
+
         return view('volunteer.show', compact('volunteer'));
     }
 
