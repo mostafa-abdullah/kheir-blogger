@@ -135,4 +135,6 @@ Route::group(['middleware' => ['web']], function () {
      ]]);
 
     Route::get('notifications', 'NotificationsController@index');
+    Route::get('notifications/{notification_id?}', 'NotificationsController@handle');
+
 });
