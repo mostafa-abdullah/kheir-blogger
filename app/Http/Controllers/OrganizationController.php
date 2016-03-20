@@ -22,11 +22,12 @@ class OrganizationController extends Controller
     public function __construct(){
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
+            'recommend', 'storeRecommendation',
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'edit', 'update'
+            'edit', 'update',
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -95,31 +96,26 @@ class OrganizationController extends Controller
         $organization->update($request->all());
         return redirect()->action('OrganizationController@show', [$organization->id]);
     }
-// ------------- Unseen ---------------------------
+
     /**
-     * recommend to view the recommendation form
+     * returns a form to send a recommendation to the organization
+     * with the specified id
      */
-    public function recommend($id)
-    {
+    public function recommend($id){
 
-        return view('organization.recommendation' , compact('id'));
+        return view('organization.recommend' , compact('id'));
     }
-
 
     /**
      * store the sent recommendation and insert it to the database
      */
-    public function storeRecommendation(RecommendationRequest $request , $id)
-    {
+    public function storeRecommendation(RecommendationRequest $request , $id){
+
         $user_id = Auth::user()->id;
-        $recommendation = new Recommendation;
+        $recommendation = new Recommendation($request->all());
         $recommendation->user_id = $user_id;
         $recommendation->organization_id = $id;
-        $recommendation->recommendation = $request->recommendation;
         $recommendation->save();
-        return redirect('organizations/'.$id);
+        return redirect()->action('OrganizationController@show', [$id]);
     }
-
-
-
 }

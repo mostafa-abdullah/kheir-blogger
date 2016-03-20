@@ -31,9 +31,8 @@ class Organization extends Authenticatable
       return $event->id;
     }
 
-// ------------- Unseen ---------------------------
     public function recommendations(){
-        
+
         $this->hasMany('App\Recommendation');
     }
 

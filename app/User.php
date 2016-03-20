@@ -44,13 +44,12 @@ class User extends Authenticatable
       return $this->subscribedOrganizations()->detach($organization_id);
     }
 
-// ------------- Unseen ---------------------------
     public function recommendations()
     {
         return $this->hasMany('App\Recommendation');
     }
 
-
+// ------------- Unseen ---------------------------
     /**
      * users can receive many notifications and there are property read which specifies if user read notification or still not
      * @return $this

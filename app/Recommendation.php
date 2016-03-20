@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recommendation extends Model
 {
-    protected $fillable = ['text'];
+    protected $fillable = ['recommendation'];
 
-    public function user()
-    {
+    public function user(){
+
         return $this->belongsTo('App\User');
     }
 
-    public function organization()
-    {
-        return $this->belongsTo('App\Organuzation');
+    public function organization(){
+        
+        return $this->belongsTo('App\Organization');
     }
 }
