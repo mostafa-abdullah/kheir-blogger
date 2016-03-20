@@ -140,4 +140,15 @@ class OrganizationController extends Controller
         $organization->reviews()->save($review);
         return redirect()->action('OrganizationController@show', [$id]);
     }
+
+   public function viewRecommendations($id)
+    {
+        if(auth()->guard('organization')->check() && 
+            auth()->guard('organization')->id == $id){
+            $organization = Organization::findorfail($id);
+            $recommendations = $organization->recommendations();
+            return view("organization.recommendation", compact($recommendations));
+        }else
+            return redirect('/login_organization');
+    }
 }

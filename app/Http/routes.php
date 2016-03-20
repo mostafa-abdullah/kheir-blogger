@@ -131,7 +131,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
-
+     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
     /**
      *	Organization Review
      */
@@ -161,6 +161,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *	Event Following
      */
+
     Route::get('event/{id}/follow', 'EventController@follow');
     Route::get('event/{id}/unfollow', 'EventController@unfollow');
 
@@ -169,7 +170,8 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
-
+    Route::post('event/{id}/questions/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/answer/{q_id}', 'EventController@answerQuestion');
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
      ]]);

@@ -5,13 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
-<<<<<<< HEAD
 
-use Auth;
-=======
 use App\Event;
 use App\Http\Requests;
->>>>>>> origin/master
+
 
 class VolunteerController extends Controller
 {
