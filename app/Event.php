@@ -12,13 +12,14 @@ class Event extends Model
         'required_contact_info','needed_membership'
     ];
 
-    public function organization()
-    {
+    public function organization(){
+        
     	return $this->belongsTo('App\Organization');
 	}
+
     public function  notifications(){
 
-        return $this->hasMany('App\Notification');
+        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
     }
 
     public function  users (){
