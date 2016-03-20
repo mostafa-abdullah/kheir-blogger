@@ -170,13 +170,12 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
-    Route::post('event/{id}/questions/ask', 'EventController@askQuestion');
-    Route::post('event/{id}/answer/{q_id}', 'EventController@answerQuestion');
+
+    Route::get('event/{id}/questions/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/questions/ask', 'EventController@storeQuestion');
+    Route::post('event/{id}/questions/{q_id}', 'EventController@answerQuestion');
+
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
      ]]);
-
-
-     Route::get('/testnotify', 'Controller@notify');
-
 });
