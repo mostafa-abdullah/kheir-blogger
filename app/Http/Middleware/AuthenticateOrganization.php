@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+/**
+ * Handles requests that are only allowed for volunteers
+ */
 class AuthenticateOrganization
 {
     /**
