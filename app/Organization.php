@@ -33,7 +33,12 @@ class Organization extends Authenticatable
 
     public function recommendations(){
 
-        $this->hasMany('App\Recommendation');
+        return $this->hasMany('App\Recommendation');
+    }
+
+    public function reviews(){
+        
+        return $this->hasMany('App\OrganizationReview');
     }
 
 }

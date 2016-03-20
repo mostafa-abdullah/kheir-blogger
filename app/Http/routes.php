@@ -133,10 +133,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
 
     /**
-     *	Organization Reviews
+     *	Organization Review
      */
-    Route::get('organization/{id}/review','OrganizationReviewController@create');
-    Route::post('organization/{id}/review','OrganizationReviewController@store');
+    Route::get('organization/{id}/review','OrganizationController@createReview');
+    Route::post('organization/{id}/review','OrganizationController@storeReview');
 
 
     Route::resource('organization', 'OrganizationController', ['only' => [

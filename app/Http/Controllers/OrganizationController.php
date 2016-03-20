@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
+use App\Http\Requests\ReviewRequest;
 
 use App\Http\Controllers\Controller;
 use App\Organization;
 use App\Recommendation;
+use App\OrganizationReview;
 
-use Gate;
 use Hash;
 use Auth;
 
@@ -23,6 +24,7 @@ class OrganizationController extends Controller
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
             'recommend', 'storeRecommendation',
+            'createReview', 'storeReview',
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -111,11 +113,31 @@ class OrganizationController extends Controller
      */
     public function storeRecommendation(RecommendationRequest $request , $id){
 
-        $user_id = Auth::user()->id;
         $recommendation = new Recommendation($request->all());
-        $recommendation->user_id = $user_id;
-        $recommendation->organization_id = $id;
-        $recommendation->save();
+        $recommendation->user_id = Auth::user()->id;
+        $organization = Organization::findorfail($id);
+        $organization->recommendations()->save($recommendation);
+        return redirect()->action('OrganizationController@show', [$id]);
+    }
+
+    /**
+     * returns a view to rate and review the organization
+     */
+    public function createReview($id){
+
+        $organization = Organization::findorfail($id);
+        return view ('organization.review', compact('organization'));
+    }
+
+    /**
+     * store the organization review and insert it to the database
+     */
+    public function storeReview(ReviewRequest $request, $id){
+
+        $review = new OrganizationReview($request->all());
+        $review->user_id = Auth::user()->id;
+        $organization = Organization::findorfail($id);
+        $organization->reviews()->save($review);
         return redirect()->action('OrganizationController@show', [$id]);
     }
 }

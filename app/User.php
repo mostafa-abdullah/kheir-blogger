@@ -30,8 +30,8 @@ class User extends Authenticatable
     /**
      * Subscribe to an organization.
      */
-    public function subscribe($organization_id)
-    {
+    public function subscribe($organization_id){
+
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
@@ -39,15 +39,22 @@ class User extends Authenticatable
     /**
      * Unsubscribe from an organization.
      */
-    public function unsubscribe($organization_id)
-    {
+    public function unsubscribe($organization_id){
+
       return $this->subscribedOrganizations()->detach($organization_id);
     }
 
-    public function recommendations()
-    {
+    public function recommendations(){
+
         return $this->hasMany('App\Recommendation');
     }
+
+    public function organizationReviews(){
+
+        return $this->hasMany('App\OrganizationReview');
+    }
+
+
 
 // ------------- Unseen ---------------------------
     /**
