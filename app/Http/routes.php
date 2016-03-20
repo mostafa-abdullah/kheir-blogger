@@ -115,6 +115,9 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit','update'
     ]]);
 
+    Route::get('organizations' , 'OrganizationController@index');
+//    Route::get('organizations\(id)' , 'OrganizationReviewController@showReviews');
+
     /**
      *	Homepage (for logged-in volunteers/organizations)
      */
@@ -126,8 +129,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
-
-
 
 
     //Recommendation Routes!

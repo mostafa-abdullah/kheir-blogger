@@ -2,6 +2,8 @@
 
         @section('content')
 
+            //For storing a review
+
             <h1> create organization review</h1>
 
 

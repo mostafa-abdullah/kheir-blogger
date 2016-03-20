@@ -11,6 +11,7 @@ use Hash;
 use Auth;
 use App\Recommendation;
 use App\Http\Requests\RecommendationRequest;
+use Illuminate\View\View;
 
 class OrganizationController extends Controller
 {
@@ -80,7 +81,6 @@ class OrganizationController extends Controller
         return view('organization.recommendation' , compact('id'));
     }
 
-
     /**
      * to store the sent recommendation and insert it to the database
      */
@@ -95,6 +95,13 @@ class OrganizationController extends Controller
         return redirect('organizations/'.$id);
     }
 
+    /**
+     * Gets all organizations registered in the database
+     * @return View
+     */
 
-
+    public function index(){
+        $organizations = Organization::all();
+        return view('organization\index' , compact('organizations' , $organizations));
+    }
 }

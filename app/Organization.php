@@ -13,11 +13,11 @@ class Organization extends Authenticatable
     /**
      * Get list of Users subscribed to an Organization.
      */
+    
     public function subscribers()
     {
       return $this->belongsToMany("App\User",
         "volunteers_subscribe_organizations")->withTimestamps();
-
     }
 
     public function recommendations()
