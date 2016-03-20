@@ -26,18 +26,21 @@ class Event extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
+
     public function  notifications()
     {
         return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
     }
 
-
+    public function organization()
+    {
+    	return $this->belongsTo('App\Organization');
+	}
 
     /**
      * Events can have many volunteers
      *
      */
-
     public function  users (){
         return $this->belongsToMany('App\User','volunteerInEvent')->withTimestamps()->withPivot('volunteering_type');
     }
@@ -63,6 +66,7 @@ class Event extends Model
 
     public function registeredUsers (){
         return $this->users()->where('volunteering_type','=','2');
+
     }
 
 }

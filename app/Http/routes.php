@@ -129,16 +129,27 @@ Route::group(['middleware' => ['web']], function () {
 
 
 
+    /**
+     *	Routes related to the event
+     */
+     Route::resource('event','EventController', ['only' => [
+         'create','store','show'
+     ]]);
+
+
+
 
     //Recommendation Routes!
     Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
 
+
+
     /**
-     *	Routes related to the event
+     *	Routes related to the organization_review
      */
-     Route::resource('event','EventController', ['only' => [
-         'create'
-     ]]);
+    Route::get('organizations/{id}/review','OrganizationReviewController@create');
+    Route::post('/organizations/{id}/review','OrganizationReviewController@store');
+
 
 });
