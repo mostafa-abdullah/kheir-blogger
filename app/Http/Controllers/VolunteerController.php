@@ -46,13 +46,9 @@ class VolunteerController extends Controller
         return redirect()->action('OrganizationController@show', [$id]);
     }
 
-
     /**
-     * Passes User's id to volunteer's view
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * Shows volunteer's profile
      */
-
     public static function show($id)
     {
         $volunteer = User::findOrFail($id);

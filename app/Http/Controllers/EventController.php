@@ -55,4 +55,32 @@ class EventController extends Controller
 		//TODO: notify subscribers and nearby volunteers (Esraa)
 		return redirect()->action('EventController@show', [$event_id]);
 	}
+
+	public function follow($id){
+
+		// TODO: a volunteer can follow an unfollowed event (Hatem)
+		//
+		return redirect()->action('EventController@show', [$id]);
+	}
+
+	public function unfollow($id){
+
+		// TODO: a volunteer can unfollow an already followed event (Hatem)
+		//
+		return redirect()->action('EventController@show', [$id]);
+	}
+
+	public function register($id){
+
+		// TODO: a volunteer can regiseter for an event only once (Hatem)
+		//
+		return redirect()->action('EventController@show', [$id]);
+	}
+
+	public function unregister($id){
+
+		// TODO: a volunteer can unregiser from an already registered event (Hatem)
+		// 
+		return redirect()->action('EventController@show', [$id]);
+	}
 }

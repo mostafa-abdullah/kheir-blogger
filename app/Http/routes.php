@@ -157,8 +157,24 @@ Route::group(['middleware' => ['web']], function () {
 | Event Routes
 |-----------------------
 */
+
+    /**
+     *	Event Following
+     */
+    Route::get('event/{id}/follow', 'EventController@follow');
+    Route::get('event/{id}/unfollow', 'EventController@unfollow');
+
+    /**
+     *	Event Registeration
+     */
+    Route::get('event/{id}/register', 'EventController@register');
+    Route::get('event/{id}/unregister', 'EventController@unregister');
+
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
      ]]);
+
+
+     Route::get('/testnotify', 'Controller@notify');
 
 });

@@ -20,33 +20,31 @@ class CreateOrganizationReviewsTable extends Migration
             $table->integer('rate');
 
             $table->timestamps();
-
-            DB::unprepared("
-                CREATE TRIGGER ins_organization_reviews AFTER INSERT ON `organization_reviews`
-                    FOR EACH ROW
-                        BEGIN
-                            UPDATE organizations
-                            SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = NEW.organization_id)
-                            WHERE id = NEW.organization_id;
-                        END
-            ");
-
-            DB::unprepared("
-                CREATE TRIGGER del_organization_reviews AFTER DELETE ON `organization_reviews`
-                    FOR EACH ROW
-                        BEGIN
-                        UPDATE organizations
-                        SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = OLD.organization_id)
-                        WHERE id = OLD.organization_id;
-                        END
-            ");
         });
+
+        DB::unprepared("
+            CREATE TRIGGER ins_organization_reviews AFTER INSERT ON `organization_reviews`
+                FOR EACH ROW
+                    BEGIN
+                        UPDATE organizations
+                        SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = NEW.organization_id)
+                        WHERE id = NEW.organization_id;
+                    END
+        ");
+
+        DB::unprepared("
+            CREATE TRIGGER del_organization_reviews AFTER DELETE ON `organization_reviews`
+                FOR EACH ROW
+                    BEGIN
+                        UPDATE organizations
+                            SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = OLD.organization_id)
+                        WHERE id = OLD.organization_id;
+                    END
+        ");
     }
 
     public function down()
     {
         Schema::drop('organization_reviews');
-        DB::unprepared('DROP TRIGGER ins_organization_reviews');
-        DB::unprepared('DROP TRIGGER del_organization_reviews');
     }
 }

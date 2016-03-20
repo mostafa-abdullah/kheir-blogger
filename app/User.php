@@ -54,27 +54,16 @@ class User extends Authenticatable
         return $this->hasMany('App\OrganizationReview');
     }
 
-
-
-// ------------- Unseen ---------------------------
-    /**
-     * users can receive many notifications and there are property read which specifies if user read notification or still not
-     * @return $this
-     */
-
     public function notifications (){
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps()->withPivot('read');
+
+        return $this->belongsToMany('App\Notification', 'user_notifications')
+                    ->withTimestamps()->withPivot('read');
     }
 
-    /*
-     * users can volunteer in many events
-     *
-     */
-
-
     public function events (){
-        return $this->belongsToMany('App\Event','volunteerInEvent')->withTimestamps()->withPivot('volunteering_type');
 
+        return $this->belongsToMany('App\Event','volunteers_in_events')
+                    ->withTimestamps()->withPivot('type');
     }
 
 
