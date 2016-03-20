@@ -28,7 +28,7 @@ class Organization extends Authenticatable
 
       $event = new Event($request->all());
       $this->events()->save($event);
-      return $event->id;
+      return $event;
     }
 
     public function recommendations(){
