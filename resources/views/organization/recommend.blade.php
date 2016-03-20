@@ -7,7 +7,7 @@
 @section('content')
 
 
-    {!! Form::open(['action' => ['OrganizationController@storeRecommendation' , $id]]) !!}
+    {!! Form::open(['action' => ['OrganizationController@storeRecommendation', $id]]) !!}
 
         <div class = "form-group">
             {!! Form::label('recommendation' , 'Recommendation') !!}
@@ -17,7 +17,6 @@
         <div class = "form-group">
             {!! Form::submit('Send' , array('class' => 'btn btn-default' )) !!}
         </div>
-
 
     {!! Form::close() !!}
 

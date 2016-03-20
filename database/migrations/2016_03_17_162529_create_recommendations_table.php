@@ -5,11 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRecommendationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('recommendations', function (Blueprint $table) {
@@ -23,11 +19,6 @@ class CreateRecommendationsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::drop('recommendations');
