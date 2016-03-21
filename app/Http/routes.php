@@ -178,4 +178,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
      ]]);
+
+    /**
+     * Event editing
+     */
+
+    Route::get('event/{id}/edit', 'EventController@editEvent');
+   // Route::post('event','EventController@store');
 });
+
+

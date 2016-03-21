@@ -104,7 +104,7 @@ class EventController extends Controller
         $question->user_id = Auth::user()->id;
 		Event::findOrFail($id)->questions()->save($question);
 
-        return redirect()->action('EventController@show', [$id])
+        return redirect()->action('EventController@show', [$id]);
     }
 
     public function answerQuestion(Request $request, $id, $q_id)
@@ -127,5 +127,21 @@ class EventController extends Controller
 		//TODO: redirect to unanswered questions when this view is compelete (Youssef)
 		return redirect()->action('EventController@show', [$id]);
     }
+
+	public function editEvent($id)
+	{
+		$event=Event::findorfail($id);
+		return view('event.edit')->with($event);
+	}
+
+
+	public function update(EventRequest $req, $id)
+	{
+		$event=Event::findorfail($id);
+		$event->update($req->all());
+		return redirect()->action('EventController@show', [$event->id]);
+
+	}
+
 
 }
