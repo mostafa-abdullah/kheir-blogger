@@ -61,7 +61,9 @@ class VolunteerController extends Controller
         return view('volunteer.show', compact('volunteer'));
     }
 
-
+    /**
+     *  Volunteer set a challenge to himself
+     */
     public function createChallenge($id)
     {
         if(Auth::user()->id == $id)
@@ -69,20 +71,58 @@ class VolunteerController extends Controller
         return redirect('/');
     }
 
+
+    /**
+     *  Store the challenge in the database
+     */
     public function storeChallenge(Request $request , $id)
     {
-        $this->validate($request , ['challenge' => 'required|numeric|min:1' ,]);
+        $this->validate($request , ['events' => 'required|numeric|min:1' ,]);
 
         if(Auth::user()->id == $id)
         {
-
             $user_id = Auth::user()->id;
             $challenge = new Challenge($request->all());
             $challenge->user_id = $user_id;
-            $challenge->save();
+            $user = User::findOrFail($user_id);
+            $user->challenges()->save($challenge);
             return redirect()->action('VolunteerController@show' , [$user_id]);
         }
         return redirect('/');
     }
+
+    /**
+     *  The volunteer edit a challenge
+     */
+
+    public function editChallenge($user_id , $challenge_id)
+    {
+        if(Auth::user()->id == $user_id)
+        {
+            $challenge = Challenge::findOrFail($challenge_id);
+            return view('volunteer.editChallenge' , compact('challenge' , 'user_id','challenge_id'));
+        }
+    }
+
+
+
+    /**
+     *  Store the edited challenge in the database
+     */
+    public function updateChallenge(Request $request , $user_id , $challenge_id)
+    {
+        $this->validate($request , ['events' => 'required|numeric|min:1']);
+        if(Auth::user()->id == $user_id)
+        {
+            $challenge = Challenge::findOrFail($challenge_id);
+            $challenge->update($request->all());
+            return redirect()->action('VolunteerController@show' , [$user_id]);
+        }
+        return redirect('/');
+
+
+    }
+
+
 
 }

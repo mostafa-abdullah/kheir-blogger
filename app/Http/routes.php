@@ -151,9 +151,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
-
+    /**
+     *  set challenges
+     */
     Route::get('volunteer/{id}/challenge' , 'VolunteerController@createChallenge');
     Route::post('volunteer/{id}/challenge' , 'VolunteerController@storeChallenge');
+
+    /**
+     *  edit challenges
+     */
+    Route::get('volunteer/{user_id}/challenge/{challenge_id}' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/{user_id}/challenge/{challenge_id}' , 'VolunteerController@updateChallenge');
 
 /*
 |-----------------------
