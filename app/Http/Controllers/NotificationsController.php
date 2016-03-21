@@ -31,12 +31,16 @@ class NotificationsController extends Controller
     	return view('notifications.show', compact('notifications'));
     }
 
+    /**
+     * Mark this notification as unread.
+     * @param null $notification_id
+     * @return string
+     */
     public function handle($notification_id = null)
     {
         $notification = Auth::user()->notifications()->findOrFail($notification_id);
         $notification->pivot->read = 0;
         $notification->push();
-//        dd($notification_id . " " . $user_id);
         return "success";
     }
 }

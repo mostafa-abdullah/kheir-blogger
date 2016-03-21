@@ -34,11 +34,6 @@
                        console.log(data);
                 }
             });
-
-
-//            document.write("clicked<br/>");
-//            notification.read = 1;
-//            document.write("notifications/" + notification.notification_id + "/" + notification.user_id);
         }
     </script>
 @endsection
