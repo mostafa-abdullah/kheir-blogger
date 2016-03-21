@@ -57,8 +57,11 @@ class EventController extends Controller
 	public function store(EventRequest $request){
 
 		$organization = auth()->guard('organization')->user();
-		$event_id = $organization->createEvent($request);
+		$event = $organization->createEvent($request);
 		//TODO: notify subscribers and nearby volunteers (Esraa)
+		$subscribers = $organization->subscribers();
+		$notification_description = $organization->name." created a new event ".$request->name;
+		notify($subscribers,$event,$notification_description, url("/events/", $event->id));
 		return redirect()->action('EventController@show', [$event_id]);
 	}
 
