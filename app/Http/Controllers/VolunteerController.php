@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Challenge;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
 
 use App\Event;
-use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 
 class VolunteerController extends Controller
@@ -60,5 +61,28 @@ class VolunteerController extends Controller
         return view('volunteer.show', compact('volunteer'));
     }
 
+
+    public function createChallenge($id)
+    {
+        if(Auth::user()->id == $id)
+            return view('volunteer.challenge' , compact('id'));
+        return redirect('/');
+    }
+
+    public function storeChallenge(Request $request , $id)
+    {
+        $this->validate($request , ['challenge' => 'required|numeric|min:1' ,]);
+
+        if(Auth::user()->id == $id)
+        {
+
+            $user_id = Auth::user()->id;
+            $challenge = new Challenge($request->all());
+            $challenge->user_id = $user_id;
+            $challenge->save();
+            return redirect()->action('VolunteerController@show' , [$user_id]);
+        }
+        return redirect('/');
+    }
 
 }

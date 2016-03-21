@@ -152,6 +152,9 @@ Route::group(['middleware' => ['web']], function () {
         'show'
     ]]);
 
+    Route::get('volunteer/{id}/challenge' , 'VolunteerController@createChallenge');
+    Route::post('volunteer/{id}/challenge' , 'VolunteerController@storeChallenge');
+
 /*
 |-----------------------
 | Event Routes
