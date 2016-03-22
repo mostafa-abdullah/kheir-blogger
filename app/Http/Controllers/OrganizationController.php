@@ -147,7 +147,8 @@ class OrganizationController extends Controller
             $organization = Organization::findorfail($id);
             $recommendations = $organization->recommendations();
             return view("organization.recommendation", compact('recommendations'));
-        }
-        return redirect('/');
+        }else
+            return redirect('/');
+
     }
 }

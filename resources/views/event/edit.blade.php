@@ -1,8 +1,8 @@
-@extends('layouts.app)
+@extends('layouts.app')
 
 @section('content')
 
-    <h1>Editing Event " <?= $event->name; ?> "-></h1>
+    <h1>Editing Event: {{$event->name}}</h1>
 
     {!! Form::model($event, array( 'method' => 'PATCH','action' =>array('EventController@update',$event->id))) !!}
 
@@ -33,18 +33,6 @@
 
     {!!Form::submit('Update', array('class'=>'btn btn-default'));!!}
     {!! Form::close() !!}
-
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-
-
+    @include('errors')
 
 @stop

@@ -26,7 +26,7 @@
 Route::group(['middleware' => ['web']], function () {
 
     /**
-     *	Welcome page (for not logged-in volunteers/organizations)
+     *  Welcome page (for not logged-in volunteers/organizations)
      */
     Route::get('/', function () {
         if(Auth::user() || auth()->guard('organization')->check())
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['web']], function () {
 |
 */
     /**
-     *	Login page for organizations
+     *  Login page for organizations
      */
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -54,12 +54,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
-     *	Login an organization with a request containing email and password
+     *  Login an organization with a request containing email and password
      */
     Route::post('/login_organization','LoginController@organizationLogin');
 
     /**
-     * 	Register page for organizations
+     *  Register page for organizations
      */
     Route::get('/register_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -68,23 +68,23 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
-     *	Register an organization with a request containing name, email and password
+     *  Register an organization with a request containing name, email and password
      */
     Route::post('/register_organization','OrganizationController@register');
 
     /**
-     *	Logout organization
+     *  Logout organization
      */
     Route::get('/logout_organization','OrganizationController@logout');
 
     /**
-     *	Authentication related to the user (volunteer)
+     *  Authentication related to the user (volunteer)
      */
     Route::auth();
 
     /**
-     *	Login a user(volunter) - Added to guard from a logged in user
-     *	or organization
+     *  Login a user(volunter) - Added to guard from a logged in user
+     *  or organization
      */
     Route::get('/login',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -118,7 +118,7 @@ Route::group(['middleware' => ['web']], function () {
         }
     });
     /**
-     *	Homepage (for logged-in volunteers/organizations)
+     *  Homepage (for logged-in volunteers/organizations)
      */
     Route::get('home', 'HomeController@index');
 
@@ -145,7 +145,6 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/review','OrganizationController@createReview');
     Route::post('organization/{id}/review','OrganizationController@storeReview');
-
 
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
@@ -179,11 +178,24 @@ Route::group(['middleware' => ['web']], function () {
 | Event Routes
 |-----------------------
 */
+    /**
+     * Question Routes
+     */
+    Route::get('event/{id}/question/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/question/ask', 'EventController@storeQuestion');
+    Route::get('event/{id}/question/answer', 'EventController@viewUnansweredQuestions');
+    Route::post('event/{id}/question/{q_id}', 'EventController@answerQuestion');
+    Route::get('event/{id}/question/{q_id}', 'EventController@showQuestion');
+
+     /**
+     *  Post Routes
+     */
+    Route::get('/event/{event_id}/post/create','EventController@createPost');
+    Route::post('/event/{event_id}/post','EventController@storePost');
 
     /**
      *	Event Following
      */
-
     Route::get('event/{id}/follow', 'EventController@follow');
     Route::get('event/{id}/unfollow', 'EventController@unfollow');
 
@@ -192,21 +204,14 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
-
-    Route::get('event/{id}/questions/ask', 'EventController@askQuestion');
-    Route::post('event/{id}/questions/ask', 'EventController@storeQuestion');
-    Route::post('event/{id}/questions/{q_id}', 'EventController@answerQuestion');
-
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
-     ]]);
+    ]]);
 
     /**
-     * Event editing
+     *  Routes related to the event
      */
-
-    Route::get('event/{id}/edit', 'EventController@editEvent');
-    Route::post('event','EventController@show');
+    Route::resource('event','EventController', ['only' => [
+         'show', 'create', 'edit', 'update'
+     ]]);
 });
-
-
