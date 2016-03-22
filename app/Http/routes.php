@@ -131,7 +131,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
-     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+    Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
     /**
      *	Organization Review
      */
@@ -148,6 +148,18 @@ Route::group(['middleware' => ['web']], function () {
 | Volunteer Routes
 |-----------------------
 */
+    /**
+     *  set challenges
+     */
+    Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
+    Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
+
+    /**
+     *  edit challenges
+     */
+    Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
+
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);

@@ -13,13 +13,13 @@ class Event extends Model
     ];
 
     public function organization(){
-        
+
     	return $this->belongsTo('App\Organization');
 	}
 
     public function  notifications(){
 
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
     }
 
     public function  users (){
