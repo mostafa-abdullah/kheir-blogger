@@ -142,14 +142,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organization/{id}/review','OrganizationController@createReview');
     Route::post('organization/{id}/review','OrganizationController@storeReview');
 
-     /**
-     *  Routes related to the event post
-     */
-    Route::group(['middleware'=>'EventPostMiddleWare'],function(){
-    Route::get('/event/{event_id}/post/create','EventPostController@createPost');
-    Route::post('/event/post/publish','EventPostController@storePost');
-    });
-
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
     ]]);
@@ -170,17 +162,22 @@ Route::group(['middleware' => ['web']], function () {
 */
 
     /**
-<<<<<<< HEAD
      *  Routes related to the event
      */
     Route::resource('event','EventController', ['only' => [
          'create'
      ]]);
         
+     /**
+     *  Routes related to the event post
+     */
+    Route::group(['middleware'=>'EventPostMiddleWare'],function(){
+    Route::get('/event/{event_id}/post/create','EventPostController@createPost');
+    Route::post('/event/post/publish','EventPostController@storePost');
+    });
 
     /**
      *  Routes related to the organization_review
-=======
      *	Event Following
      */
 
@@ -189,7 +186,6 @@ Route::group(['middleware' => ['web']], function () {
 
     /**
      *	Event Registeration
->>>>>>> master
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');

@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Requests\EventPostRequest as EventPostRequest;
 use App\EventPost as EventPost;
 use App\Notification as Notification;
+use App\Event as Event;
 
 class EventPostController extends Controller
 {
@@ -36,8 +37,9 @@ class EventPostController extends Controller
     	$eventPost->organization_id = $organization_id;
     	$eventPost->save();
          if($request->sendnotifications == 1){
-            $notf = new Notification;
-            $notf->addNotification([1],$request->event_id,$request->description,"Hello");
+            $event = Event::find($request->event_id);
+            Notification::notify(array($event->registrants()), $event, $request->description, url("/events/", $event->id));
+            Notification::notify(array($event->followers()), $event, $request->description, url("/events/", $event->id));
          }
         return redirect('home');
 
