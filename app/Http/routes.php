@@ -114,6 +114,12 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('home', 'HomeController@index');
 
+    /*
+    Send feed back to the admin (for logged-in volunteers/organizations)
+    */
+    Route::get('sendFeedback' , 'HomeController@sendFeedback');
+
+
 /*
 |-----------------------
 | Organization Routes
@@ -144,7 +150,7 @@ Route::group(['middleware' => ['web']], function () {
     ]]);
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');
-    
+
 /*
 |-----------------------
 | Passwrod reset routes
