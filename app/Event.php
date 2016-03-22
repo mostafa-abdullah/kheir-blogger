@@ -30,12 +30,12 @@ class Event extends Model
 
     public function followers(){
 
-        return $this->users()->where('type','=','1');
+        return $this->users()->where('type','=','1')->get();
     }
 
     public function registrants(){
 
-        return $this->users()->where('type','=','2');
+        return $this->users()->where('type','=','2')->get();
     }
 
     public function reviews()

@@ -27,7 +27,8 @@ class EventController extends Controller
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'create', 'store', 'answerQuestion', 'viewUnansweredQuestions',
+            'create', 'store', 'edit', 'update',
+			'answerQuestion', 'viewUnansweredQuestions',
 			'createPost', 'storePost'
         ]]);
 
@@ -43,26 +44,18 @@ class EventController extends Controller
 |==========================================================================
 |
 */
-	/**
-	 * show the event's page
-	 */
+
 	public function show($id){
 		// TODO: show the event's page (Hossam Ahmad)
         // hint: to display question use the scope methods in the Question model
 		return Event::find($id);
 	}
 
-	/**
-	 * returns a form to create a new event
-	 */
 	public function create(){
 
 		return view('event.create');
 	}
 
-	/**
-	 * store the created event in the database
-	 */
 	public function store(EventRequest $request){
 
 		$organization = auth()->guard('organization')->user();
@@ -71,6 +64,29 @@ class EventController extends Controller
 		$notification_description = $organization->name." created a new event ".$request->name;
 		Notification::notify($subscribers, $event, $notification_description, url("/event", $event->id));
 		return redirect()->action('EventController@show', [$event->id]);
+	}
+
+	public function edit($id)
+	{
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+			return view('event.edit', compact('event'));
+		}
+		return redirect()->action('EventController@show', [$id]);
+	}
+
+	public function update(EventRequest $request, $id)
+	{
+		$event = Event::findorfail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+			$event = Event::findOrFail($id);
+			$event->update($request->all());
+			Notification::notify($event->registrants(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
+        	Notification::notify($event->followers(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
+		}
+		return redirect()->action('EventController@show', [$id]);
 	}
 
 /*
@@ -171,7 +187,6 @@ class EventController extends Controller
 						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
     }
 
-
 /*
 |==========================================================================
 | Event Posts
@@ -204,9 +219,9 @@ class EventController extends Controller
     	$eventPost->save();
         if($request->sendnotifications == 1)
 		{
-            $event = Event::find($request->event_id);
-            Notification::notify(array($event->registrants()), $event, $request->description, url("/event", $event->id));
-        	Notification::notify(array($event->followers()), $event, $request->description, url("/event", $event->id));
+            $event = Event::find($event_id);
+			Notification::notify($event->registrants(), $event, "Event ".($event->name)." has new posts",url("/event",$id));
+        	Notification::notify($event->followers(), $event, "Event ".($event->name)." has new posts",url("/event",$id));
         }
         return redirect()->action('EventController@show', [$event_id]);
     }
