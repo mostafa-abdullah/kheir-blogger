@@ -134,13 +134,21 @@ class EventController extends Controller
 	public function editEvent($id)
 	{
 		$event=Event::findorfail($id);
-		return view('event.edit')->with($event);
-	}
+		$organization_auth_id = auth()->guard('organization')->id;
+		$organization_create_event=Event::find($id)->organization()->$id;
+		if($organization_auth_id==$organization_create_event) {
+			return view('event.edit')->with($event);
+		}else{
+			return redirect('home');
+		}
 
+	}
 
 	public function update(EventRequest $req, $id)
 	{
 		$event=Event::findorfail($id);
+
+
 		$event->update($req->all());
 		return redirect()->action('EventController@show', [$event->id]);
 

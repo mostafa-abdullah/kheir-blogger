@@ -184,7 +184,7 @@ Route::group(['middleware' => ['web']], function () {
      */
 
     Route::get('event/{id}/edit', 'EventController@editEvent');
-   // Route::post('event','EventController@store');
+    Route::post('event','EventController@show');
 });
 
 
