@@ -33,6 +33,11 @@ class HomeController extends Controller
     */
     public function sendFeedback()
     {
-      return view('feedback');
+      return view('sendFeedback');
+    }
+
+    public function storeFeedback()
+    {
+      
     }
 }
