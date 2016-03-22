@@ -37,7 +37,7 @@ class HomeController extends Controller
       return view('sendFeedback');
     }
 
-    public function storeFeedback($id)
+    public function storeFeedback($Request , $id)
     {
       $input = Request::all();
       $feedback = new Feedback;
