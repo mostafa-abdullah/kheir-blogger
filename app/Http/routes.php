@@ -131,7 +131,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
-     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+    Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
     /**
      *	Organization Review
      */
@@ -148,20 +148,21 @@ Route::group(['middleware' => ['web']], function () {
 | Volunteer Routes
 |-----------------------
 */
-    Route::resource('volunteer','VolunteerController', ['only' => [
-        'show'
-    ]]);
     /**
      *  set challenges
      */
-    Route::get('challenge' , 'VolunteerController@createChallenge');
-    Route::post('challenge' , 'VolunteerController@storeChallenge');
+    Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
+    Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
 
     /**
      *  edit challenges
      */
-    Route::get('challenge/{challenge_id}/edit' , 'VolunteerController@editChallenge');
-    Route::patch('challenge/{challenge_id}/edit' , 'VolunteerController@updateChallenge');
+    Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
+
+    Route::resource('volunteer','VolunteerController', ['only' => [
+        'show'
+    ]]);
 
 /*
 |-----------------------

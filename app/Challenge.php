@@ -3,14 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Challenge extends Model
 {
-    protected $fillable = ['events' , 'deadline'];
+    protected $fillable = ['events'];
 
 
-    public function user(){
-
+    public function user()
+    {
         return $this->belongsTo('App\User');
+    }
+
+    public function scopeCurrentYear($query)
+    {
+    	$query->where('year', Carbon::now()->year);
     }
 }

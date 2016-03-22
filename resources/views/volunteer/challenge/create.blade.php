@@ -12,11 +12,6 @@
         {!! Form::number('events' , '0' , ['class' => 'form-control']) !!}
     </div>
 
-    <div class = "form-group">
-        {!! Form::label('deadline' , 'Before this date') !!}
-        {!! Form::date('deadline' , date('Y-d-m') , ['class' => 'form-control']) !!}
-    </div>
-
     <div>
         {!! Form::submit('Set Challenge' , ['class' => 'form-control']) !!}
     </div>

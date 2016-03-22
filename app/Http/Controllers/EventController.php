@@ -107,7 +107,7 @@ class EventController extends Controller
         $question->user_id = Auth::user()->id;
 		Event::findOrFail($id)->questions()->save($question);
 
-        return redirect()->action('EventController@show', [$id])
+        return redirect()->action('EventController@show', [$id]);
     }
 
     public function answerQuestion(Request $request, $id, $q_id)

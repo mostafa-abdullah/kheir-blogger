@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventsNotificationsTable extends Migration
+class CreateEventNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateEventsNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_notification', function (Blueprint $table) {
+        Schema::create('event_notifications', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('event_id')->unsigned()->index();
@@ -34,6 +34,6 @@ class CreateEventsNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('event_notification');
+        Schema::drop('event_notifications');
     }
 }

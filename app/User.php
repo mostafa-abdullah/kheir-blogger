@@ -75,13 +75,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Question');
     }
 
+    public function challenges(){
 
-    /**
-     * A volunteer has many challenges
-     */
-
-    public function challenges()
-    {
         return $this->hasMany('App\Challenge');
+    }
+
+    public function currentYearChallenge(){
+
+        return $this->challenges()->currentYear()->get();
     }
 }

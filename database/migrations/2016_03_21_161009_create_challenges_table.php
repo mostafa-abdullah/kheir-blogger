@@ -20,7 +20,7 @@ class CreateChallengesTable extends Migration
                   ->on('users')
                   ->onDelete('cascade');
             $table->integer('events');
-            $table->date('deadline');
+            $table->integer('year');
             $table->timestamps();
         });
     }

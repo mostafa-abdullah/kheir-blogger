@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Challenge;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\User;
 
+use App\User;
 use App\Event;
-use Illuminate\Support\Facades\Auth;
+use App\Challenge;
+
+use Carbon\Carbon;
+use Auth;
 
 
 class VolunteerController extends Controller
@@ -18,7 +20,8 @@ class VolunteerController extends Controller
 
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
-            'subscribe', 'unsubscribe',
+            'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
+            'editChallenge', 'updateChallenge'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -55,9 +58,6 @@ class VolunteerController extends Controller
     public static function show($id)
     {
         $volunteer = User::findOrFail($id);
-
-
-
         return view('volunteer.show', compact('volunteer'));
     }
 
@@ -66,8 +66,10 @@ class VolunteerController extends Controller
      */
     public function createChallenge()
     {
-            return view('volunteer.challenge');
-
+        $challenge = Auth::user()->currentYearChallenge();
+        if($challenge->isEmpty())
+            return view('volunteer.challenge.create');
+        return redirect('volunteer/challenge/edit');
     }
 
 
@@ -76,37 +78,28 @@ class VolunteerController extends Controller
      */
     public function storeChallenge(Request $request)
     {
-        $this->validate($request ,
-            ['events' => 'required|numeric|min:1' ,
-             'deadline' => 'required|date_format:Y-d-m'
-            ]);
-        $user_id = Auth::user()->id;
+        $this->validate($request , ['events' => 'required|numeric|min:1']);
         $challenge = new Challenge($request->all());
-        $challenge->user_id = $user_id;
-        $user = User::findOrFail($user_id);
-        $user->challenges()->save($challenge);
-        return redirect()->action('VolunteerController@show' , [$user_id]);
-
+        $challenge->year = Carbon::now()->year;
+        Auth::user()->challenges()->save($challenge);
+        return redirect('home');
     }
 
     /**
-     *  The volunteer edit a challenge
+     *  Volunteer can edit challenge
      */
-
-    public function editChallenge($challenge_id)
+    public function editChallenge()
     {
-        $challenge = Challenge::findOrFail($challenge_id);
+        $challenge = Challenge::findOrFail();
         if($challenge->user->id == Auth::user()->id)
-            return view('volunteer.editChallenge' , compact('challenge' , 'challenge_id'));
-        return redirect('/');
+            return view('volunteer.challenge.edit' , compact('challenge' , 'challenge_id'));
+        return redirect('home');
     }
 
-
-
     /**
-     *  Store the edited challenge in the database
+     *  Volunteer can update challenge
      */
-    public function updateChallenge(Request $request , $challenge_id)
+    public function updateChallenge(Request $request)
     {
         $this->validate($request , ['events' => 'required|numeric|min:1']);
 
@@ -116,7 +109,7 @@ class VolunteerController extends Controller
             $challenge->update($request->all());
             return redirect()->action('VolunteerController@show' , [Auth::user()->id]);
         }
-        return redirect('/');
+        return redirect('home');
 
     }
 
