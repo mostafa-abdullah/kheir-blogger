@@ -76,8 +76,10 @@ class VolunteerController extends Controller
      */
     public function storeChallenge(Request $request)
     {
-        $this->validate($request , ['events' => 'required|numeric|min:1' ,]);
-
+        $this->validate($request ,
+            ['events' => 'required|numeric|min:1' ,
+             'deadline' => 'required|date_format:Y-d-m'
+            ]);
         $user_id = Auth::user()->id;
         $challenge = new Challenge($request->all());
         $challenge->user_id = $user_id;

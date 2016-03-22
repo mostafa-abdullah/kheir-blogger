@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Challenge extends Model
 {
-    protected $fillable = ['events'];
+    protected $fillable = ['events' , 'deadline'];
 
 
     public function user(){
