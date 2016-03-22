@@ -13,24 +13,19 @@ class Event extends Model
     ];
 
     public function organization(){
-        
-    	return $this->belongsTo('App\Organization');
+
+    	return $this->belongsTo('App\Organization')->first();
 	}
 
     public function  notifications(){
 
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+        return $this->belongsToMany('App\Notification',"user_notifications")->withTimestamps();
     }
 
     public function  users (){
 
         return $this->belongsToMany('App\User','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
-    }
-
-    public function questions()
-    {
-        return this->hasMany('App\Question');
     }
 
     public function followers(){

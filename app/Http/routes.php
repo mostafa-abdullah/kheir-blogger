@@ -157,26 +157,29 @@ Route::group(['middleware' => ['web']], function () {
 | Event Routes
 |-----------------------
 */
+    /**
+     * Question Routes
+     */
+    Route::get('event/{id}/answer', 'EventController@viewUnansweredQuestions');
+    Route::get('event/{id}/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/ask', 'EventController@storeQuestion');
+    Route::post('event/{id}/answer/{q_id}', 'EventController@answerQuestion');
 
     /**
      *	Event Following
      */
-
     Route::get('event/{id}/follow', 'EventController@follow');
     Route::get('event/{id}/unfollow', 'EventController@unfollow');
 
     /**
      *	Event Registeration
-     */ 
-    Route::resource('event','EventController', ['only' => [
-         'create','store','show'
-     ]]);
+     */
 
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
+    Route::resource('event','EventController', ['only' => [
+         'create','store','show'
+    ]]);
 
-    Route::get('event/{id}/answer', 'EventController@viewQuestions');
-    Route::get('event/{id}/questions/ask', 'EventController@addQuestion');
-    Route::post('event/{id}/questions/ask', 'EventController@askQuestion');
-    Route::post('event/{id}/answer/{q_id}', 'EventController@answerQuestion'); 
+
 });

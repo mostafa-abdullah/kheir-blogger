@@ -19,13 +19,13 @@ class EventController extends Controller
 
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
-            'askQuestion',
+            'askQuestion', 'storeQuestion'
 
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'create', 'store', 'answerQuestion',
+            'create', 'store', 'answerQuestion', 'viewUnansweredQuestions'
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -93,10 +93,9 @@ class EventController extends Controller
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-	public function askQuestion($id){
-
-		//TODO: returns a form for writing a question (Youssef)
-		//
+	public function askQuestion($id)
+	{
+		return view('event.ask', compact('id'));
 	}
 
     public function storeQuestion(Request $request, $id)
@@ -107,13 +106,7 @@ class EventController extends Controller
         $question->user_id = Auth::user()->id;
 		Event::findOrFail($id)->questions()->save($question);
 
-        return redirect()->action('EventController@show', [$id])
-    }
-
-
-    public function addQuestion($id)
-    {
-        return view('event.ask', compact($id));
+        return redirect()->action('EventController@show', [$id]);
     }
 
     public function answerQuestion(Request $request, $id, $q_id)
@@ -122,8 +115,7 @@ class EventController extends Controller
 
         $question = Question::findorfail($q_id);
 
-
-        if($question->event()->organization()->id != auth()->guard('organization')->id){
+        if($question->event()->organization()->id != auth()->guard('organization')->user()->id){
 			return redirect()->action('EventController@show', [$id])
 							 ->withErrors(['Permission' => 'You do not have Permission to answer this question']);
         }
@@ -132,20 +124,21 @@ class EventController extends Controller
 		$question->answered_at = Carbon::now();
 		$question->save();
 
-		Notification::notify(array($question->user_id), $question->event_id, "Your question has been answered", url("/events/", $question->event_id, "/", $question->id));
+		Notification::notify(array($question->user_id), $question->event(), "Your question has been answered", url("/events/", $question->event_id, "/", $question->id));
 
-				return redirect()->action('EventController@viewQuestions', [$id]);
+		return redirect()->action('EventController@viewQuestions', [$id]);
     }
 
-    public function viewQuestions($id)
+    public function viewUnansweredQuestions($id)
     {
-        if(auth()->guard('organization')->check() && 
-            auth()->guard('organization')->id == $id){
-        $event = Event::findorfail($id);
-        $questions = $event->questions()->Unanswered();
-        return view("event.answer", compact($questions));
-        }else
-            return redirect(url('/event/'.$id))->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
-    }
 
+        $event = Event::findorfail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization_id)
+		{
+        	$questions = $event->questions()->Unanswered()->get();
+        	return view("event.answer", compact('questions'));
+        }
+		return redirect()->action('EventController@show', [$id])
+						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
+    }
 }

@@ -20,7 +20,7 @@ class Question extends Model
     */
     public function event(){
 
-    	return $this->belongsTo('App\Event');
+    	return $this->belongsTo('App\Event')->first();
     }
 
     public function user(){

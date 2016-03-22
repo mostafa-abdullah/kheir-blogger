@@ -146,8 +146,7 @@ class OrganizationController extends Controller
         if(auth()->guard('organization')->id == $id){
             $organization = Organization::findorfail($id);
             $recommendations = $organization->recommendations();
-
-            return view("organization.recommendation", compact($recommendations));
+            return view("organization.recommendation", compact('recommendations'));
         }else
             return redirect('/');
 

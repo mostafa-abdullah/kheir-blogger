@@ -4,7 +4,7 @@
 </header>
 @section('content')
 
-	{!! Form::open(['action' => ['EventController@askQuestion', $id]]) !!}
+	{!! Form::open(['action' => ['EventController@storeQuestion', $id]]) !!}
 
         <div class = "form-group">
             {!! Form::label('recommendation' , 'question') !!}
