@@ -21,8 +21,11 @@
 
     <h1>Reviews</h1>
     <ul>
-        @foreach($volunteer->reviews as $review)
-            <li>{{ $review->body}}</li>
+        @foreach($volunteer->eventReviews as $review)
+            <li>{{ $review }}</li>
+        @endforeach
+        @foreach($volunteer->organizationReviews as $review)
+            <li>{{ $review  }}</li>
         @endforeach
     </ul>
 

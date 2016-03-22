@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function eventReviews(){
 
-        return $this->hasMany('App\Review');
+        return $this->hasMany('App\EventReview');
     }
 
     public function eventQuestions(){
