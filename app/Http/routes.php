@@ -93,9 +93,9 @@ Route::group(['middleware' => ['web']], function () {
     });
 
 /*
-|--------------------------------------------------------------------------
+|==========================================================================
 | Functional Routes
-|--------------------------------------------------------------------------
+|==========================================================================
 |
 | These routes are related to the main actions of the applications
 | associated with volunteers, organizations or events.
@@ -108,43 +108,67 @@ Route::group(['middleware' => ['web']], function () {
 |       update  => update a model with the passed request
 |       destroy => delete a model
 */
-    /**
-     * Routes related to the organization
-     */
-    Route::resource('organizations', 'OrganizationController', ['only' => [
-        'show', 'edit','update'
-    ]]);
 
     /**
      *	Homepage (for logged-in volunteers/organizations)
      */
     Route::get('home', 'HomeController@index');
 
+/*
+|-----------------------
+| Organization Routes
+|-----------------------
+*/
+
     /**
-     *	Routes related to the volunteer
+     *	Organization Subscription
      */
+    Route::get('organization/{id}/subscribe', 'VolunteerController@subscribe');
+    Route::get('organization/{id}/unsubscribe', 'VolunteerController@unsubscribe');
+
+    /**
+     *	Organization Recommendation
+     */
+    Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
+     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+    /**
+     *	Organization Review
+     */
+    Route::get('organization/{id}/review','OrganizationController@createReview');
+    Route::post('organization/{id}/review','OrganizationController@storeReview');
+
+
+    Route::resource('organization', 'OrganizationController', ['only' => [
+        'show', 'edit', 'update',
+    ]]);
+
+/*
+|-----------------------
+| Volunteer Routes
+|-----------------------
+*/
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
 
-
-
-
-    //Recommendation Routes!
-    Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
-    Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
-
-    /**
-     *	Routes related to the event
-     */
-    Route::resource('event','EventController', ['only' => [
-         'create'
-     ]]);
-
+/*
+|-----------------------
+| Event Routes
+|-----------------------
+*/
 
     /**
-     *	Routes related to the organization_review
+     *	Event Following
      */
+
+    Route::get('event/{id}/follow', 'EventController@follow');
+    Route::get('event/{id}/unfollow', 'EventController@unfollow');
+
+    /**
+     *	Event Registeration
+     */
+<<<<<<< HEAD
     Route::get('organizations/{id}/review','OrganizationReviewController@create');
     Route::post('/organizations/{id}/review','OrganizationReviewController@store');
     /**
@@ -154,5 +178,16 @@ Route::group(['middleware' => ['web']], function () {
          'index' , 'create' ,'store'
      ]]);
 
+=======
+    Route::get('event/{id}/register', 'EventController@register');
+    Route::get('event/{id}/unregister', 'EventController@unregister');
+>>>>>>> f48d18924fad18a5ec8b70234dceb0bcb07f7297
 
+    Route::get('event/{id}/questions/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/questions/ask', 'EventController@storeQuestion');
+    Route::post('event/{id}/questions/{q_id}', 'EventController@answerQuestion');
+
+    Route::resource('event','EventController', ['only' => [
+         'create','store','show'
+     ]]);
 });

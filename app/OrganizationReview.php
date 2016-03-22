@@ -4,17 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Recommendation extends Model
+class OrganizationReview extends Model
 {
-    protected $fillable = ['recommendation'];
+    protected $fillable = ['review' , 'rate'];
+
+    protected $table = 'organization_reviews';
 
     public function user(){
 
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\user');
     }
 
     public function organization(){
-        
+
         return $this->belongsTo('App\Organization');
     }
 }

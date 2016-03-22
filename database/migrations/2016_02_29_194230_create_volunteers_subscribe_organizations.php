@@ -20,6 +20,7 @@ class CreateVolunteersSubscribeOrganizations extends Migration
             $table->integer('organization_id')->unsigned()->index();
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
+            $table->primary(['user_id', 'organization_id'], 'subscription_primary_key');
             $table->timestamps();
         });
     }
