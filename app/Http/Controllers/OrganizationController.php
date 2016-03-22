@@ -79,7 +79,7 @@ class OrganizationController extends Controller
     * edit the profile of organization.
     */
     public function edit($id){
-
+        
       if(auth()->guard('organization')->id()==$id){
           $organization = Organization::findorfail($id);
           return view('organization.edit' , compact('organization'));
