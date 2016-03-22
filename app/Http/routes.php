@@ -104,11 +104,19 @@ Route::group(['middleware' => ['web']], function () {
 |       show    => view page for a single model
 |       create  => view page for creating a model
 |       store   => create a model with the passed request
-|       edit    => view page for updaing a model
+|       edit    => view page for updating a model
 |       update  => update a model with the passed request
 |       destroy => delete a model
 */
 
+    Route::get('/unread', function(){
+        $notifications = Auth::user()->notifications()->read()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 0;
+            $notification->push();
+        }
+    });
     /**
      *	Homepage (for logged-in volunteers/organizations)
      */
@@ -149,14 +157,16 @@ Route::group(['middleware' => ['web']], function () {
 |-----------------------
 */
     /**
-     *  set challenges
+     * Notification Routes
+     */
+    Route::get('notifications', 'VolunteerController@showNotifications');
+    Route::post('notifications', 'VolunteerController@unreadNotification');
+
+    /**
+     *  Challenges Routes
      */
     Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
     Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
-
-    /**
-     *  edit challenges
-     */
     Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
     Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
 

@@ -58,11 +58,10 @@ class EventController extends Controller
 
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
-		//TODO: notify subscribers and nearby volunteers (Esraa)
-		$subscribers = $organization->subscribers();
+		$subscribers = $organization->subscribers()->get();
 		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($subscribers,$event,$notification_description, url("/events/", $event->id));
-		return redirect()->action('EventController@show', [$event_id]);
+		Notification::notify($subscribers, $event, $notification_description, url("/events", $event->id));
+		return redirect()->action('EventController@show', [$event->id]);
 	}
 
 	public function follow($id){
