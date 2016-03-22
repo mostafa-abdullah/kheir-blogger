@@ -59,7 +59,7 @@ class User extends Authenticatable
                     ->withTimestamps()->withPivot('read');
     }
 
-    public function events (){
+    public function events(){
 
         return $this->belongsToMany('App\Event','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
@@ -69,4 +69,11 @@ class User extends Authenticatable
 
         return $this->hasMany('App\Review');
     }
+
+    public function eventQuestions(){
+
+        return $this->hasMany('App\Question');
+    }
+
+
 }

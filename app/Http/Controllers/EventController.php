@@ -4,17 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
-use App\Event;
+
 use Carbon\Carbon;
-use Auth;
-use Illuminate\Support\Facades\Input;
-use App\User;
+use App\Event;
 use App\Organization;
 use App\Question;
 use App\Notification;
 
-class EventController extends Controller
-{
+use Auth;
 
 class EventController extends Controller
 {
@@ -22,12 +19,13 @@ class EventController extends Controller
 
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
+            'askQuestion',
 
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'create', 'store'
+            'create', 'store', 'answerQuestion',
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -59,8 +57,11 @@ class EventController extends Controller
 	public function store(EventRequest $request){
 
 		$organization = auth()->guard('organization')->user();
-		$event_id = $organization->createEvent($request);
+		$event = $organization->createEvent($request);
 		//TODO: notify subscribers and nearby volunteers (Esraa)
+		$subscribers = $organization->subscribers();
+		$notification_description = $organization->name." created a new event ".$request->name;
+		notify($subscribers,$event,$notification_description, url("/events/", $event->id));
 		return redirect()->action('EventController@show', [$event_id]);
 	}
 
@@ -88,50 +89,52 @@ class EventController extends Controller
 	public function unregister($id){
 
 		// TODO: a volunteer can unregiser from an already registered event (Hatem)
-		// 
+		//
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-    /**
-    *   Adds a new question to the database.
-    */
-    public function askQuestion($id)
+	public function askQuestion($id){
+
+		//TODO: returns a form for writing a question (Youssef)
+		//
+	}
+
+    public function storeQuestion(Request $request, $id)
     {
-        if(Auth::user()){
-            $input = Input::all();
-            $question = new Question;
-            $question->user_id = Auth::user()->id;
-            $question->event_id = $id;
-            $question->question = $input['question'];
-            $question->question_body = $input['question_body'];
-            $question->save();
-            return redirect(url('/event/'.$input['event_id']));
-        }else{
-            return redirect(url('/event/'.$input['event_id']))->withErrors(['Permission' => 'You have to be logged in to ask a question']);
-        }
-        
+		$this->validate($request, [ 'question' => 'required' ]);
+
+        $question = new Question($request->all());
+        $question->user_id = Auth::user()->id;
+		Event::findOrFail($id)->questions()->save($question);
+
+        return redirect()->action('EventController@show', [$id])
     }
+
 
     public function addQuestion($id)
     {
         return view('event.ask', compact($id));
     }
 
-    public function answerQuestion($id, $q_id)
+    public function answerQuestion(Request $request, $id, $q_id)
     {
-        $input = Request::all();
-        $input['answered_at'] = Carbon::now();
+	 	$this->validate($request, [ 'answer' => 'required' ]);
+
         $question = Question::findorfail($q_id);
-        if(auth()->guard('organization')->check() && $question->event()->organization()->id == auth()->guard('organization')->id){ 
-                $question->answer = $input['answer'];
-                $question->answered_at = $input['answered_at'];
-                $question->save();
-                $notification = new Notification;
-                $notification->addNotification(compact($question->user_id), $question->event_id, "Your question has been answered", "/event/".$question->event_id . "/" . $question->id);
-                return redirect(url('/event/answer/'$input['event_id']));    
-        }else{
-            return redirect(url('/event/'$input['event_id']))->withErrors(['Permission' => 'You do not have Permission to answer this question']);
+
+
+        if($question->event()->organization()->id != auth()->guard('organization')->id){
+			return redirect()->action('EventController@show', [$id])
+							 ->withErrors(['Permission' => 'You do not have Permission to answer this question']);
         }
+
+		$question->answer = $request->get('answer');
+		$question->answered_at = Carbon::now();
+		$question->save();
+
+		Notification::notify(array($question->user_id), $question->event_id, "Your question has been answered", url("/events/", $question->event_id, "/", $question->id));
+
+				return redirect()->action('EventController@viewQuestions', [$id]);
     }
 
     public function viewQuestions($id)
