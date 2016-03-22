@@ -14,7 +14,7 @@ class Event extends Model
 
     public function organization(){
 
-    	return $this->belongsTo('App\Organization');
+    	return $this->belongsTo('App\Organization')->first();
 	}
 
     public function  notifications(){
