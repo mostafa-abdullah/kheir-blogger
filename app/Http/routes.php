@@ -129,11 +129,7 @@ Route::group(['middleware' => ['web']], function () {
 */
 
     /**
-<<<<<<< HEAD
-     *  Routes related to the volunteer
-=======
      *	Organization Subscription
->>>>>>> master
      */
     Route::get('organization/{id}/subscribe', 'VolunteerController@subscribe');
     Route::get('organization/{id}/unsubscribe', 'VolunteerController@unsubscribe');
@@ -191,23 +187,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('event/{id}/question/{q_id}', 'EventController@answerQuestion');
     Route::get('event/{id}/question/{q_id}', 'EventController@showQuestion');
 
-    /**
-     *  Routes related to the event
-     */
-    Route::resource('event','EventController', ['only' => [
-         'create'
-     ]]);
-        
      /**
-     *  Routes related to the event post
+     *  Post Routes
      */
-    Route::group(['middleware'=>'EventPostMiddleWare'],function(){
-    Route::get('/event/{event_id}/post/create','EventPostController@createPost');
-    Route::post('/event/post/publish','EventPostController@storePost');
-    });
+    Route::get('/event/{event_id}/post/create','EventController@createPost');
+    Route::post('/event/{event_id}/post','EventController@storePost');
 
     /**
-     *  Routes related to the organization_review
      *	Event Following
      */
     Route::get('event/{id}/follow', 'EventController@follow');
@@ -222,5 +208,11 @@ Route::group(['middleware' => ['web']], function () {
          'create','store','show'
     ]]);
 
+    /**
+     *  Routes related to the event
+     */
+    Route::resource('event','EventController', ['only' => [
+         'create'
+     ]]);
 
 });

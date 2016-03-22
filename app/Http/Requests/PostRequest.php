@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class EventPostRequest extends Request
+class PostRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class EventPostRequest extends Request
      */
     public function authorize()
     {
-        return auth()->guard('organization')->user();
+        return auth()->guard('organization')->check();
     }
 
     /**
