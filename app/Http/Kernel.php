@@ -46,6 +46,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth_organization' => \App\Http\Middleware\AuthenticateOrganization::class,
+        'auth_volunteer' => \App\Http\Middleware\AuthenticateVolunteer::class,
         'auth_both' => \App\Http\Middleware\AuthVolunteerOrOrganization::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,

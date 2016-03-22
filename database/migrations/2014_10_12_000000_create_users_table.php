@@ -3,6 +3,9 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Users table is implemented to hold information about volunteers
+ */
 class CreateUsersTable extends Migration
 {
     /**

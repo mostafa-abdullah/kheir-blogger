@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteerSubscribeAnEventTable extends Migration
+class CreateQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,22 @@ class CreateVolunteerSubscribeAnEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('volunteerInEvent', function (Blueprint $table) {
+        // A question is identified by its id, event's id and the organization's id.
+        Schema::create('questions', function (Blueprint $table)
+        {
             $table->increments('id');
-
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('event_id')->unsigned()->index();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
 
-            $table->integer('volunteering_type')->unsigned();
+            $table->string('question');
+            $table->text('question_body')->nullable();
+            $table->text('answer')->nullable();
 
+            $table->timestamp('answered_at');
             $table->timestamps();
-
         });
     }
 
@@ -35,6 +38,6 @@ class CreateVolunteerSubscribeAnEventTable extends Migration
      */
     public function down()
     {
-        Schema::drop('volunteerInEvent');
+        Schema::drop('questions');
     }
 }
