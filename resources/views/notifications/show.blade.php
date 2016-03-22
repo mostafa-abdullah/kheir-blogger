@@ -14,7 +14,7 @@
                             <br/>
                             {{ $notification->date_time }}
                             <br/>
-                            <button class="btn btn-secondary" onclick="rec({{ $notification->pivot }}, this)" type="button">mark as unread</button>
+                            <button class="btn btn-secondary" name="{{ $notification->id}}" type="button">mark as unread</button>
                         </div>
                         <br/>
                     </li>
@@ -22,18 +22,22 @@
             </ul>
         @endif
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">
 
-        function rec(notification, objButton) {
-            objButton.style.visibility = 'hidden';
+    $(document).ready(function(){
+        $("button").click(function(){
+            $(this).hide();
+            var notification_id = $(this).attr("name");
             $.ajax({
-                type: "GET",
-                url: "notifications/" + notification.notification_id,
+                type: "POST",
+                url: "notifications",
+                data: {'notification_id': notification_id},
                 success: function(data) {
                        console.log(data);
                 }
             });
-        }
+        });
+    });
     </script>
 @endsection

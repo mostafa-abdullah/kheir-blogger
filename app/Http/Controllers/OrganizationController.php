@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Requests\OrganizationRequest;
-use App\Http\Requests\RecommendationRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\RegisterOrganizationRequest;
+use App\Http\Requests\RecommendationRequest;
+use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
+
+use App\Http\Controllers\Controller;
 use App\Organization;
-use App\OrganizationReview;
 use App\Recommendation;
-use Auth;
+use App\OrganizationReview;
+
 use Hash;
+use Auth;
 
 
 class OrganizationController extends Controller
 {
-
 
     public function __construct(){
         $this->middleware('auth_volunteer', ['only' => [
@@ -52,6 +54,9 @@ class OrganizationController extends Controller
         return redirect('home');
     }
 
+    /**
+     * logout the logged-in organization
+     */
     public function logout(){
 
         Auth::guard('organization')->logout();
@@ -84,6 +89,9 @@ class OrganizationController extends Controller
       }
     }
 
+    /**
+    * update the profile of organization.
+    */
     public function update(OrganizationRequest $request, $id){
 
         $organization = Organization::findorfail($id);

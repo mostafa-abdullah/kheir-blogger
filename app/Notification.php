@@ -13,7 +13,7 @@ class Notification extends Model
      */
      public function events(){
 
-         return $this->belongsToMany('App\Event')->withTimestamps();
+         return $this->belongsToMany('App\Event', 'event_notifications')->withTimestamps();
      }
 
      /**
@@ -50,9 +50,12 @@ class Notification extends Model
         $notification = new Notification;
         $notification['description'] = $description;
         $notification['link'] = $link;
-        $event->notifications()->save($notification);
+        $notification->save();
+        $event->notifications()->attach($notification);
 
         foreach($usersToNotify as $user)
-          $user->notifications()->attach($notification, ['read' => 0 ]);
+            $user->notifications()->attach($notification, ['read' => 0 ]);
+
+
     }
 }

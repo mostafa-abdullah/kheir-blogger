@@ -109,6 +109,14 @@ Route::group(['middleware' => ['web']], function () {
 |       destroy => delete a model
 */
 
+    Route::get('/unread', function(){
+        $notifications = Auth::user()->notifications()->read()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 0;
+            $notification->push();
+        }
+    });
     /**
      *	Homepage (for logged-in volunteers/organizations)
      */
@@ -131,7 +139,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
-     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+    Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
     /**
      *	Organization Review
      */
@@ -148,6 +156,12 @@ Route::group(['middleware' => ['web']], function () {
 | Volunteer Routes
 |-----------------------
 */
+    /**
+     * Notification Routes
+     */
+    Route::get('notifications', 'VolunteerController@showNotifications');
+    Route::post('notifications', 'VolunteerController@unreadNotification');
+
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
@@ -178,8 +192,4 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('event','EventController', ['only' => [
          'create','store','show'
      ]]);
-
-    Route::get('notifications', 'NotificationsController@index');
-    Route::get('notifications/{notification_id?}', 'NotificationsController@handle');
-
 });

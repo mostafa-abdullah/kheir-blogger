@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests;
+
 use App\User;
+use App\Event;
+use App\Challenge;
+
+use Carbon\Carbon;
+use Auth;
 
 
 class VolunteerController extends Controller
@@ -13,7 +20,9 @@ class VolunteerController extends Controller
 
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
-            'subscribe', 'unsubscribe',
+            'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
+            'editChallenge', 'updateChallenge',
+            'showNotifications', 'unreadNotification'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -53,5 +62,73 @@ class VolunteerController extends Controller
         return view('volunteer.show', compact('volunteer'));
     }
 
+    /**
+     *  Volunteer set a challenge to himself
+     */
+    public function createChallenge()
+    {
+        if(Auth::user()->currentYearChallenge())
+            return redirect('volunteer/challenge/edit');
+        return view('volunteer.challenge.create');
+    }
 
+
+    /**
+     *  Store the challenge in the database
+     */
+    public function storeChallenge(Request $request)
+    {
+        $this->validate($request , ['events' => 'required|numeric|min:1']);
+        $challenge = new Challenge($request->all());
+        $challenge->year = Carbon::now()->year;
+        Auth::user()->challenges()->save($challenge);
+        return redirect('home');
+    }
+
+    /**
+     *  Volunteer can edit challenge
+     */
+    public function editChallenge()
+    {
+        $challenge = Auth::user()->currentYearChallenge();
+        if($challenge)
+            return view('volunteer.challenge.edit' , compact('challenge'));
+        return redirect('volunteer/challenge/create');
+    }
+
+    /**
+     *  Volunteer can update challenge
+     */
+    public function updateChallenge(Request $request)
+    {
+        $this->validate($request , ['events' => 'required|numeric|min:1']);
+        $challenge = Auth::user()->currentYearChallenge();
+        if($challenge)
+            $challenge->update($request->all());
+        return redirect('home');
+    }
+
+    /**
+     * show all notifications for the authenticated user.
+     */
+	public function showNotifications()
+    {
+		$notifications = Auth::user()->notifications()->unread()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 1;
+            $notification->push();
+        }
+    	return view('notifications.show', compact('notifications'));
+    }
+
+    /**
+     * Mark this notification as unread.
+     */
+    public function unreadNotification(Request $request)
+    {
+        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
+        $notification->pivot->read = 0;
+        $notification->push();
+    }
 }
