@@ -27,4 +27,12 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /*
+    *show the sendFeedback page
+    */
+    public function sendFeedback()
+    {
+      return view('feedback');
+    }
 }
