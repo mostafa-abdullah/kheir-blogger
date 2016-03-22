@@ -72,7 +72,6 @@ class VolunteerController extends Controller
         return view('volunteer.challenge.create');
     }
 
-
     /**
      *  Store the challenge in the database
      */

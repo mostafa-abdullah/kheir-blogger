@@ -162,6 +162,14 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('notifications', 'VolunteerController@showNotifications');
     Route::post('notifications', 'VolunteerController@unreadNotification');
 
+    /**
+     *  Challenges Routes
+     */
+    Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
+    Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
+    Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
+
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
