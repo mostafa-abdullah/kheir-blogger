@@ -18,6 +18,7 @@ class SendFeedbackTable extends Migration
           $table->string('user_id');
           $table->string('subject')->nullable();
           $table->string('message')->nullable();
+          $table->timestamps();
       });
     }
 

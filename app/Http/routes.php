@@ -117,8 +117,8 @@ Route::group(['middleware' => ['web']], function () {
     /*
     Send feed back to the admin (for logged-in volunteers/organizations)
     */
-    Route::get('sendFeedback' , 'HomeController@sendFeedback');
-    Route::post('sendFeedback/{id}' , 'HomeController@storeFeedback');
+    Route::get('sendFeedback' , 'Controller@sendFeedback');
+    Route::post('sendFeedback/' , 'Controller@storeFeedback');
 
 /*
 |-----------------------
