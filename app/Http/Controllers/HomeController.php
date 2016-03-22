@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use Illuminate\Http\Request;
+use App\Feedback;
 
+// use Illuminate\Http\Request;
+use Request;
 class HomeController extends Controller
 {
     /**
@@ -37,7 +39,7 @@ class HomeController extends Controller
       return view('sendFeedback');
     }
 
-    public function storeFeedback($Request , $id)
+    public function storeFeedback($id)
     {
       $input = Request::all();
       $feedback = new Feedback;

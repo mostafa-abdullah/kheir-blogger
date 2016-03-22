@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
 {
-    protected $guarded = array('user_id');
+    // protected $guarded = array('user_id');
 }
