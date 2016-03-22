@@ -137,7 +137,7 @@ class EventController extends Controller
 		$organization_create_event_id=Event::find($id)->organization()->id;
 		if($organization_auth_id==$organization_create_event_id) {
 			$event=Event::findorfail($id);
-			return view('event.edit')->with($event);
+			return view('event.edit')->with('event',$event);
 		}else{
 			return redirect('home');
 		}
@@ -147,9 +147,10 @@ class EventController extends Controller
 	public function update(EventRequest $req, $id)
 	{
 		$event=Event::findorfail($id);
-
-
 		$event->update($req->all());
+		$users=$event->users()->toArray();
+		Notification::notify($users,$event,"Event ".($event->name)."info has been updated",url("/events/",$id));
+
 		return redirect()->action('EventController@show', [$event->id]);
 
 	}

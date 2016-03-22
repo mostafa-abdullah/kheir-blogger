@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Editing Event</h1>
+    <h1>Editing Event " <?= $event->name; ?> "-></h1>
 
     {!! Form::model($event, array( 'method' => 'PATCH','action' =>array('EventController@update',$event->id))) !!}
 
