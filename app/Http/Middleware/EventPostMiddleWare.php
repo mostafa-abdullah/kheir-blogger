@@ -17,8 +17,13 @@ class EventPostMiddleWare
     public function handle($request, Closure $next)
     {   
      
+
         if(!(auth()->guard('organization')->user())){
-            return redirect('login_organization');
+            if ($request->ajax() || $request->wantsJson()) {
+                        return response('Unauthorized.', 401);
+                    } else {
+                        return redirect()->guest('login_organization');
+            }
         }
 
         $organization_id = auth()->guard('organization')->user()->id;

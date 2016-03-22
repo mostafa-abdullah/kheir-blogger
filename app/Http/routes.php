@@ -26,7 +26,7 @@
 Route::group(['middleware' => ['web']], function () {
 
     /**
-     *	Welcome page (for not logged-in volunteers/organizations)
+     *  Welcome page (for not logged-in volunteers/organizations)
      */
     Route::get('/', function () {
         if(Auth::user() || auth()->guard('organization')->check())
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['web']], function () {
 |
 */
     /**
-     *	Login page for organizations
+     *  Login page for organizations
      */
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -54,12 +54,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
-     *	Login an organization with a request containing email and password
+     *  Login an organization with a request containing email and password
      */
     Route::post('/login_organization','LoginController@organizationLogin');
 
     /**
-     * 	Register page for organizations
+     *  Register page for organizations
      */
     Route::get('/register_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -68,23 +68,23 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
-     *	Register an organization with a request containing name, email and password
+     *  Register an organization with a request containing name, email and password
      */
     Route::post('/register_organization','OrganizationController@register');
 
     /**
-     *	Logout organization
+     *  Logout organization
      */
     Route::get('/logout_organization','OrganizationController@logout');
 
     /**
-     *	Authentication related to the user (volunteer)
+     *  Authentication related to the user (volunteer)
      */
     Route::auth();
 
     /**
-     *	Login a user(volunter) - Added to guard from a logged in user
-     *	or organization
+     *  Login a user(volunter) - Added to guard from a logged in user
+     *  or organization
      */
     Route::get('/login',function(){
         if(Auth::user() || auth()->guard('organization')->check())
@@ -116,30 +116,17 @@ Route::group(['middleware' => ['web']], function () {
     ]]);
 
     /**
-     *	Homepage (for logged-in volunteers/organizations)
+     *  Homepage (for logged-in volunteers/organizations)
      */
     Route::get('home', 'HomeController@index');
 
     /**
-     *	Routes related to the volunteer
+     *  Routes related to the volunteer
      */
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
 
-
-
-
-    //Recommendation Routes!
-    Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
-    Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
-
-    /**
-     *	Routes related to the event
-     */
-     Route::resource('event','EventController', ['only' => [
-         'create'
-     ]]);
 
      /**
      *  Routes related to the event post
@@ -148,5 +135,24 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/event/{event_id}/post/create','EventPostController@createPost');
     Route::post('/event/post/publish','EventPostController@storePost');
     });
-    
+
+
+    //Recommendation Routes!
+    Route::get('organizations/{id}/recommend' , 'OrganizationController@recommend');
+    Route::post('organizations/{id}' , 'OrganizationController@storeRecommendation');
+
+    /**
+     *  Routes related to the event
+     */
+    Route::resource('event','EventController', ['only' => [
+         'create'
+     ]]);
+        
+
+    /**
+     *  Routes related to the organization_review
+     */
+    Route::get('organizations/{id}/review','OrganizationReviewController@create');
+    Route::post('/organizations/{id}/review','OrganizationReviewController@store');
+
 });

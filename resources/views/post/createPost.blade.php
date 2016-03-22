@@ -26,6 +26,10 @@
 </div>
 
 <div class="form-group" style="margin-left: 20px;">
+{!! Form::label("Send Notifications") !!}
+{!! Form::checkbox('sendnotifications', '1'); !!}
+</div>
+<div class="form-group" style="margin-left: 20px;">
 {!! Form::label("Description") !!} <br />
 {!! Form::textarea("description") !!}
 </div>
