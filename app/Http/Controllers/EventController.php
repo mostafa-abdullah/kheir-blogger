@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\PostRequest;
 
 use Carbon\Carbon;
 use App\Event;
 use App\Organization;
 use App\Question;
 use App\Notification;
+use App\Post;
 
 use Auth;
 
@@ -25,7 +27,8 @@ class EventController extends Controller
 
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
-            'create', 'store', 'answerQuestion', 'viewUnansweredQuestions'
+            'create', 'store', 'answerQuestion', 'viewUnansweredQuestions',
+			'createPost', 'storePost'
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -34,6 +37,12 @@ class EventController extends Controller
         ]]);
     }
 
+/*
+|==========================================================================
+| General Event Functions
+|==========================================================================
+|
+*/
 	/**
 	 * show the event's page
 	 */
@@ -64,6 +73,12 @@ class EventController extends Controller
 		return redirect()->action('EventController@show', [$event->id]);
 	}
 
+/*
+|==========================================================================
+| Volunteers Interaction with Event
+|==========================================================================
+|
+*/
 	public function follow($id){
 
 		// TODO: a volunteer can follow an unfollowed event (Hatem)
@@ -92,6 +107,12 @@ class EventController extends Controller
 		return redirect()->action('EventController@show', [$id]);
 	}
 
+/*
+|==========================================================================
+| Event Questions
+|==========================================================================
+|
+*/
 	public function askQuestion($id)
 	{
 		return view('event.question.ask', compact('id'));
@@ -148,5 +169,45 @@ class EventController extends Controller
         }
 		return redirect()->action('EventController@show', [$id])
 						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
+    }
+
+
+/*
+|==========================================================================
+| Event Posts
+|==========================================================================
+|
+*/
+	/*
+	* Return view for creating Post.
+	*
+	*/
+    public function createPost($event_id)
+    {
+		$event = Event::findOrFail($event_id);
+		$organization_id = auth()->guard('organization')->user()->id;
+		if($event->organization()->id == $organization_id)
+			return view('event.post.create')->with('event_id', $event_id);
+		return redirect()->action('EventController@show', [$event_id]);
+    }
+
+    /*
+	* Add a new Post to the Event and Notify Users.
+	*
+	*/
+    public function storePost(PostRequest $request, $event_id)
+    {
+    	$organization_id = auth()->guard('organization')->user()->id;
+    	$eventPost = new Post($request->all());
+    	$eventPost->event_id = $event_id;
+    	$eventPost->organization_id = $organization_id;
+    	$eventPost->save();
+        if($request->sendnotifications == 1)
+		{
+            $event = Event::find($request->event_id);
+            Notification::notify(array($event->registrants()), $event, $request->description, url("/event", $event->id));
+        	Notification::notify(array($event->followers()), $event, $request->description, url("/event", $event->id));
+        }
+        return redirect()->action('EventController@show', [$event_id]);
     }
 }
