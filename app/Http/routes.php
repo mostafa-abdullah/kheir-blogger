@@ -160,8 +160,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  edit challenges
      */
-    Route::get('volunteer/{user_id}/challenge/{challenge_id}' , 'VolunteerController@editChallenge');
-    Route::patch('volunteer/{user_id}/challenge/{challenge_id}' , 'VolunteerController@updateChallenge');
+    Route::get('volunteer/{user_id}/challenge/{challenge_id}/edit' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/{user_id}/challenge/{challenge_id/edit}' , 'VolunteerController@updateChallenge');
 
 /*
 |-----------------------
