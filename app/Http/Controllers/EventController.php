@@ -133,10 +133,10 @@ class EventController extends Controller
 
 	public function editEvent($id)
 	{
-		$event=Event::findorfail($id);
 		$organization_auth_id = auth()->guard('organization')->id;
-		$organization_create_event=Event::find($id)->organization()->$id;
-		if($organization_auth_id==$organization_create_event) {
+		$organization_create_event_id=Event::find($id)->organization()->id;
+		if($organization_auth_id==$organization_create_event_id) {
+			$event=Event::findorfail($id);
 			return view('event.edit')->with($event);
 		}else{
 			return redirect('home');
