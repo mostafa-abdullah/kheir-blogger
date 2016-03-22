@@ -36,7 +36,7 @@ class HomeController extends Controller
       return view('sendFeedback');
     }
 
-    public function storeFeedback()
+    public function storeFeedback($id)
     {
       
     }
