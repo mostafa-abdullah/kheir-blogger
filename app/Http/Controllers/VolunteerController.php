@@ -66,10 +66,9 @@ class VolunteerController extends Controller
      */
     public function createChallenge()
     {
-        $challenge = Auth::user()->currentYearChallenge();
-        if($challenge->isEmpty())
-            return view('volunteer.challenge.create');
-        return redirect('volunteer/challenge/edit');
+        if(Auth::user()->currentYearChallenge())
+            return redirect('volunteer/challenge/edit');
+        return view('volunteer.challenge.create');
     }
 
 
@@ -90,10 +89,10 @@ class VolunteerController extends Controller
      */
     public function editChallenge()
     {
-        $challenge = Challenge::findOrFail();
-        if($challenge->user->id == Auth::user()->id)
-            return view('volunteer.challenge.edit' , compact('challenge' , 'challenge_id'));
-        return redirect('home');
+        $challenge = Auth::user()->currentYearChallenge();
+        if($challenge)
+            return view('volunteer.challenge.edit' , compact('challenge'));
+        return redirect('volunteer/challenge/create');
     }
 
     /**
@@ -102,17 +101,9 @@ class VolunteerController extends Controller
     public function updateChallenge(Request $request)
     {
         $this->validate($request , ['events' => 'required|numeric|min:1']);
-
-        $challenge = Challenge::findOrFail($challenge_id);
-        if($challenge->user->id == Auth::user()->id)
-        {
+        $challenge = Auth::user()->currentYearChallenge();
+        if($challenge)
             $challenge->update($request->all());
-            return redirect()->action('VolunteerController@show' , [Auth::user()->id]);
-        }
         return redirect('home');
-
     }
-
-
-
 }

@@ -6,16 +6,11 @@
     <hr>
 
     {!! Form::model($challenge , ['method' => 'PATCH' ,
-                                  'action' => ['VolunteerController@updateChallenge' , $challenge_id]]) !!}
+                                  'action' => ['VolunteerController@updateChallenge']]) !!}
 
     <div class = "form-group">
         {!! Form::label('events' , 'Edit the number of events') !!}
-        {!! Form::number('events' , $challenge->events , ['class' => 'form-control']) !!}
-    </div>
-
-    <div class = "form-group">
-        {!! Form::label('deadline' , 'Adjust your deadline') !!}
-        {!! Form::date('deadline' , $challenge->deadline , ['class' => 'form-control']) !!}
+        {!! Form::number('events' , $challenge->events, ['class' => 'form-control']) !!}
     </div>
 
     <div>

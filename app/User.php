@@ -82,6 +82,6 @@ class User extends Authenticatable
 
     public function currentYearChallenge(){
 
-        return $this->challenges()->currentYear()->get();
+        return $this->challenges()->currentYear()->first();
     }
 }
