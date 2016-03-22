@@ -33,12 +33,16 @@ class HomeController extends Controller
     */
     public function sendFeedback()
     {
+
       return view('sendFeedback');
     }
 
     public function storeFeedback($id)
     {
       $input = Request::all();
-      $feedback = new feedback;
+      $feedback = new Feedback;
+      $feedback->user_id = $id;
+      $feedback->subject = $input['subject'];
+      $feedback->message = $input['message'];
     }
 }
