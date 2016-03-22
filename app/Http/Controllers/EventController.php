@@ -112,6 +112,11 @@ class EventController extends Controller
         
     }
 
+    public function addQuestion($id)
+    {
+        return view('event.ask', compact($id));
+    }
+
     public function answerQuestion($id, $q_id)
     {
         $input = Request::all();
@@ -122,11 +127,22 @@ class EventController extends Controller
                 $question->answered_at = $input['answered_at'];
                 $question->save();
                 $notification = new Notification;
-                $notification->addNotification(compact($question->user_id), $question->event_id, "Your question has been answered", "/events/".$question->event_id . "/" . $question->id);
-                return redirect(url('/events/unansweredQuestions/'$input['event_id']));    
+                $notification->addNotification(compact($question->user_id), $question->event_id, "Your question has been answered", "/event/".$question->event_id . "/" . $question->id);
+                return redirect(url('/event/answer/'$input['event_id']));    
         }else{
-            return redirect(url('/events'$input['event_id']))->withErrors(['Permission' => 'You do not have Permission to answer this question']);
+            return redirect(url('/event/'$input['event_id']))->withErrors(['Permission' => 'You do not have Permission to answer this question']);
         }
+    }
+
+    public function viewQuestions($id)
+    {
+        if(auth()->guard('organization')->check() && 
+            auth()->guard('organization')->id == $id){
+        $event = Event::findorfail($id);
+        $questions = $event->questions()->Unanswered();
+        return view("event.answer", compact($questions));
+        }else
+            return redirect(url('/event/'.$id))->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
     }
 
 }

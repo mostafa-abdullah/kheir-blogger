@@ -27,6 +27,11 @@ class Event extends Model
                     ->withTimestamps()->withPivot('type');
     }
 
+    public function questions()
+    {
+        return this->hasMany('App\Question');
+    }
+
     public function followers(){
 
         return $this->users()->where('type','=','1');

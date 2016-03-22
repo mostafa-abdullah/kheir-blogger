@@ -149,6 +149,6 @@ class OrganizationController extends Controller
             $recommendations = $organization->recommendations();
             return view("organization.recommendation", compact($recommendations));
         }else
-            return redirect('/login_organization');
+            return redirect('/login_organization')->withErrors(['Permission' => 'You do not have Permission to view these recommendations']);
     }
 }
