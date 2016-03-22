@@ -19,7 +19,7 @@ class Event extends Model
 
     public function  notifications(){
 
-        return $this->belongsToMany('App\Notification',"user_notifications")->withTimestamps();
+        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
     }
 
     public function  users (){

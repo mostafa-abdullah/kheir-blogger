@@ -104,11 +104,19 @@ Route::group(['middleware' => ['web']], function () {
 |       show    => view page for a single model
 |       create  => view page for creating a model
 |       store   => create a model with the passed request
-|       edit    => view page for updaing a model
+|       edit    => view page for updating a model
 |       update  => update a model with the passed request
 |       destroy => delete a model
 */
 
+    Route::get('/unread', function(){
+        $notifications = Auth::user()->notifications()->read()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 0;
+            $notification->push();
+        }
+    });
     /**
      *	Homepage (for logged-in volunteers/organizations)
      */
@@ -131,7 +139,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
-     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+    Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
     /**
      *	Organization Review
      */
@@ -148,6 +156,20 @@ Route::group(['middleware' => ['web']], function () {
 | Volunteer Routes
 |-----------------------
 */
+    /**
+     * Notification Routes
+     */
+    Route::get('notifications', 'VolunteerController@showNotifications');
+    Route::post('notifications', 'VolunteerController@unreadNotification');
+
+    /**
+     *  Challenges Routes
+     */
+    Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
+    Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
+    Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
+    Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
+
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
     ]]);
@@ -160,10 +182,11 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Question Routes
      */
-    Route::get('event/{id}/answer', 'EventController@viewUnansweredQuestions');
-    Route::get('event/{id}/ask', 'EventController@askQuestion');
-    Route::post('event/{id}/ask', 'EventController@storeQuestion');
-    Route::post('event/{id}/answer/{q_id}', 'EventController@answerQuestion');
+    Route::get('event/{id}/question/ask', 'EventController@askQuestion');
+    Route::post('event/{id}/question/ask', 'EventController@storeQuestion');
+    Route::get('event/{id}/question/answer', 'EventController@viewUnansweredQuestions');
+    Route::post('event/{id}/question/{q_id}', 'EventController@answerQuestion');
+    Route::get('event/{id}/question/{q_id}', 'EventController@showQuestion');
 
     /**
      *	Event Following
@@ -174,7 +197,6 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *	Event Registeration
      */
-
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
     Route::resource('event','EventController', ['only' => [
