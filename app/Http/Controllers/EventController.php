@@ -60,13 +60,8 @@ class EventController extends Controller
 		$event = $organization->createEvent($request);
 		$subscribers = $organization->subscribers()->get();
 		$notification_description = $organization->name." created a new event ".$request->name;
-<<<<<<< HEAD
 		Notification::notify($subscribers, $event, $notification_description, url("/events", $event->id));
 		return redirect()->action('EventController@show', [$event->id]);
-=======
-		Notification::notify($subscribers,$event,$notification_description, url("/events/", $event->id));
-		return redirect()->action('EventController@show', [$event_id]);
->>>>>>> 800ce0d599f47eec5d3da15565234d40cdc8a83a
 	}
 
 	public function follow($id){
@@ -130,11 +125,7 @@ class EventController extends Controller
 		$question->answered_at = Carbon::now();
 		$question->save();
 
-<<<<<<< HEAD
-		Notification::notify(array($question->user_id), $question->event_id, "Your question has been answered", url("/event/", $question->event_id, "/", $question->id));
-=======
 		Notification::notify(array($question->user_id), $event, "Your question has been answered", url("/events/", $question->event_id, "/", $question->id));
->>>>>>> 800ce0d599f47eec5d3da15565234d40cdc8a83a
 
 		//TODO: redirect to unanswered questions when this view is compelete (Youssef)
 		return redirect()->action('EventController@show', [$id]);
