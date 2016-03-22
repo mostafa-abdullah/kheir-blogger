@@ -6,8 +6,7 @@
     <hr>
 
     {!! Form::model($challenge , ['method' => 'PATCH' ,
-                                  'action' => ['VolunteerController@updateChallenge' ,
-                                   $user_id , $challenge_id]]) !!}
+                                  'action' => ['VolunteerController@updateChallenge' , $challenge_id]]) !!}
 
     <div class = "form-group">
         {!! Form::label('events' , 'Edit the number of events') !!}

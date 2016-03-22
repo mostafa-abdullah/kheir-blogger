@@ -64,44 +64,39 @@ class VolunteerController extends Controller
     /**
      *  Volunteer set a challenge to himself
      */
-    public function createChallenge($id)
+    public function createChallenge()
     {
-        if(Auth::user()->id == $id)
-            return view('volunteer.challenge' , compact('id'));
-        return redirect('/');
+            return view('volunteer.challenge');
+
     }
 
 
     /**
      *  Store the challenge in the database
      */
-    public function storeChallenge(Request $request , $id)
+    public function storeChallenge(Request $request)
     {
         $this->validate($request , ['events' => 'required|numeric|min:1' ,]);
 
-        if(Auth::user()->id == $id)
-        {
-            $user_id = Auth::user()->id;
-            $challenge = new Challenge($request->all());
-            $challenge->user_id = $user_id;
-            $user = User::findOrFail($user_id);
-            $user->challenges()->save($challenge);
-            return redirect()->action('VolunteerController@show' , [$user_id]);
-        }
-        return redirect('/');
+        $user_id = Auth::user()->id;
+        $challenge = new Challenge($request->all());
+        $challenge->user_id = $user_id;
+        $user = User::findOrFail($user_id);
+        $user->challenges()->save($challenge);
+        return redirect()->action('VolunteerController@show' , [$user_id]);
+
     }
 
     /**
      *  The volunteer edit a challenge
      */
 
-    public function editChallenge($user_id , $challenge_id)
+    public function editChallenge($challenge_id)
     {
-        if(Auth::user()->id == $user_id)
-        {
-            $challenge = Challenge::findOrFail($challenge_id);
-            return view('volunteer.editChallenge' , compact('challenge' , 'user_id','challenge_id'));
-        }
+        $challenge = Challenge::findOrFail($challenge_id);
+        if($challenge->user->id == Auth::user()->id)
+            return view('volunteer.editChallenge' , compact('challenge' , 'challenge_id'));
+        return redirect('/');
     }
 
 
@@ -109,17 +104,17 @@ class VolunteerController extends Controller
     /**
      *  Store the edited challenge in the database
      */
-    public function updateChallenge(Request $request , $user_id , $challenge_id)
+    public function updateChallenge(Request $request , $challenge_id)
     {
         $this->validate($request , ['events' => 'required|numeric|min:1']);
-        if(Auth::user()->id == $user_id)
+
+        $challenge = Challenge::findOrFail($challenge_id);
+        if($challenge->user->id == Auth::user()->id)
         {
-            $challenge = Challenge::findOrFail($challenge_id);
             $challenge->update($request->all());
-            return redirect()->action('VolunteerController@show' , [$user_id]);
+            return redirect()->action('VolunteerController@show' , [Auth::user()->id]);
         }
         return redirect('/');
-
 
     }
 

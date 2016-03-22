@@ -154,14 +154,14 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  set challenges
      */
-    Route::get('volunteer/{id}/challenge' , 'VolunteerController@createChallenge');
-    Route::post('volunteer/{id}/challenge' , 'VolunteerController@storeChallenge');
+    Route::get('challenge' , 'VolunteerController@createChallenge');
+    Route::post('challenge' , 'VolunteerController@storeChallenge');
 
     /**
      *  edit challenges
      */
-    Route::get('volunteer/{user_id}/challenge/{challenge_id}/edit' , 'VolunteerController@editChallenge');
-    Route::patch('volunteer/{user_id}/challenge/{challenge_id/edit}' , 'VolunteerController@updateChallenge');
+    Route::get('challenge/{challenge_id}/edit' , 'VolunteerController@editChallenge');
+    Route::patch('challenge/{challenge_id}/edit' , 'VolunteerController@updateChallenge');
 
 /*
 |-----------------------
