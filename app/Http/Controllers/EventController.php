@@ -149,7 +149,8 @@ class EventController extends Controller
 		$event=Event::findorfail($id);
 		$event->update($req->all());
 		$users=$event->users()->toArray();
-		Notification::notify($users,$event,"Event ".($event->name)."info has been updated",url("/events/",$id));
+		$organization_name=$event->organization()->name;
+		Notification::notify($users,$event,"Event ".($event->name)." by ".$organization_name." info has been updated",url("/events/",$id));
 
 		return redirect()->action('EventController@show', [$event->id]);
 
