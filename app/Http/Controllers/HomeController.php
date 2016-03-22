@@ -38,6 +38,7 @@ class HomeController extends Controller
 
     public function storeFeedback($id)
     {
-      
+      $input = Request::all();
+      $feedback = new feedback;
     }
 }
