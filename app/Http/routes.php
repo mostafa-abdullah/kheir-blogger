@@ -122,11 +122,11 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('home', 'HomeController@index');
 
-    /*
-    Send feed back to the admin (for logged-in volunteers/organizations)
-    */
-    Route::get('sendFeedback' , 'Controller@sendFeedback');
-    Route::post('sendFeedback/' , 'Controller@storeFeedback');
+    /**
+     * Send feed back to the admin (for logged-in volunteers/organizations)
+     */
+    Route::get('feedback' , 'HomeController@sendFeedback');
+    Route::post('fpeedback' , 'HomeController@storeFeedback');
 
 /*
 |-----------------------
