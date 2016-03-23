@@ -117,6 +117,7 @@ Route::group(['middleware' => ['web']], function () {
             $notification->push();
         }
     });
+    
     /**
      *  Homepage (for logged-in volunteers/organizations)
      */
@@ -126,7 +127,7 @@ Route::group(['middleware' => ['web']], function () {
      * Send feed back to the admin (for logged-in volunteers/organizations)
      */
     Route::get('feedback' , 'HomeController@sendFeedback');
-    Route::post('fpeedback' , 'HomeController@storeFeedback');
+    Route::post('feedback' , 'HomeController@storeFeedback');
 
 /*
 |-----------------------
