@@ -39,9 +39,9 @@ class User extends Authenticatable
     /**
      * Unsubscribe from an organization.
      */
-    public function unsubscribe($organization_id){
-
-      return $this->subscribedOrganizations()->detach($organization_id);
+    public function unsubscribe($organization_id)
+    {
+        return $this->subscribedOrganizations()->detach($organization_id);
     }
     public function recommendations(){
 
@@ -71,7 +71,6 @@ class User extends Authenticatable
     }
 
     public function eventQuestions(){
-
         return $this->hasMany('App\Question');
     }
 

@@ -10,8 +10,6 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('event_id')->unsigned();
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->text('description');
             $table->text('link');
             $table->timestamps();
