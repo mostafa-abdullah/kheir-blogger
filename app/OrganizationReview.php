@@ -19,4 +19,9 @@ class OrganizationReview extends Model
 
         return $this->belongsTo('App\Organization');
     }
+
+    public function reportingUsers()
+    {
+        return $this->belongsToMany('App\User', 'organization_review_reports')->withTimestamps();
+    }
 }
