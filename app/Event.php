@@ -13,13 +13,13 @@ class Event extends Model
     ];
 
     public function organization(){
-        
-    	return $this->belongsTo('App\Organization');
+
+    	return $this->belongsTo('App\Organization')->first();
 	}
 
     public function  notifications(){
 
-        return $this->belongsToMany('App\Notification',"user_notification")->withTimestamps();
+        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
     }
 
     public function  users (){
@@ -30,12 +30,12 @@ class Event extends Model
 
     public function followers(){
 
-        return $this->users()->where('type','=','1');
+        return $this->users()->where('type','=','1')->get();
     }
 
     public function registrants(){
 
-        return $this->users()->where('type','=','2');
+        return $this->users()->where('type','=','2')->get();
     }
 
     public function reviews()
