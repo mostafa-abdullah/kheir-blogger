@@ -41,4 +41,5 @@ class Organization extends Authenticatable
         return $this->hasMany('App\OrganizationReview');
     }
 
+
 }

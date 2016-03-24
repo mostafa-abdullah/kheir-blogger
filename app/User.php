@@ -35,6 +35,14 @@ class User extends Authenticatable
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
+    /**
+     * to check if the user already subscribed an organization
+     */
+    public function is_subscribed($id){
+        if(!$this->subscribedOrganizations()->find($id))
+           return false;
+        return true;
+    }
 
     /**
      * Unsubscribe from an organization.
