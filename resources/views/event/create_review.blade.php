@@ -2,9 +2,9 @@
 
         @section('content')
 
-            <h1> create organization review</h1>
+            <h1> create organization review on {{ $event->name }}</h1>
 
-            {!! Form::open(array('action' => array('EventReviewController@store',$id))) !!}
+            {!! Form::open(array('action' => array('EventReviewController@store',$event->$id))) !!}
 
             <div class = "form_group">
 

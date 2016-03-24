@@ -180,9 +180,9 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *	Event Registeration
      */
-<<<<<<< HEAD
-    Route::get('organizations/{id}/review','OrganizationReviewController@create');
-    Route::post('/organizations/{id}/review','OrganizationReviewController@store');
+     Route::get('event/{id}/register', 'EventController@register');
+     Route::get('event/{id}/unregister', 'EventController@unregister');
+
     /**
      *	Routes related to the Event Review
      */
@@ -190,10 +190,6 @@ Route::group(['middleware' => ['web']], function () {
          'index' , 'create' ,'store'
      ]]);
 
-=======
-    Route::get('event/{id}/register', 'EventController@register');
-    Route::get('event/{id}/unregister', 'EventController@unregister');
->>>>>>> f48d18924fad18a5ec8b70234dceb0bcb07f7297
 
     Route::get('event/{id}/questions/ask', 'EventController@askQuestion');
     Route::post('event/{id}/questions/ask', 'EventController@storeQuestion');

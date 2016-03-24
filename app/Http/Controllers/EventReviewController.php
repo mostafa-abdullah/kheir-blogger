@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Event_Review;
+use App\EventReview;
+use App\Event;
+
 use Auth;
 use App\Http\Requests;
 
@@ -17,8 +19,8 @@ class EventReviewController extends Controller
     */
 
     public function create($id){
-
-        return view ('event.create_review',compact('id'));
+        $event = Event::findorfail($id);
+        return view ('event.create_review',compact('event'));
 
     }
     /**
@@ -29,9 +31,10 @@ class EventReviewController extends Controller
 
     public function index($id){
 
-    return  $event_review = Event_Review::all()->where('event_id', '=', $id)->toArray();
+    return  $event_review = EventReview::all()->where('event_id', '=', $id)->toArray();
 
     }
+
 
     /**
     * Store the evet review.
@@ -39,23 +42,16 @@ class EventReviewController extends Controller
     * @return view
     */
 
-    public function store( $id,Request $request){
+    public function store(ReviewRequest $request, $id){
 
-        $user_id = Auth::user()->id;
+        if(Auth::user()){
+          $review = new EventReview($request->all());
+          $review->user_id = Auth::user()->id;
+          $event = Event::findorfail($id);
+          $event->reviews()->save($review);
 
-        if($user_id){
-        $this->validate($request,['rate'=>'required|numeric|min:1|max:5']);
-
-        $review = new Event_Review;
-
-        $review->event_id = $id;
-        $review->user_id = $user_id;
-        $review->review = $request->review;
-        $review->rate = $request->rate;
-        $review->save();
-
-        return redirect('events/'.$id);
       }
+        return redirect('events/'.$id);
 
 
     }
