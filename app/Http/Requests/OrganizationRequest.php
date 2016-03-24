@@ -13,7 +13,9 @@ class OrganizationRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        $organization_id = $this->route()->getParameter('organization');
+
+        return $organization_id == auth()->guard('organization')->id();
     }
 
     /**
@@ -23,11 +25,12 @@ class OrganizationRequest extends Request
      */
     public function rules()
     {
+        $id = $this->route()->getParameter('organization');
         return [
-          "phone"=>"digits:11",
-          "slogan"=>"max:50"
-
-
+            "name"   => "required",
+            "email"  => "unique:organizations,email,".$id,
+            "phone"  => "digits:11",
+            "slogan" => "max:50"
         ];
     }
 }

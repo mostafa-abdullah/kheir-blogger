@@ -3,16 +3,12 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteersRecommendOrganizationsTable extends Migration
+class CreateRecommendationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
-        Schema::create('volunteers_recommend_organizations', function (Blueprint $table) {
+        Schema::create('recommendations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -23,13 +19,8 @@ class CreateVolunteersRecommendOrganizationsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::drop('volunteers_recommend_organizations');
+        Schema::drop('recommendations');
     }
 }
