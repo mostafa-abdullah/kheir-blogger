@@ -83,7 +83,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::auth();
 
     /**
-     *  Login a user(volunter) - Added to guard from a logged in user
+     *  Login a user(volunteer) - Added to guard from a logged in user
      *  or organization
      */
     Route::get('/login',function(){
@@ -152,6 +152,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organization/{id}/review','OrganizationController@createReview');
     Route::post('organization/{id}/review','OrganizationController@storeReview');
 
+
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
     ]]);
@@ -182,11 +183,17 @@ Route::group(['middleware' => ['web']], function () {
         'show'
     ]]);
 
-/*
-|-----------------------
-| Event Routes
-|-----------------------
-*/
+    /**
+     * Reports Routes
+     */
+    Route::post('volunteer/report/organizationreview', 'VolunteerController@reportOrganizationReview');
+    Route::post('volunteer/report/eventreview', 'VolunteerController@reportEventReview');
+
+    /*
+    |-----------------------
+    | Event Routes
+    |-----------------------
+    */
     /**
      * Question Routes
      */

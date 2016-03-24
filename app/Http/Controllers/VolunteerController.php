@@ -22,7 +22,8 @@ class VolunteerController extends Controller
             // Add all functions that are allowed for volunteers only
             'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
             'editChallenge', 'updateChallenge',
-            'showNotifications', 'unreadNotification'
+            'showNotifications', 'unreadNotification', 'reportOrganizationReview',
+            'reportEventReview'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -129,5 +130,23 @@ class VolunteerController extends Controller
         $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
         $notification->pivot->read = 0;
         $notification->push();
+    }
+
+    /**
+     * Report an organization's review
+     * @param Request $request
+     */
+    public function reportOrganizationReview(Request $request)
+    {
+        Auth::user()->reportedOrganizationReviews()->attach($request['review_id']);
+    }
+
+    /**
+     * Report an event's review
+     * @param Request $request
+     */
+    public function reportEventReview(Request $request)
+    {
+        Auth::user()->reportedEventReviews()->attach($request['review_id']);
     }
 }
