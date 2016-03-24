@@ -6,6 +6,7 @@ use App\Event;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -20,7 +21,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $announcement = ['1st announcement', '2nd announcement', '3rd announcement'];
         $questions = [['question' => 'When the event will be Held', 'answer' => 'In 12 pm sharp'], ['question' => 'When the event will be Held', 'answer' => 'In 12 pm sharp']];
-        $reviews=[['writen_by'=>'HOssam','Body'=>'la bla bla'],['writen_by'=>'Ahmed','Body'=>'It is very Best =)']];
+        $reviews=[['writen_by'=>'Hossam','Body'=>'la bla bla'],['writen_by'=>'Ahmed','Body'=>'It is very Best =)']];
         return view('event.event', compact('event', 'announcement', 'questions','reviews'));
     }
 
@@ -29,5 +30,8 @@ class EventController extends Controller
     {
         return view('event.create');
     }
+
+
+
 
 }
