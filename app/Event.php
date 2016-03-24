@@ -53,5 +53,9 @@ class Event extends Model
         return $this->hasMany('App\Question');
     }
 
+    public function posts(){
+        return $this->hasMany('App\Post');
+    }
+
 
 }

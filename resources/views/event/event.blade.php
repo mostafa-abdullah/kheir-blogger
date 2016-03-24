@@ -19,30 +19,41 @@
             @endif
         </div>
         <br><br>
-        <h3 class="text-center"> Description</h3>
+        <h1 class="text-center"> Description</h1>
         <p class="text-center">
             {{$event->description}}
         </p>
         <div class="col-md-7">
             <h1>Announcements</h1>
+            @if($announcement->count()==0)
+             <h3 class="alert-info">This Event has no announcements</h3>
+            @else
              @foreach($announcement as $element)
                  <ul>
                      <li>{{$element}}</li>
                  </ul>
              @endforeach
+            @endif
         </div>
 
         <div class="col-md-5">
-            <h3>Questions and answers</h3>
+            <h1>Questions and answers</h1>
+            @if($questions->count()==0)
+                <h3 class="alert-info">This Event has no answered Questions</h3>
+            @else
             @foreach($questions as $question)
                 <ul>
                     <li>{{$question['question'] .'?'}}</li>
                      <h4>{{$question['answer']}}</h4>
                 </ul>
             @endforeach
+            @endif
         </div>
         <div class="col-md-5">
-            <h3>Reviews</h3>
+            <h1>Reviews</h1>
+            @if($reviews->count()==0)
+                <h3 class="alert-info">This Event has no Reviews</h3>
+            @else
             @foreach($reviews as $review)
                 <div class="jumbotron">
 
@@ -53,6 +64,7 @@
 
                 </div>
             @endforeach
+            @endif
         </div>
 
         <div class ="col-md-5">
