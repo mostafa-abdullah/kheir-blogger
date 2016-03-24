@@ -23,7 +23,7 @@
         <p class="text-center">
             {{$event->description}}
         </p>
-        <div class="col-md-7">
+        <div class="col-md-6">
             <h1>Announcements</h1>
             @if($announcement->count()==0)
              <h3 class="alert-info">This Event has no announcements</h3>
@@ -36,7 +36,7 @@
             @endif
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-6">
             <h1>Questions and answers</h1>
             @if($questions->count()==0)
                 <h3 class="alert-info">This Event has no answered Questions</h3>
@@ -49,7 +49,7 @@
             @endforeach
             @endif
         </div>
-        <div class="col-md-5">
+        <div class="col-md-6">
             <h1>Reviews</h1>
             @if($reviews->count()==0)
                 <h3 class="alert-info">This Event has no Reviews</h3>
@@ -67,7 +67,7 @@
             @endif
         </div>
 
-        <div class ="col-md-5">
+        <div class ="col-md-6">
 
         </div>
     </div>
