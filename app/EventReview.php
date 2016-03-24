@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EventReview extends Model
 {
     protected $fillable = ['review', 'rate'];
+
     protected $table = ['event_reviews'];
 
     public function user()
@@ -18,4 +19,5 @@ class EventReview extends Model
     {
         return $this->belongsTo('App\Event');
     }
+
 }

@@ -21,7 +21,8 @@ class VolunteerController extends Controller
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
             'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
-            'editChallenge', 'updateChallenge'
+            'editChallenge', 'updateChallenge',
+            'showNotifications', 'unreadNotification'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -71,7 +72,6 @@ class VolunteerController extends Controller
         return view('volunteer.challenge.create');
     }
 
-
     /**
      *  Store the challenge in the database
      */
@@ -105,5 +105,29 @@ class VolunteerController extends Controller
         if($challenge)
             $challenge->update($request->all());
         return redirect('home');
+    }
+
+    /**
+     * show all notifications for the authenticated user.
+     */
+	public function showNotifications()
+    {
+		$notifications = Auth::user()->notifications()->unread()->get();
+        foreach($notifications as $notification)
+        {
+            $notification->pivot->read = 1;
+            $notification->push();
+        }
+    	return view('notifications.show', compact('notifications'));
+    }
+
+    /**
+     * Mark this notification as unread.
+     */
+    public function unreadNotification(Request $request)
+    {
+        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
+        $notification->pivot->read = 0;
+        $notification->push();
     }
 }

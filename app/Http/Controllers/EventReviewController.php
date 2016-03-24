@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\EventReview;
 use App\Event;
+use App\Http\Requests\EventReviewRequest;
 
 use Auth;
 use App\Http\Requests;
@@ -20,7 +21,7 @@ class EventReviewController extends Controller
 
     public function create($id){
         $event = Event::findorfail($id);
-        return view ('event.create_review',compact('event'));
+        return view ('event.review.create',compact('event'));
 
     }
     /**
@@ -42,7 +43,7 @@ class EventReviewController extends Controller
     * @return view
     */
 
-    public function store(ReviewRequest $request, $id){
+    public function store(EventReviewRequest $request, $id){
 
         if(Auth::user()){
           $review = new EventReview($request->all());
