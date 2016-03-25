@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
 
-use App\Http\Controllers\Controller;
 use App\Organization;
 use App\Recommendation;
 use App\OrganizationReview;
@@ -22,44 +23,39 @@ class OrganizationController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
             'recommend', 'storeRecommendation',
-            'createReview', 'storeReview',
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
             'edit', 'update', 'viewRecommendations'
-        ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
         ]]);
     }
 
     /**
-    * show the profile of organization.
+    * Show organization profile.
     */
-    public function show($id){
+    public function show($id)
+    {
         $organization = Organization::findOrFail($id);
-        $state=0;
-          if (auth()->guard('organization')->check())$state=1;
-         else if (Auth::user()){
-             if (Auth::user()->is_subscribed($id))$state=2;
-             else $state=3;
-         }
+        $state = 0;
+        if(auth()->guard('organization')->check())
+            $state = 1;
+        else if (Auth::user())
+                if (Auth::user()->isSubscribed($id))
+                    $state = 2;
+                else
+                    $state = 3;
         $events=$organization->events();
         return view('organization.profile',compact('organization','state','events'));
     }
 
 
     /**
-    * edit the profile of organization.
+    * Edit organization profile.
     */
     public function edit($id)
     {
-        if(auth()->guard('organization')->id()==$id)
+        if(auth()->guard('organization')->id() == $id)
         {
             $organization = Organization::findorfail($id);
             return view('organization.edit' , compact('organization'));
@@ -68,28 +64,28 @@ class OrganizationController extends Controller
     }
 
     /**
-    * update the profile of organization.
+    * Update organization profile.
     */
-    public function update(OrganizationRequest $request, $id){
-
+    public function update(OrganizationRequest $request, $id)
+    {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
-        return redirect()->action('OrganizationController@show', [$organization->id]);
+        return redirect()->action('OrganizationController@show', [$id]);
     }
 
     /**
-     * returns a form to send a recommendation to the organization
-     * with the specified id
+     * Recommendation Form.
      */
-    public function recommend($id){
-
+    public function recommend($id)
+    {
         return view('organization.recommend' , compact('id'));
     }
 
     /**
-     * store the sent recommendation and insert it to the database
+     * A volunteer can send a recommendation to an organization.
      */
-    public function storeRecommendation(RecommendationRequest $request , $id){
+    public function storeRecommendation(RecommendationRequest $request , $id)
+    {
 
         $recommendation = new Recommendation($request->all());
         $recommendation->user_id = Auth::user()->id;
@@ -98,14 +94,18 @@ class OrganizationController extends Controller
         return redirect()->action('OrganizationController@show', [$id]);
     }
 
-   public function viewRecommendations($id)
+    /**
+     * An organization can view recommendations sent to it.
+     */
+    public function viewRecommendations($id)
     {
-        if(auth()->guard('organization')->id == $id){
+        if(auth()->guard('organization')->id() == $id)
+        {
             $organization = Organization::findorfail($id);
-            $recommendations = $organization->recommendations();
-            return view("organization.recommendation", compact('recommendations'));
-        }else
-            return redirect('/');
-
+            $recommendations = $organization->recommendations()
+                                            ->orderBy('created_at', 'desc')->get();
+            return view('organization.recommendations', compact('recommendations'));
+        }
+        return redirect('/');
     }
 }

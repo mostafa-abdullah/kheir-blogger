@@ -64,7 +64,7 @@ class Notification extends Model
     /**
      *  remove users from user to be notified who blocked the organization created an event
      */
-    public function filter ($usersToNotify, $event){
+    public static function filter ($usersToNotify, $event){
         $organization_id = $event->organization_id;
         $organization = Organization::find($organization_id);
 

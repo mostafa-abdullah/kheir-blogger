@@ -114,48 +114,45 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
     Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
 
-    /*
-    |-----------------------
-    | Organization Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Organization Routes
+|-----------------------
+*/
 
     /**
-     *	Organization Subscription
+     * Organization Subscription
      */
     Route::get('organization/{id}/subscribe', 'VolunteerController@subscribe');
     Route::get('organization/{id}/unsubscribe', 'VolunteerController@unsubscribe');
 
     /**
-     *	Organization Recommendation
+     * Organization Recommendation
      */
     Route::get('organization/{id}/recommend' , 'OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'OrganizationController@storeRecommendation');
     Route::get('organization/{id}/recommendations', 'OrganizationController@viewRecommendations');
+
     /**
-     *	Organization Review
+     * Organization Review
      */
     Route::get('organization/{id}/review','OrganizationController@createReview');
     Route::post('organization/{id}/review','OrganizationController@storeReview');
 
+    /**
+     * Organizaton Blocking
+     */
+    Route::post('organization/{id}/block','VolunteerController@blockAnOrganization');
 
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
     ]]);
 
-    Route::get('volunteer/{id}','VolunteerController@show');
-
-   /*
-    *  block an organization
-    */
-
-    Route::post('organization/{id}/block','VolunteerController@blockAnOrganization');
-
-    /*
-    |-----------------------
-    | Volunteer Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Volunteer Routes
+|-----------------------
+*/
     /**
      * Notification Routes
      */
@@ -169,6 +166,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
     Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
     Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
+
+    Route::get('volunteer/{id}','VolunteerController@show');
 
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show'
