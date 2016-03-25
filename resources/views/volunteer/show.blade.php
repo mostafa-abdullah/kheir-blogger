@@ -21,12 +21,14 @@
 
     <h1>Reviews</h1>
     <ul>
-        @foreach($volunteer->eventReviews as $review)
-            <li>{{ $review }}</li>
-        @endforeach
-        @foreach($volunteer->organizationReviews as $review)
-            <li>{{ $review  }}</li>
-        @endforeach
+        <h4>On Events:</h4>
+        @for ($i = 0; $i < 3 && $i < count($volunteer->eventReviews); $i++)
+            <li>{{ $volunteer->eventReviews[$i]->review }},{{  $volunteer->eventReviews[$i]-> rate}}</li>
+        @endfor
+        <h4>On Organizations:</h4>
+        @for ($i = 0; $i < 3 && $i < count($volunteer->organizationReviews); $i++)
+            <li>{{ $volunteer->organizationReviews[$i]-> review}}, {{$volunteer->organizationReviews[$i]-> rate  }}</li>
+        @endfor
     </ul>
 
 </body>
