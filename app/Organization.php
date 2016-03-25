@@ -42,4 +42,12 @@ class Organization extends Authenticatable
     }
 
 
+    /**
+     *  An orgaization can be blocked by many users
+     */
+
+    public function blockedByUser (){
+      return $this->belongsToMany('App\User','usersBlockedOrganiztion')->withTimestamps();
+    }
+
 }
