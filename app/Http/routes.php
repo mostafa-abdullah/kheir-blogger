@@ -221,7 +221,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
-\    Route::resource('event','EventController', ['only' => [
+    Route::resource('event','EventController', ['only' => [
          'create','store','show'
     ]]);
 
