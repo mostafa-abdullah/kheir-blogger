@@ -106,12 +106,14 @@ class User extends Authenticatable
 
         return $this->hasMany('App\EventReview');
 
+
     }
 
     public function reportedEventReviews()
     {
         return $this->belongsToMany('App\EventReview',
             'event_review_reports', 'user_id', 'review_id')->withTimestamps();
+
     }
 
     public function eventQuestions(){
