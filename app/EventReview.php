@@ -18,4 +18,9 @@ class EventReview extends Model
     {
         return $this->belongsTo('App\Event');
     }
+
+    public function reportingUsers()
+    {
+        return $this->belongsToMany('App\User', 'event_review_reports')->withTimestamps();
+    }
 }
