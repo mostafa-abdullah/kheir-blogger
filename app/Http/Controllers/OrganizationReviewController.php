@@ -14,7 +14,7 @@ class OrganizationReviewController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            'create', 'store', 'edit', 'update'
+            'create', 'store', 'edit', 'update', 'report'
         ]]);
     }
 
@@ -78,5 +78,13 @@ class OrganizationReviewController extends Controller
     public function destroy($organization_id, $review_id)
     {
         //TODO
+    }
+
+    public function report($organization_id, $review_id)
+    {
+        $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
+        if(!$review->reportingUsers()->find(Auth::user()->id))
+            Auth::user()->reportedOrganizationReviews()->attach($review);
+        return redirect()->action('OrganizationController@show', [$organization_id]);
     }
 }

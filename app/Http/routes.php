@@ -115,7 +115,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Reviewing.
      */
-     Route::resource('organization/{id}/review', 'OrganizationReviewController');
+    Route::get('organization/{id}/review/{r_id}/report', 'OrganizationReviewController@report');
+    Route::resource('organization/{id}/review', 'OrganizationReviewController');
 
     /**
      * Organizaton Blocking.
@@ -155,16 +156,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('feedback' , 'HomeController@storeFeedback');
 
     /**
-     * Reports Routes
+     * Volunteer CRUD.
      */
-    Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
-    Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
-
-
-    Route::get('volunteer/{id}','VolunteerController@show');
-
     Route::resource('volunteer','VolunteerController', ['only' => [
-        'show'
+        'show',
     ]]);
 
 /*
@@ -199,12 +194,13 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event Reviewing.
      */
+    Route::get('event/{id}/review/{r_id}/report', 'EventReviewController@report');
     Route::resource('event/{id}/review','EventReviewController');
 
     /**
      *  Event CRUD.
      */
     Route::resource('event','EventController', ['only' => [
-         'show', 'create', 'edit', 'update'
+         'show', 'create', 'store', 'edit', 'update'
      ]]);
 });

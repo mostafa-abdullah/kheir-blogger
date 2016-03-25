@@ -22,6 +22,7 @@ class OrganizationReview extends Model
 
     public function reportingUsers()
     {
-        return $this->belongsToMany('App\User', 'organization_review_reports')->withTimestamps();
+        return $this->belongsToMany('App\User', 'organization_review_reports', 'review_id', 'user_id')
+                    ->withTimestamps();
     }
 }

@@ -33,12 +33,17 @@ class Event extends Model
 
     public function followers()
     {
-        return $this->users()->where('type', 1);
+        return $this->volunteers()->where('type', 1);
     }
 
     public function registrants()
     {
-        return $this->users()->where('type', 2);
+        return $this->volunteers()->where('type', 2);
+    }
+
+    public function attendees()
+    {
+        return $this->volunteers()->where('type', 3);
     }
 
     public function notifications()

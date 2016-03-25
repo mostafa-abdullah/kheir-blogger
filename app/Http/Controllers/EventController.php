@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\PostRequest;
 
@@ -39,7 +40,7 @@ class EventController extends Controller
 	public function show($id)
 	{
 		// TODO: show the event's page (Hossam Ahmad)
-		return Event::find($id);
+		return Event::findOrFail($id);
 	}
 
 	public function create()

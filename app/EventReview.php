@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EventReview extends Model
 {
     protected $fillable = ['review', 'rate'];
-    
+
     protected $table = 'event_reviews';
 
     public function user()
@@ -22,6 +22,7 @@ class EventReview extends Model
 
     public function reportingUsers()
     {
-        return $this->belongsToMany('App\User', 'event_review_reports')->withTimestamps();
+        return $this->belongsToMany('App\User', 'event_review_reports', 'review_id', 'user_id')
+                    ->withTimestamps();
     }
 }

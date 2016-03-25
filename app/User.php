@@ -23,15 +23,15 @@ class User extends Authenticatable
      */
     public function subscribedOrganizations()
     {
-      return $this->belongsToMany('App\Organization',
-        'volunteers_subscribe_organizations')->withTimestamps();
+      return $this->belongsToMany('App\Organization', 'volunteers_subscribe_organizations')
+                  ->withTimestamps();
     }
 
     /**
      * Subscribe to an organization.
      */
-    public function subscribe($organization_id){
-
+    public function subscribe($organization_id)
+    {
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
@@ -91,21 +91,15 @@ class User extends Authenticatable
         return $this->hasMany('App\Recommendation');
     }
 
-    public function organizationReviews(){
-
+    public function organizationReviews()
+    {
         return $this->hasMany('App\OrganizationReview');
     }
 
     public function reportedOrganizationReviews()
     {
-        return $this->belongsToMany('App\OrganizationReview',
-                        'organization_review_reports', 'user_id', 'review_id')->withTimestamps();
-    }
-
-    public function notifications()
-    {
-        return $this->belongsToMany('App\Notification', 'user_notifications')
-                    ->withTimestamps()->withPivot('read');
+        return $this->belongsToMany('App\OrganizationReview', 'organization_review_reports', 'user_id', 'review_id')
+                    ->withTimestamps();
     }
 
     public function events()
@@ -127,8 +121,14 @@ class User extends Authenticatable
 
     public function reportedEventReviews()
     {
-        return $this->belongsToMany('App\EventReview',
-            'event_review_reports', 'user_id', 'review_id')->withTimestamps();
+        return $this->belongsToMany('App\EventReview', 'event_review_reports', 'user_id', 'review_id')
+                    ->withTimestamps();
+    }
+    
+    public function notifications()
+    {
+        return $this->belongsToMany('App\Notification', 'user_notifications')
+                    ->withTimestamps()->withPivot('read');
     }
 
     public function eventQuestions(){

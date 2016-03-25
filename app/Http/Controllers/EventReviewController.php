@@ -15,7 +15,7 @@ class EventReviewController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            'create', 'store', 'edit', 'update'
+            'create', 'store', 'edit', 'update', 'report'
         ]]);
     }
 
@@ -31,9 +31,9 @@ class EventReviewController extends Controller
     /**
      * Show a certain event review
      */
-    public function show($id)
+    public function show($event_id, $review_id)
     {
-        //TODO
+        return Event::findOrFail($event_id)->reviews()->find($review_id);
     }
 
     /**
@@ -42,7 +42,11 @@ class EventReviewController extends Controller
     public function create($id)
     {
         $event = Event::findorfail($id);
-        return view ('event.review.create',compact('event'));
+        if(!$event->attendees()->find(Auth::user()->id))
+            return redirect()->action('EventController@show', [$id]);
+        if($event->reviews()->where('user_id', Auth::user()->id))
+            return redirect()->action('EventController@show', [$id]);
+        return view ('event.review.create', compact('event'));
     }
 
     /**
@@ -76,8 +80,16 @@ class EventReviewController extends Controller
     /**
      * Delete an event review
      */
-    public function destroy()
+    public function destroy($event_id, $review_id)
     {
         //TODO
+    }
+
+    public function report($event_id, $review_id)
+    {
+        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
+        if(!$review->reportingUsers()->find(Auth::user()->id))
+            Auth::user()->reportedEventReviews()->attach($review);
+        return redirect()->action('EventController@show', [$event_id]);
     }
 }
