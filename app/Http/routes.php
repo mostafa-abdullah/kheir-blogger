@@ -218,11 +218,6 @@ Route::group(['middleware' => ['web']], function () {
          'create','store','show'
     ]]);
 
-    /**
-     *  Routes related to the event
-     */
-    Route::resource('event','EventController', ['only' => [
-         'show', 'create', 'edit', 'update'
-     ]]);
+    
 
 });
