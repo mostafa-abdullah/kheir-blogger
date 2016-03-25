@@ -128,11 +128,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('feedback' , 'HomeController@sendFeedback');
     Route::post('fpeedback' , 'HomeController@storeFeedback');
 
-/*
-|-----------------------
-| Organization Routes
-|-----------------------
-*/
+    /**
+     * Reports Routes
+     */
+    Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
+    Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
+
+    /*
+    |-----------------------
+    | Organization Routes
+    |-----------------------
+    */
 
     /**
      *	Organization Subscription
@@ -160,11 +166,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('volunteer/{id}','VolunteerController@show');
 
 
-/*
-|-----------------------
-| Volunteer Routes
-|-----------------------
-*/
+    /*
+    |-----------------------
+    | Volunteer Routes
+    |-----------------------
+    */
     /**
      * Notification Routes
      */
@@ -183,11 +189,6 @@ Route::group(['middleware' => ['web']], function () {
         'show'
     ]]);
 
-    /**
-     * Reports Routes
-     */
-    Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
-    Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
 
     /*
     |-----------------------
