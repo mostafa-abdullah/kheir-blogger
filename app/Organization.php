@@ -41,6 +41,7 @@ class Organization extends Authenticatable
         return $this->hasMany('App\OrganizationReview');
     }
 
+
     /**
      *  An orgaization can be blocked by many users
      */
