@@ -234,7 +234,7 @@ Route::group(['middleware' => ['web']], function () {
      *  Routes related to the event
      */
     Route::resource('event','EventController', ['only' => [
-         'show', 'create', 'edit', 'update'
+         'show', 'create', 'edit', 'update','destroy'
      ]]);
      /**
       *	Routes related to the Event Review
