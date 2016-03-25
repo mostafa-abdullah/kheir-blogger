@@ -68,10 +68,15 @@ class OrganizationController extends Controller
     * show the profile of organization.
     */
     public function show($id){
-
-        //TODO: return a view with the organization profile (Badry)
         $organization = Organization::findOrFail($id);
-        return $organization;
+        $state=0;
+          if (auth()->guard('organization')->check())$state=1;
+         else if (Auth::user()){
+             if (Auth::user()->is_subscribed($id))$state=2;
+             else $state=3;
+         }
+        $events=$organization->events();
+        return view('organization.profile',compact('organization','state','events'));
     }
 
 

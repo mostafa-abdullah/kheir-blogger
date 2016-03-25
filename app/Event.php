@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+   use Illuminate\Database\Eloquent\SoftDeletes;
 class Event extends Model
 {
-
+ use SoftDeletes;
     protected $fillable = [
         'name', 'description', 'timing', 'location',
         'required_contact_info','needed_membership'
@@ -48,5 +48,9 @@ class Event extends Model
         return $this->hasMany('App\Question');
     }
 
+    public function scopeCurrentYearAttendedEvents($query)
+    {
+        $query->where('type' , '=' , '3')->whereYear('timing', '=', date('Y'));
+    }
 
 }

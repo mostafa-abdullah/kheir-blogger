@@ -83,7 +83,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::auth();
 
     /**
-     *  Login a user(volunter) - Added to guard from a logged in user
+     *  Login a user(volunteer) - Added to guard from a logged in user
      *  or organization
      */
     Route::get('/login',function(){
@@ -128,11 +128,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('feedback' , 'HomeController@sendFeedback');
     Route::post('fpeedback' , 'HomeController@storeFeedback');
 
-/*
-|-----------------------
-| Organization Routes
-|-----------------------
-*/
+    /**
+     * Reports Routes
+     */
+    Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
+    Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
+
+    /*
+    |-----------------------
+    | Organization Routes
+    |-----------------------
+    */
 
     /**
      *	Organization Subscription
@@ -152,18 +158,24 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organization/{id}/review','OrganizationController@createReview');
     Route::post('organization/{id}/review','OrganizationController@storeReview');
 
+
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
     ]]);
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');
 
+   /*
+    *  block an organization
+    */
 
-/*
-|-----------------------
-| Volunteer Routes
-|-----------------------
-*/
+    Route::post('organization/{id}/block','VolunteerController@blockAnOrganization');
+
+    /*
+    |-----------------------
+    | Volunteer Routes
+    |-----------------------
+    */
     /**
      * Notification Routes
      */
@@ -173,6 +185,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Challenges Routes
      */
+    Route::get('volunteer/challenge/view' , 'VolunteerController@viewChallenges');
+    Route::get('volunteer/challenge/attended' , 'VolunteerController@viewAttendedEvents');
     Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
     Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
     Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
@@ -182,11 +196,12 @@ Route::group(['middleware' => ['web']], function () {
         'show'
     ]]);
 
-/*
-|-----------------------
-| Event Routes
-|-----------------------
-*/
+
+    /*
+    |-----------------------
+    | Event Routes
+    |-----------------------
+    */
     /**
      * Question Routes
      */
@@ -223,7 +238,13 @@ Route::group(['middleware' => ['web']], function () {
      *  Routes related to the event
      */
     Route::resource('event','EventController', ['only' => [
-         'show', 'create', 'edit', 'update'
+         'show', 'create', 'edit', 'update','destroy'
      ]]);
+     /**
+      *	Routes related to the Event Review
+      */
+     Route::resource('event/{id}/review','EventReviewController', ['only' => [
+          'index' , 'create' ,'store'
+      ]]);
 
 });
