@@ -186,8 +186,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Reports Routes
      */
-    Route::post('volunteer/report/organizationreview', 'VolunteerController@reportOrganizationReview');
-    Route::post('volunteer/report/eventreview', 'VolunteerController@reportEventReview');
+    Route::post('organization/{id}/review/{r_id}/report', 'VolunteerController@reportOrganizationReview');
+    Route::post('event/{id}/review/{r_id}/report', 'VolunteerController@reportEventReview');
 
     /*
     |-----------------------

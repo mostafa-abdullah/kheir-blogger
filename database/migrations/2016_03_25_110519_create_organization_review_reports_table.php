@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVolunteerReportsEventReview extends Migration
+class CreateOrganizationReviewReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateVolunteerReportsEventReview extends Migration
      */
     public function up()
     {
-        Schema::create('event_review_reports', function (Blueprint $table) {
+        Schema::create('organization_review_reports', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('review_id')->unsigned()->index();
-            $table->foreign('review_id')->references('id')->on('event_reviews')->onDelete('cascade');
+            $table->foreign('review_id')->references('id')->on('organization_reviews')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreateVolunteerReportsEventReview extends Migration
      */
     public function down()
     {
-        Schema::drop('event_review_reports');
+        Schema::drop('organization_review_reports');
     }
 }
