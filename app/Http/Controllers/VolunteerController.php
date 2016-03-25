@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\User;
 use App\Event;
 use App\Challenge;
+use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
@@ -16,23 +17,11 @@ use Auth;
 
 class VolunteerController extends Controller
 {
-
     public function __construct(){
 
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
-            'createChallenge', 'storeChallenge',
-            'editChallenge', 'updateChallenge',
             'showNotifications', 'unreadNotification',
-        ]]);
-
-        $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
-        ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
+            'createFeedback', 'storeFeedback'
         ]]);
     }
 
@@ -46,62 +35,17 @@ class VolunteerController extends Controller
     }
 
     /**
-     *  Volunteer set a challenge to himself
-     */
-    public function createChallenge()
-    {
-        if(Auth::user()->currentYearChallenge())
-            return redirect('volunteer/challenge/edit');
-        return view('volunteer.challenge.create');
-    }
-
-    /**
-     *  Store the challenge in the database
-     */
-    public function storeChallenge(Request $request)
-    {
-        $this->validate($request , ['events' => 'required|numeric|min:1']);
-        $challenge = new Challenge($request->all());
-        $challenge->year = Carbon::now()->year;
-        Auth::user()->challenges()->save($challenge);
-        return redirect('home');
-    }
-
-    /**
-     *  Volunteer can edit challenge
-     */
-    public function editChallenge()
-    {
-        $challenge = Auth::user()->currentYearChallenge();
-        if($challenge)
-            return view('volunteer.challenge.edit' , compact('challenge'));
-        return redirect('volunteer/challenge/create');
-    }
-
-    /**
-     *  Volunteer can update challenge
-     */
-    public function updateChallenge(Request $request)
-    {
-        $this->validate($request , ['events' => 'required|numeric|min:1']);
-        $challenge = Auth::user()->currentYearChallenge();
-        if($challenge)
-            $challenge->update($request->all());
-        return redirect('home');
-    }
-
-    /**
      * show all notifications for the authenticated user.
      */
-	public function showNotifications()
+    public function showNotifications()
     {
-		$notifications = Auth::user()->notifications()->unread()->get();
+        $notifications = Auth::user()->notifications()->unread()->get();
         foreach($notifications as $notification)
         {
             $notification->pivot->read = 1;
             $notification->push();
         }
-    	return view('notifications.show', compact('notifications'));
+        return view('notifications.show', compact('notifications'));
     }
 
     /**
@@ -114,12 +58,21 @@ class VolunteerController extends Controller
         $notification->push();
     }
 
-    /**
-      *  User blocks an organization
-      */
-    public function blockAnOrganization ($organization_id){
-        $organization = Organization::find($organization_id);
-        Auth::user()->blockOrganisation()->attach($organization);
+    public function createFeedback()
+    {
+      return view('feedback');
+    }
 
+    public function storeFeedback(Request $request)
+    {
+        $this->validate($request, [
+            'subject' => 'required|max:60',
+            'message' => 'required',
+        ]);
+        $feedback = new Feedback($request->all());
+        $feedback->user_id = Auth::user()->id;
+        $feedback->save();
+        \Session::flash('flash_message','feedback successfully sent!');
+        return redirect('/');
     }
 }

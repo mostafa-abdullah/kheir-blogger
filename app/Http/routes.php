@@ -121,7 +121,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organizaton Blocking.
      */
-    Route::post('organization/{id}/block','VolunteerController@blockAnOrganization');
+    Route::post('organization/{id}/block','OrganizationController@block');
 
     /**
      * Organization CRUD.
@@ -136,24 +136,23 @@ Route::group(['middleware' => ['web']], function () {
 |-----------------------
 */
     /**
-     * Notification Routes
+     *  Challenges Routes.
+     */
+    Route::resource('volunteer/challenge', 'ChallengeController' ['except' => [
+        'show', 'destroy'
+    );
+
+    /**
+     * Notification Routes.
      */
     Route::get('notifications', 'VolunteerController@showNotifications');
     Route::post('notifications', 'VolunteerController@unreadNotification');
 
     /**
-     *  Challenges Routes
+     * Send feedback to the admin.
      */
-    Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
-    Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
-    Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');
-    Route::patch('volunteer/challenge/edit' , 'VolunteerController@updateChallenge');
-
-    /**
-     * Send feed back to the admin (for logged-in volunteers/organizations)
-     */
-    Route::get('feedback' , 'HomeController@sendFeedback');
-    Route::post('feedback' , 'HomeController@storeFeedback');
+    Route::get('feedback' , 'VolunteerController@createFeedback');
+    Route::post('feedback' , 'VolunteerController@storeFeedback');
 
     /**
      * Volunteer CRUD.

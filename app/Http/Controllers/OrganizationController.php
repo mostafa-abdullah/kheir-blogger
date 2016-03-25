@@ -25,6 +25,7 @@ class OrganizationController extends Controller
         $this->middleware('auth_volunteer', ['only' => [
             'subscribe', 'unsubscribe',
             'recommend', 'storeRecommendation',
+            'block', 'unblock'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -125,5 +126,23 @@ class OrganizationController extends Controller
             return view('organization.recommendation.index', compact('recommendations'));
         }
         return redirect('/');
+    }
+
+
+    /**
+     * A volunteer can block an organization to stop receiving notifications.
+     */
+    public function block($organization_id){
+        $organization = Organization::find($organization_id);
+        Auth::user()->blockOrganisation()->attach($organization);
+    }
+
+
+    /**
+     * A volunteer can unblock an organization.
+     */
+    public function unblock($organization_id){
+        $organization = Organization::find($organization_id);
+        Auth::user()->blockOrganisation()->detach($organization);
     }
 }
