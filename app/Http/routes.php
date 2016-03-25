@@ -1,21 +1,8 @@
 <?php
-
 /*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-
-/*
-|--------------------------------------------------------------------------
+|==========================================================================
 | Application Routes
-|--------------------------------------------------------------------------
+|==========================================================================
 |
 | This route group applies the "web" middleware group to every route
 | it contains. The "web" middleware group is defined in your HTTP
@@ -26,7 +13,7 @@
 Route::group(['middleware' => ['web']], function () {
 
     /**
-     *  Welcome page (for not logged-in volunteers/organizations)
+     * Homepage for logged-in volunteers/organizations or Welcome page for others.
      */
     Route::get('/', function () {
         if(Auth::user() || auth()->guard('organization')->check())
@@ -35,60 +22,57 @@ Route::group(['middleware' => ['web']], function () {
     });
 
 /*
-|--------------------------------------------------------------------------
+|==========================================================================
 | Authentication Routes
-|--------------------------------------------------------------------------
+|==========================================================================
 |
-| These routes are related to the authentication of volunteers and organizations
+| These routes are related to the authentication of volunteers/organizations.
 |
 */
     /**
-     *  Login page for organizations
+     * Organization login page.
      */
     Route::get('login_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
-        if(isset($errors))
-            var_dump($errors);
+            return redirect('/');
        return view('auth.login_organization');
     });
 
     /**
-     *  Login an organization with a request containing email and password
+     * Organization login request.
      */
-    Route::post('/login_organization','LoginController@organizationLogin');
+    Route::post('login_organization','OrganizationAuthController@login');
 
     /**
-     *  Register page for organizations
+     * Organization register page.
      */
-    Route::get('/register_organization',function(){
+    Route::get('register_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
+            return redirect('/');
         return view('auth.register_organization');
     });
 
     /**
-     *  Register an organization with a request containing name, email and password
+     * Organization register request.
      */
-    Route::post('/register_organization','OrganizationController@register');
+    Route::post('register_organization','OrganizationAuthController@register');
 
     /**
-     *  Logout organization
+     * Organization logout request.
      */
-    Route::get('/logout_organization','OrganizationController@logout');
+    Route::get('logout_organization','OrganizationAuthController@logout');
 
     /**
-     *  Authentication related to the user (volunteer)
+     *  Volunteer Authentication (register/login/logout)
      */
     Route::auth();
 
     /**
-     *  Login a user(volunteer) - Added to guard from a logged in user
-     *  or organization
+     *  Volunteer Login Page.
      */
-    Route::get('/login',function(){
+    Route::get('login',function(){
         if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
+            return redirect('/');
         return view('auth.login');
     });
 
@@ -117,11 +101,6 @@ Route::group(['middleware' => ['web']], function () {
             $notification->push();
         }
     });
-    
-    /**
-     *  Homepage (for logged-in volunteers/organizations)
-     */
-    Route::get('home', 'HomeController@index');
 
     /**
      * Send feed back to the admin (for logged-in volunteers/organizations)
@@ -163,7 +142,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('organization', 'OrganizationController', ['only' => [
         'show', 'edit', 'update',
     ]]);
-    Route::get('/home', 'HomeController@index');
+
     Route::get('volunteer/{id}','VolunteerController@show');
 
    /*

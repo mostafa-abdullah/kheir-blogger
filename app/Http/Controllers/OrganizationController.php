@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
@@ -20,7 +19,8 @@ use Auth;
 class OrganizationController extends Controller
 {
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
             'recommend', 'storeRecommendation',
@@ -36,32 +36,6 @@ class OrganizationController extends Controller
             // Add all functions that are allowed for volunteers/organizations only
 
         ]]);
-
-    }
-
-    /**
-     * registers a new organization
-     */
-    public function register(RegisterOrganizationRequest $request){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
-        $organization = new Organization;
-        $organization->name = $request->name;
-        $organization->email = $request->email;
-        $organization->password = bcrypt($request->password);
-        $organization->save();
-        auth()->guard('organization')->login($organization);
-        return redirect('home');
-    }
-
-    /**
-     * logout the logged-in organization
-     */
-    public function logout(){
-
-        Auth::guard('organization')->logout();
-        Auth::guard('user')->logout();
-        return redirect('/');
     }
 
     /**
@@ -83,15 +57,14 @@ class OrganizationController extends Controller
     /**
     * edit the profile of organization.
     */
-    public function edit($id){
-
-      if(auth()->guard('organization')->id()==$id){
-          $organization = Organization::findorfail($id);
-          return view('organization.edit' , compact('organization'));
-      }
-      else{
-        return redirect('home');
-      }
+    public function edit($id)
+    {
+        if(auth()->guard('organization')->id()==$id)
+        {
+            $organization = Organization::findorfail($id);
+            return view('organization.edit' , compact('organization'));
+        }
+        return redirect('/');
     }
 
     /**
