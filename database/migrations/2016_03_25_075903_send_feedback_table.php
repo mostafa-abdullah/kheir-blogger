@@ -12,14 +12,14 @@ class SendFeedbackTable extends Migration
      */
     public function up()
     {
-      Schema::create('feedbacks', function (Blueprint $table)
-      {
+        Schema::create('feedbacks', function (Blueprint $table)
+        {
 
-          $table->string('user_id');
-          $table->string('subject')->nullable();
-          $table->string('message')->nullable();
-          $table->timestamps();
-      });
+            $table->string('user_id');
+            $table->string('subject')->nullable();
+            $table->string('message')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -29,7 +29,7 @@ class SendFeedbackTable extends Migration
      */
     public function down()
     {
-      Schema::drop('feedbacks');
+        Schema::drop('feedbacks');
 
     }
 }

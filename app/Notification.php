@@ -53,9 +53,36 @@ class Notification extends Model
         $notification->save();
         $event->notifications()->attach($notification);
 
-        foreach($usersToNotify as $user)
+        $filteredUsersToNotify = filter($usersToNotify,$event);
+
+        foreach($filteredUsersToNotify as $user)
             $user->notifications()->attach($notification, ['read' => 0 ]);
 
 
     }
+
+    /**
+     *  remove users from user to be notified who blocked the organization created an event
+     */
+    public function filter ($usersToNotify, $event){
+        $organization_id = $event->organization_id;
+        $organization = Organization::find($organization_id);
+
+        $filteredUsersToNotify = array();
+
+        foreach($usersToNotify as $user){
+           $result =  $user->blockOrganisation()->where('organization_id','=',$organization_id)->get();
+            /*
+             * check if the returned result does not contain an result which means that this user does not block the organization that created the event so add it to the filtered users array
+             */
+             if($result->count() == 0){
+                 $filteredUsersToNotify[] = $user;
+             }
+
+         }
+
+        return $filteredUsersToNotify;
+
+    }
+
 }
