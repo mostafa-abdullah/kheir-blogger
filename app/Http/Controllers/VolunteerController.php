@@ -35,6 +35,15 @@ class VolunteerController extends Controller
     }
 
     /**
+     * Volunteer can view all events he/she attended this year
+     */
+    public function viewAttendedEvents()
+    {
+        $events = Auth::user()->currentYearAttendedEvents()->get();
+        return view('volunteer.challenge.attendedEvents' , compact('events'));
+    }
+
+    /**
      * show all notifications for the authenticated user.
      */
     public function showNotifications()

@@ -117,6 +117,7 @@ class User extends Authenticatable
 
         return $this->hasMany('App\EventReview');
 
+
     }
 
     public function reportedEventReviews()
@@ -124,7 +125,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\EventReview', 'event_review_reports', 'user_id', 'review_id')
                     ->withTimestamps();
     }
-    
+
     public function notifications()
     {
         return $this->belongsToMany('App\Notification', 'user_notifications')
@@ -145,12 +146,22 @@ class User extends Authenticatable
         return $this->challenges()->currentYear()->first();
     }
 
+
+    public function previousYearsChallenges()
+    {
+        return $this->challenges()->previousYears();
+    }
+
+    public function currentYearAttendedEvents()
+    {
+        return $this->events()->currentYearAttendedEvents();
+    }
+
     /**
      *  A user can block many organiztions
      */
     public function blockOrganisation (){
         return $this->belongsToMany('App\Organization','usersBlockedOrganiztion')->withTimestamps();
     }
-
 
 }

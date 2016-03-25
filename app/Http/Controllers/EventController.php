@@ -108,4 +108,18 @@ class EventController extends Controller
 		Auth::user()->unregisterEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
+
+    public function destroy($id)
+	{
+    	$event = Event::findOrFail($id);
+
+    	if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+
+        $event->delete();
+          Notification::notify($event->registrants(), $event, "Event ".($event->name)."has been deleted ",url("home"));
+
+           }
+    }
+
 }

@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Carbon\Carbon;
+
 
 class Event extends Model
 {
+    use SoftDeletes;
 
     protected $fillable = [
         'name', 'description', 'timing', 'location',
@@ -61,8 +65,14 @@ class Event extends Model
         return $this->hasMany('App\Question');
     }
 
+
     public function reviews()
     {
         return $this->hasMany('App\EventReview');
+    }
+
+    public function scopeCurrentYearAttendedEvents($query)
+    {
+        $query->where('type' , '=' , '3')->whereYear('timing', '=', date('Y'));
     }
 }

@@ -138,6 +138,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Challenges Routes.
      */
+     Route::get('volunteer/challenge/view' , 'VolunteerController@viewChallenges');
+     Route::get('volunteer/challenge/attended' , 'VolunteerController@viewAttendedEvents');
     Route::resource('volunteer/challenge', 'ChallengeController' ['except' => [
         'show', 'destroy'
     );
@@ -200,6 +202,10 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','EventController', ['only' => [
+<<<<<<< HEAD
          'show', 'create', 'store', 'edit', 'update'
+=======
+         'show', 'create', 'edit', 'update','destroy'
+>>>>>>> origin/master
      ]]);
 });
