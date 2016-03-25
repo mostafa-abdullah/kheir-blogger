@@ -192,11 +192,9 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event Question.
      */
-    Route::get('event/{id}/question/ask', 'EventController@askQuestion');
-    Route::post('event/{id}/question/ask', 'EventController@storeQuestion');
-    Route::get('event/{id}/question/answer', 'EventController@viewUnansweredQuestions');
-    Route::post('event/{id}/question/{q_id}', 'EventController@answerQuestion');
-    Route::get('event/{id}/question/{q_id}', 'EventController@showQuestion');
+    Route::get('event/{id}/question/answer', 'EventQuestionController@viewUnansweredQuestions');
+    Route::post('event/{id}/question/{q_id}/answer', 'EventQuestionController@answer');
+    Route::resource('event/{id}/question', 'EventQuestionController');
 
     /**
      * Event Reviewing.

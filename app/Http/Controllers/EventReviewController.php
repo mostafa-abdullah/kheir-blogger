@@ -24,7 +24,8 @@ class EventReviewController extends Controller
      */
     public function index($event_id)
     {
-        return EventReview::all()->where('event_id', '=', $id)->toArray();
+        $event = Event::findOrFail($event_id);
+        return $event->reviews;
     }
 
     /**
@@ -49,14 +50,11 @@ class EventReviewController extends Controller
      */
     public function store(EventReviewRequest $request, $id)
     {
-        if(Auth::user()){
           $review = new EventReview($request->all());
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
-
-      }
-        return redirect('events/'.$id);
+          return redirect()->action('EventController@show', [$id]);
     }
 
     /**

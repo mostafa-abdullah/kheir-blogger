@@ -9,7 +9,7 @@
             <div class = "form_group">
 
                 {!! Form::label('review','Review') !!}
-                {!! Form::text('review',null,['class'=> 'form-control']) !!}
+                {!! Form::textarea('review',null,['class'=> 'form-control']) !!}
             </div>
 
             <div class = "form-group">
@@ -19,7 +19,7 @@
 
 
             <div class="form-group">
-                {!! Form::submit('AddReview',['class'=>'btn btn form-control']) !!}
+                {!! Form::submit('Add Review',['class'=>'btn btn-default']) !!}
 
 
             </div>
@@ -27,13 +27,5 @@
             {!! Form::close() !!}
 
 
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-  @endif
+    @include('errors')
 @stop

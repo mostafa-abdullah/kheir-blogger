@@ -102,16 +102,21 @@ class User extends Authenticatable
                         'organization_review_reports', 'user_id', 'review_id')->withTimestamps();
     }
 
-    public function notifications (){
-
+    public function notifications()
+    {
         return $this->belongsToMany('App\Notification', 'user_notifications')
                     ->withTimestamps()->withPivot('read');
     }
 
-    public function events(){
-
+    public function events()
+    {
         return $this->belongsToMany('App\Event','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
+    }
+
+    public function attendedEvents()
+    {
+        return $this->events()->wherePivot('type', 3);
     }
 
     public function eventReviews(){

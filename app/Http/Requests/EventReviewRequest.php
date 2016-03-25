@@ -15,17 +15,13 @@ class EventReviewRequest extends Request
     public function authorize()
     {
         $event_id = $this->route()->getParameter('id');
-        $check = !Auth::user()->eventReviews()
-                            ->where('event_id', $event_id)->first();
-        $check &=   Auth::user()->confirmedEvent($event_id);
-        return $check;
+        if(Auth::user()->eventReviews()->where('event_id', $event_id)->first())
+            return false;
+        if(!Auth::user()->attendedEvents()->find($event_id))
+            return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
