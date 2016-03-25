@@ -12,39 +12,36 @@ use App\Http\Requests;
 
 class EventReviewController extends Controller
 {
-    //
     /**
-    * Creat new review for event.
-    *
-    * @return view
-    */
+     * Show all reviews of a certain event
+     */
+    public function index($event_id)
+    {
+        return EventReview::all()->where('event_id', '=', $id)->toArray();
+    }
 
-    public function create($id){
+    /**
+     * Show a certain event review
+     */
+    public function show($id)
+    {
+        //TODO
+    }
+
+    /**
+     * Create a new event review
+     */
+    public function create($id)
+    {
         $event = Event::findorfail($id);
         return view ('event.review.create',compact('event'));
-
-    }
-    /**
-    * Find all Reviews on event.
-    *
-    * @return view
-    */
-
-    public function index($id){
-
-    return  $event_review = EventReview::all()->where('event_id', '=', $id)->toArray();
-
     }
 
-
     /**
-    * Store the evet review.
-    *
-    * @return view
-    */
-
-    public function store(EventReviewRequest $request, $id){
-
+     * Store the created event review
+     */
+    public function store(EventReviewRequest $request, $id)
+    {
         if(Auth::user()){
           $review = new EventReview($request->all());
           $review->user_id = Auth::user()->id;
@@ -53,10 +50,29 @@ class EventReviewController extends Controller
 
       }
         return redirect('events/'.$id);
-
-
     }
 
+    /**
+     * Edit an event review
+     */
+    public function edit()
+    {
+        //TODO
+    }
 
+    /**
+     * Update the edited event review
+     */
+    public function update()
+    {
+        //TODO
+    }
 
+    /**
+     * Delete an event review
+     */
+    public function destroy()
+    {
+        //TODO
+    }
 }

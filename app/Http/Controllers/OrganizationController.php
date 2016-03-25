@@ -84,7 +84,7 @@ class OrganizationController extends Controller
     * edit the profile of organization.
     */
     public function edit($id){
-        
+
       if(auth()->guard('organization')->id()==$id){
           $organization = Organization::findorfail($id);
           return view('organization.edit' , compact('organization'));
@@ -122,27 +122,6 @@ class OrganizationController extends Controller
         $recommendation->user_id = Auth::user()->id;
         $organization = Organization::findorfail($id);
         $organization->recommendations()->save($recommendation);
-        return redirect()->action('OrganizationController@show', [$id]);
-    }
-
-    /**
-     * returns a view to rate and review the organization
-     */
-    public function createReview($id){
-
-        $organization = Organization::findorfail($id);
-        return view ('organization.review', compact('organization'));
-    }
-
-    /**
-     * store the organization review and insert it to the database
-     */
-    public function storeReview(ReviewRequest $request, $id){
-
-        $review = new OrganizationReview($request->all());
-        $review->user_id = Auth::user()->id;
-        $organization = Organization::findorfail($id);
-        $organization->reviews()->save($review);
         return redirect()->action('OrganizationController@show', [$id]);
     }
 
