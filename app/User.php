@@ -55,20 +55,20 @@ class User extends Authenticatable
     public function followEvent($event_id)
     {
         if (!$this->events()->find($event_id))
-            $this->events()->attach($event_id,['type' => 1]); 
+            $this->events()->attach($event_id,['type' => 1]);
         else
-           $this->events()->find($event_id)->type = 1; 
+           $this->events()->find($event_id)->type = 1;
     }
     public function unfollowEvent($event_id)
     {
         $this->events()->detach($event_id);
     }
     public function registerEvent($event_id)
-    {   
+    {
         if (!$this->events()->find($event_id))
-            $this->events()->attach($event_id,['type' => 2]); 
+            $this->events()->attach($event_id,['type' => 2]);
         else
-           $this->events()->find($event_id)->type = 2; 
+           $this->events()->find($event_id)->type = 2;
     }
     public function unregisterEvent($event_id)
     {
@@ -104,7 +104,8 @@ class User extends Authenticatable
 
     public function eventReviews(){
 
-        return $this->hasMany('App\Review');
+        return $this->hasMany('App\EventReview');
+
     }
 
     public function reportedEventReviews()

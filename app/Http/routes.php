@@ -236,4 +236,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('event','EventController', ['only' => [
          'show', 'create', 'edit', 'update'
      ]]);
+     /**
+      *	Routes related to the Event Review
+      */
+     Route::resource('event/{id}/review','EventReviewController', ['only' => [
+          'index' , 'create' ,'store'
+      ]]);
+
 });
