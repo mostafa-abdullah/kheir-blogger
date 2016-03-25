@@ -165,6 +165,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/home', 'HomeController@index');
     Route::get('volunteer/{id}','VolunteerController@show');
 
+   /*
+    *  block an organization
+    */
+
+    Route::post('organization/{id}/block','VolunteerController@blockAnOrganization');
 
     /*
     |-----------------------

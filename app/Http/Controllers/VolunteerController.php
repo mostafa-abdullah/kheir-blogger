@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
@@ -133,28 +134,18 @@ class VolunteerController extends Controller
     }
 
     /**
-     * Report an organization's review
-     * @param Request $request
+<<<<<<< HEAD
+     *  User blocks an organization
      */
-    public function reportOrganizationReview(Request $request)
-    {
-        $reviews = Auth::user()->reportedOrganizationReviews->toArray();
-        $found = 0;
-        foreach($reviews as $review)
-        {
-            if ($review['id'] == $request['r_id'])
-                $found = 1;
-        }
+    public function blockAnOrganization ($organization_id){
+        $organization = Organization::find($organization_id);
+        Auth::user()->blockOrganisation()->attach($organization);
 
-        if ($found == 0)
-            Auth::user()->reportedOrganizationReviews()->attach($request['r_id']);
-        else {
-            // show a message to the user that he is trying to report a review he already reported before.
-        }
     }
 
+
+
     /**
-     * Report an event's review
      * @param Request $request
      */
     public function reportEventReview(Request $request)
@@ -173,4 +164,5 @@ class VolunteerController extends Controller
             // show a message to the user that he is trying to report a review he already reported before.
         }
     }
+
 }
