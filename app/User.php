@@ -76,6 +76,12 @@ class User extends Authenticatable
         return $this->hasMany('App\OrganizationReview');
     }
 
+    public function reportedOrganizationReviews()
+    {
+        return $this->belongsToMany('App\OrganizationReview',
+                        'organization_review_reports', 'user_id', 'review_id')->withTimestamps();
+    }
+
     public function notifications (){
 
         return $this->belongsToMany('App\Notification', 'user_notifications')
@@ -92,6 +98,12 @@ class User extends Authenticatable
 
         return $this->hasMany('App\EventReview');
 
+    }
+
+    public function reportedEventReviews()
+    {
+        return $this->belongsToMany('App\EventReview',
+            'event_review_reports', 'user_id', 'review_id')->withTimestamps();
     }
 
     public function eventQuestions(){
