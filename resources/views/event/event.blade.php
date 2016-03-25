@@ -30,7 +30,7 @@
             @else
              @foreach($announcement as $element)
                  <ul>
-                     <li>{{$element}}</li>
+                     <li>{{$element->description}}</li>
                  </ul>
              @endforeach
             @endif
@@ -43,8 +43,9 @@
             @else
             @foreach($questions as $question)
                 <ul>
-                    <li>{{$question['question'] .'?'}}</li>
-                     <h4>{{$question['answer']}}</h4>
+                    <li>{{$question->question_body .'?'}}</li>
+                    <h6>by {{\App\User::findOrFail($question->user_id)->name}}</h6>
+                     <h4>{{$question->answer}}</h4>
                 </ul>
             @endforeach
             @endif
@@ -58,9 +59,9 @@
                 <div class="jumbotron">
 
                     <h3>
-                        {{$review['Body']}}
+                        {{$review->review}}
                     </h3>
-                        <h5>By {{$review['writen_by']}}</h5>
+                        <h5>By {{\App\User::findOrFail($review->user_id)->name}}</h5>
 
                 </div>
             @endforeach
