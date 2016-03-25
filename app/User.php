@@ -113,4 +113,6 @@ class User extends Authenticatable
     public function blockOrganisation (){
         return $this->belongsToMany('App\Organization','usersBlockedOrganiztion')->withTimestamps();
     }
+
+
 }
