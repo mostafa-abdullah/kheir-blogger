@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use App\Feedback as Feedback;
 class sendConfirmations extends Command
 {
     /**
@@ -18,7 +18,7 @@ class sendConfirmations extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send Event Confirmations to User.';
 
     /**
      * Create a new command instance.
@@ -37,6 +37,10 @@ class sendConfirmations extends Command
      */
     public function handle()
     {
-        //
+        $z = new Feedback;
+        $z->user_id=1;
+        $z->subject = "1";
+        $z->message = "1";
+        $z->save();
     }
 }
