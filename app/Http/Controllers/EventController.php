@@ -95,31 +95,31 @@ class EventController extends Controller
 |==========================================================================
 |
 */
-	public function follow($id){
-
-		// TODO: a volunteer can follow an unfollowed event (Hatem)
-		//
+	public function follow($id)
+	{
+		$user = Auth::user();
+		$user->followEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-	public function unfollow($id){
-
-		// TODO: a volunteer can unfollow an already followed event (Hatem)
-		//
+	public function unfollow($id)
+	{
+		$user = Auth::user();
+		$user->unfollowEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-	public function register($id){
-
-		// TODO: a volunteer can regiseter for an event only once (Hatem)
-		//
+	public function register($id)
+	{
+		$user = Auth::user();
+		$user->registerEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-	public function unregister($id){
-
-		// TODO: a volunteer can unregiser from an already registered event (Hatem)
-		//
+	public function unregister($id)
+	{
+		$user = Auth::user();
+		$user->unregisterEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 

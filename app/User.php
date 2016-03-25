@@ -43,6 +43,29 @@ class User extends Authenticatable
     {
         return $this->subscribedOrganizations()->detach($organization_id);
     }
+
+    public function followEvent($event_id)
+    {
+        if (!$this->events()->find($event_id))
+            $this->events()->attach($event_id,['type' => 1]); 
+        else
+           $this->events()->find($event_id)->type = 1; 
+    }
+    public function unfollowEvent($event_id)
+    {
+        $this->events()->detach($event_id);
+    }
+    public function registerEvent($event_id)
+    {   
+        if (!$this->events()->find($event_id))
+            $this->events()->attach($event_id,['type' => 2]); 
+        else
+           $this->events()->find($event_id)->type = 2; 
+    }
+    public function unregisterEvent($event_id)
+    {
+        $this->events()->detach($event_id);
+    }
     public function recommendations(){
 
         return $this->hasMany('App\Recommendation');
