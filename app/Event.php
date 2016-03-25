@@ -48,4 +48,9 @@ class Event extends Model
         return $this->hasMany('App\Question');
     }
 
+    public function scopeCurrentYearAttendedEvents($query)
+    {
+        $query->where('type' , '=' , '3')->whereYear('timing', '=', date('Y'));
+    }
+
 }

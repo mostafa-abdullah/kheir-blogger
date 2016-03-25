@@ -130,12 +130,22 @@ class User extends Authenticatable
         return $this->challenges()->currentYear()->first();
     }
 
+
+    public function previousYearsChallenges()
+    {
+        return $this->challenges()->previousYears();
+    }
+
+    public function currentYearAttendedEvents()
+    {
+        return $this->events()->currentYearAttendedEvents();
+    }
+
     /**
      *  A user can block many organiztions
      */
     public function blockOrganisation (){
         return $this->belongsToMany('App\Organization','usersBlockedOrganiztion')->withTimestamps();
     }
-
-
+    
 }

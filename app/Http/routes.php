@@ -185,6 +185,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Challenges Routes
      */
+    Route::get('volunteer/challenge/view' , 'VolunteerController@viewChallenges');
+    Route::get('volunteer/challenge/attended' , 'VolunteerController@viewAttendedEvents');
     Route::get('volunteer/challenge/create' , 'VolunteerController@createChallenge');
     Route::post('volunteer/challenge' , 'VolunteerController@storeChallenge');
     Route::get('volunteer/challenge/edit' , 'VolunteerController@editChallenge');

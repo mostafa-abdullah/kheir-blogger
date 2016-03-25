@@ -110,6 +110,26 @@ class VolunteerController extends Controller
     }
 
     /**
+     * Volunteer can view all his challenges
+     */
+    public function viewChallenges()
+    {
+       $currentChallenge = Auth::user()->currentYearChallenge();
+       $previousChallenges = Auth::user()->previousYearsChallenges()->latest('year')->get();
+        return view('volunteer.challenge.viewChallenges' , compact('currentChallenge' , 'previousChallenges'));
+    }
+
+
+    /**
+     * Volunteer can view all events he/she attended this year
+     */
+    public function viewAttendedEvents()
+    {
+        $events = Auth::user()->currentYearAttendedEvents()->get();
+        return view('volunteer.challenge.attendedEvents' , compact('events'));
+    }
+    
+    /**
      * show all notifications for the authenticated user.
      */
 	public function showNotifications()
