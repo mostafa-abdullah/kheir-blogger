@@ -49,6 +49,12 @@ class EventController extends Controller
     |
     */
 
+    /**
+     * To show announcements,answered question sand reviews of an event and pass
+     * it to the event view
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show($id)
     {
         $event = Event::findOrFail($id);
