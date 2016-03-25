@@ -38,7 +38,7 @@ class User extends Authenticatable
     /**
      * to check if the user already subscribed an organization
      */
-    public function is_subscribed($id){
+    public function isSubscribed($id){
         if(!$this->subscribedOrganizations()->find($id))
            return false;
         return true;
