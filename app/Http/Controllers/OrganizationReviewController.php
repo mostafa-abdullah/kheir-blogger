@@ -2,42 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
+use App\Http\Requests\OrganizationReviewRequest;
 
+use App\Organization;
 use App\OrganizationReview;
+
+use Auth;
 
 class OrganizationReviewController extends Controller
 {
-    /**
-     * Show all reviews of a certain organization
-     */
-    public function index($id)
+    public function __construct()
     {
-        return OrganizationReview::all()->where('organization_id', '=', $id)->toArray();
+        $this->middleware('auth_volunteer', ['only' => [
+            'create', 'store', 'edit', 'update'
+        ]]);
     }
 
     /**
-     * Show a certain organization review
+     * Show all reviews of a certain organization.
      */
-    public function show($id)
+    public function index($id)
+    {
+        $organization = Organization::findorfail($id);
+        return $organization->reviews()->get();
+    }
+
+    /**
+     * Show a certain organization review.
+     */
+    public function show($organization_id, $review_id)
     {
         //TODO
     }
 
     /**
-     * Create a new organization review
+     * Create a new organization review.
      */
     public function create($id)
     {
         $organization = Organization::findorfail($id);
-        return view ('organization.review', compact('organization'));
+        return view ('organization.review.create', compact('organization'));
     }
 
     /**
-     * Store the created organization review
+     * Store the created organization review.
      */
-    public function store(ReviewRequest $request, $id)
+    public function store(OrganizationReviewRequest $request, $id)
     {
         $review = new OrganizationReview($request->all());
         $review->user_id = Auth::user()->id;
@@ -47,9 +57,9 @@ class OrganizationReviewController extends Controller
     }
 
     /**
-     * Edit an organization review
+     * Edit an organization review.
      */
-    public function edit()
+    public function edit($organization_id, $review_id)
     {
         //TODO
     }
@@ -57,7 +67,7 @@ class OrganizationReviewController extends Controller
     /**
      * Update the edited organization review
      */
-    public function update()
+    public function update($organization_id, $review_id)
     {
         //TODO
     }
@@ -65,7 +75,7 @@ class OrganizationReviewController extends Controller
     /**
      * Delete an organization review
      */
-    public function destroy()
+    public function destroy($organization_id, $review_id)
     {
         //TODO
     }

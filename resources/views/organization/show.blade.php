@@ -23,14 +23,14 @@
     <div class = "form-group">
     <div></div>
        @if($state==3)
-    {!! Form::open(['action' => ['VolunteerController@subscribe',$organization->id],'method'=>'get']) !!}
+    {!! Form::open(['action' => ['OrganizationController@subscribe',$organization->id],'method'=>'get']) !!}
     <div >
         {!! Form::submit('Subscribe' , array('class' => 'btn btn-default' )) !!}
     </div>
 
     {!! Form::close() !!}
        @elseif($state==2)
-       {!! Form::open(['action' => ['VolunteerController@unsubscribe',$organization->id],'method'=>'get']) !!}
+       {!! Form::open(['action' => ['OrganizationController@unsubscribe',$organization->id],'method'=>'get']) !!}
        <div >
            {!! Form::submit('Unsubscribe' , array('class' => 'btn btn-default' )) !!}
        </div>

@@ -23,6 +23,7 @@ class OrganizationController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
+            'subscribe', 'unsubscribe',
             'recommend', 'storeRecommendation',
         ]]);
 
@@ -46,9 +47,8 @@ class OrganizationController extends Controller
                 else
                     $state = 3;
         $events=$organization->events();
-        return view('organization.profile',compact('organization','state','events'));
+        return view('organization.show',compact('organization','state','events'));
     }
-
 
     /**
     * Edit organization profile.
@@ -74,11 +74,29 @@ class OrganizationController extends Controller
     }
 
     /**
+     * A volunteer can subscribe for an organization.
+     */
+    public function subscribe($id)
+    {
+        Auth::user()->subscribe($id);
+        return redirect()->action('OrganizationController@show', [$id]);
+    }
+
+    /**
+     * A volunteer can unsubscribe from an organization.
+     */
+    public function unsubscribe($id)
+    {
+        Auth::user()->unsubscribe($id);
+        return redirect()->action('OrganizationController@show', [$id]);
+    }
+
+    /**
      * Recommendation Form.
      */
     public function recommend($id)
     {
-        return view('organization.recommend' , compact('id'));
+        return view('organization.recommendation.create' , compact('id'));
     }
 
     /**
@@ -104,7 +122,7 @@ class OrganizationController extends Controller
             $organization = Organization::findorfail($id);
             $recommendations = $organization->recommendations()
                                             ->orderBy('created_at', 'desc')->get();
-            return view('organization.recommendations', compact('recommendations'));
+            return view('organization.recommendation.index', compact('recommendations'));
         }
         return redirect('/');
     }

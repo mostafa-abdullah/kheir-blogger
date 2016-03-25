@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\PostRequest;
 
@@ -17,52 +16,44 @@ use Auth;
 
 class EventController extends Controller
 {
-	public function __construct(){
-
+	public function __construct()
+	{
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
-            'askQuestion', 'storeQuestion',
+			'follow', 'unfollow', 'register', 'unregister',
+			'askQuestion', 'storeQuestion',
 
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
-            'create', 'store', 'edit', 'update',
+            'create', 'store', 'edit', 'update', 'destroy',
 			'answerQuestion', 'viewUnansweredQuestions',
-			'createPost', 'storePost'
-        ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
         ]]);
     }
 
 /*
 |==========================================================================
-| General Event Functions
+| Event CRUD Functions
 |==========================================================================
 |
 */
-
-	public function show($id){
+	public function show($id)
+	{
 		// TODO: show the event's page (Hossam Ahmad)
-        // hint: to display question use the scope methods in the Question model
 		return Event::find($id);
 	}
 
-	public function create(){
-
+	public function create()
+	{
 		return view('event.create');
 	}
 
-	public function store(EventRequest $request){
-
+	public function store(EventRequest $request)
+	{
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
-		$subscribers = $organization->subscribers()->get();
 		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($subscribers, $event, $notification_description, url("/event", $event->id));
+		Notification::notify($organization->subscribers()->get(), $event,
+							$notification_description, url("/event", $event->id));
 		return redirect()->action('EventController@show', [$event->id]);
 	}
 
@@ -70,9 +61,7 @@ class EventController extends Controller
 	{
 		$event = Event::findOrFail($id);
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
-		{
 			return view('event.edit', compact('event'));
-		}
 		return redirect()->action('EventController@show', [$id]);
 	}
 
@@ -83,43 +72,39 @@ class EventController extends Controller
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
-			Notification::notify($event->registrants(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
-        	Notification::notify($event->followers(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
+			Notification::notify($event->volunteers()->get(), $event,
+								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 /*
 |==========================================================================
-| Volunteers Interaction with Event
+| Volunteers' Interaction with Event
 |==========================================================================
 |
 */
 	public function follow($id)
 	{
-		$user = Auth::user();
-		$user->followEvent($id);
+		Auth::user()->followEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function unfollow($id)
 	{
-		$user = Auth::user();
-		$user->unfollowEvent($id);
+		Auth::user()->unfollowEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function register($id)
 	{
-		$user = Auth::user();
-		$user->registerEvent($id);
+		Auth::user()->registerEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function unregister($id)
 	{
-		$user = Auth::user();
-		$user->unregisterEvent($id);
+		Auth::user()->unregisterEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 

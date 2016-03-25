@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Auth;
 
-class ReviewRequest extends Request
+class OrganizationReviewRequest extends Request
 {
 
     /**

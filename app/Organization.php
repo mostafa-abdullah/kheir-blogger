@@ -36,8 +36,8 @@ class Organization extends Authenticatable
         return $this->hasMany('App\Recommendation');
     }
 
-    public function reviews(){
-
+    public function reviews()
+    {
         return $this->hasMany('App\OrganizationReview');
     }
 

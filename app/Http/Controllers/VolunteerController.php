@@ -21,7 +21,7 @@ class VolunteerController extends Controller
 
         $this->middleware('auth_volunteer', ['only' => [
             // Add all functions that are allowed for volunteers only
-            'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
+            'createChallenge', 'storeChallenge',
             'editChallenge', 'updateChallenge',
             'showNotifications', 'unreadNotification', 'reportOrganizationReview',
             'reportEventReview'
@@ -35,24 +35,6 @@ class VolunteerController extends Controller
             // Add all functions that are allowed for volunteers/organizations only
 
         ]]);
-    }
-
-    /**
-     * subscribes the authenticated user for the organization with
-     * the passed id
-     */
-    public function subscribe($id){
-        Auth::user()->subscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
-    }
-
-    /**
-     * Unsubscribes the authenticated user for the organization with
-     * the passed id
-     */
-    public function unsubscribe($id){
-        Auth::user()->unsubscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
     }
 
     /**

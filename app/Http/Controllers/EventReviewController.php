@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\EventReview;
-use App\Event;
 use App\Http\Requests\EventReviewRequest;
 
+use App\EventReview;
+use App\Event;
+
 use Auth;
-use App\Http\Requests;
+
 
 class EventReviewController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth_volunteer', ['only' => [
+            'create', 'store', 'edit', 'update'
+        ]]);
+    }
+
     /**
      * Show all reviews of a certain event
      */

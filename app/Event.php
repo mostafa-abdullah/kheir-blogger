@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -12,40 +13,51 @@ class Event extends Model
         'required_contact_info','needed_membership'
     ];
 
-    public function organization(){
+    protected $dates = ['timing'];
 
+    public function setTimingAttribute($timing)
+    {
+        $this->attributes['timing'] = Carbon::parse($timing);
+    }
+
+    public function organization()
+    {
     	return $this->belongsTo('App\Organization')->first();
 	}
 
-    public function  notifications(){
-
-        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
-    }
-
-    public function  users (){
-
+    public function volunteers()
+    {
         return $this->belongsToMany('App\User','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
     }
 
-    public function followers(){
-
-        return $this->users()->where('type','=','1')->get();
+    public function followers()
+    {
+        return $this->users()->where('type','=','1');
     }
 
-    public function registrants(){
+    public function registrants()
+    {
+        return $this->users()->where('type','=','2');
+    }
 
-        return $this->users()->where('type','=','2')->get();
+    public function notifications()
+    {
+        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\EventPost');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
     }
 
     public function reviews()
     {
         return $this->hasMany('App\EventReview');
     }
-
-    public function questions(){
-
-        return $this->hasMany('App\Question');
-    }
-
 }
