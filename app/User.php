@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 /**
  * Users represent the volunteers
  */
@@ -56,12 +57,42 @@ class User extends Authenticatable
         $this->events()->detach($event_id);
     }
     public function registerEvent($event_id)
-    {   
+    {
         if (!$this->events()->find($event_id))
             $this->events()->attach($event_id,['type' => 2]); 
         else
-           $this->events()->find($event_id)->type = 2; 
+           $this->events()->find($event_id)->type = 2;
     }
+
+
+    public function confirmEventAttendance($event_id){
+
+      if($this->events()->find($event_id))
+      if($this->events()->find($event_id)->registrants()->find($this->id)) {
+          $record = $this->events()->find($event_id)->pivot;
+          $record->type = 3;
+          $record->save();
+       }
+
+
+
+    }
+
+    public function unconfirmEventAttendance($event_id){
+
+
+
+        if($this->events()->find($event_id))
+            if($this->events()->find($event_id)->registrants()->find($this->id)) {
+
+            $record = $this->events()->find($event_id)->pivot;
+            $record->type = 4;
+            $record->save();
+        }
+
+    }
+
+
     public function unregisterEvent($event_id)
     {
         $this->events()->detach($event_id);
@@ -76,10 +107,11 @@ class User extends Authenticatable
         return $this->hasMany('App\OrganizationReview');
     }
 
-    public function notifications (){
+    public function notifications ()
+    {
 
         return $this->belongsToMany('App\Notification', 'user_notifications')
-                    ->withTimestamps()->withPivot('read');
+            ->withTimestamps()->withPivot('read');
     }
 
     public function events(){

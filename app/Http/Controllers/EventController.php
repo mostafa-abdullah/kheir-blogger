@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\PostRequest;
@@ -12,6 +12,7 @@ use App\Organization;
 use App\Question;
 use App\Notification;
 use App\Post;
+use App\User;
 
 use Auth;
 
@@ -122,6 +123,36 @@ class EventController extends Controller
 		$user->unregisterEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
+
+	public function confirm($id){
+
+		$user = Auth::user();
+		$Event = App\Event::find($id);
+
+		if($Event->timing < carbon::now())
+			$user->confirmEventAttendance($id);
+
+		return redirect()->action('EventController@show',[$id]);
+	}
+	public function unconfirm($id){
+
+		$user = Auth::user();
+		$Event = App\Event::find($id);
+
+		if($Event->timing < carbon::now())
+			$user->unconfirmEventAttendance($id);
+
+
+
+		return redirect()->action('EventController@show',[$id]);
+
+
+	}
+
+
+
+
+
 
 /*
 |==========================================================================
