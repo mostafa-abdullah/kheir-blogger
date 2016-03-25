@@ -134,9 +134,8 @@ class VolunteerController extends Controller
     }
 
     /**
-<<<<<<< HEAD
-     *  User blocks an organization
-     */
+      *  User blocks an organization
+      */
     public function blockAnOrganization ($organization_id){
         $organization = Organization::find($organization_id);
         Auth::user()->blockOrganisation()->attach($organization);
