@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 /**
  * Users represent the volunteers
  */
@@ -89,6 +90,32 @@ class User extends Authenticatable
         }
     }
 
+    public function confirmEventAttendance($event_id){
+
+      if($this->events()->find($event_id))
+      if($this->events()->find($event_id)->registrants()->find($this->id)) {
+          $record = $this->events()->find($event_id)->pivot;
+          $record->type = 3;
+          $record->save();
+       }
+
+
+
+    }
+
+    public function unconfirmEventAttendance($event_id){
+
+
+
+        if($this->events()->find($event_id))
+            if($this->events()->find($event_id)->registrants()->find($this->id)) {
+
+            $record = $this->events()->find($event_id)->pivot;
+            $record->type = 4;
+            $record->save();
+        }
+
+    }
     public function unregisterEvent($event_id)
     {
         $this->events()->detach($event_id);
