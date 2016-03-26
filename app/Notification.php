@@ -70,17 +70,16 @@ class Notification extends Model
 
         $filteredUsersToNotify = array();
 
-        foreach($usersToNotify as $user){
-           $result =  $user->blockOrganisation()->where('organization_id','=',$organization_id)->get();
+        foreach($usersToNotify as $user)
+        {
+            $result =  $user->blockOrganisation()->where('organization_id','=',$organization_id)->get();
             /*
              * check if the returned result does not contain an result which means that this user does not block the organization that created the event so add it to the filtered users array
              */
              if($result->count() == 0){
                  $filteredUsersToNotify[] = $user;
              }
-
-         }
-
+        }
         return $filteredUsersToNotify;
 
     }

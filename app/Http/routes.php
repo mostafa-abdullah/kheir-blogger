@@ -121,7 +121,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organizaton Blocking.
      */
-    Route::post('organization/{id}/block','OrganizationController@block');
+    Route::get('organization/{id}/block','OrganizationController@block');
+    Route::get('organization/{id}/unblock','OrganizationController@unblock');
 
     /**
      * Organization CRUD.

@@ -9,45 +9,26 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
+    protected $fillable = ['name', 'email', 'password'];
 
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
-
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * Get list of Organizations which the user is subscribed to.
-     */
+    protected $hidden = ['password', 'remember_token'];
+/*
+|======================================
+| Organization Relations and functions
+|======================================
+*/
     public function subscribedOrganizations()
     {
       return $this->belongsToMany('App\Organization', 'volunteers_subscribe_organizations')
                   ->withTimestamps();
     }
 
-    /**
-     * Subscribe to an organization.
-     */
     public function subscribe($organization_id)
     {
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
 
-    /**
-     * to check if the user already subscribed an organization
-     */
-    public function isSubscribed($id){
-        if(!$this->subscribedOrganizations()->find($id))
-           return false;
-        return true;
-    }
-
-    /**
-     * Unsubscribe from an organization.
-     */
     public function unsubscribe($organization_id)
     {
         return $this->subscribedOrganizations()->detach($organization_id);
@@ -68,16 +49,15 @@ class User extends Authenticatable
         return $this->belongsToMany('App\OrganizationReview', 'organization_review_reports', 'user_id', 'review_id')
                     ->withTimestamps();
     }
-
+/*
+|======================================
+| Event Relations and functions
+|======================================
+*/
     public function events()
     {
         return $this->belongsToMany('App\Event','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
-    }
-
-    public function eventReviews()
-    {
-        return $this->hasMany('App\EventReview');
     }
 
     public function followEvent($event_id)
@@ -114,12 +94,27 @@ class User extends Authenticatable
         $this->events()->detach($event_id);
     }
 
+    public function attendedEvents($year)
+    {
+        return $this->events()->year($year)->wherePivot('type', 3);
+    }
+
+    public function eventReviews()
+    {
+        return $this->hasMany('App\EventReview');
+    }
+
     public function reportedEventReviews()
     {
         return $this->belongsToMany('App\EventReview', 'event_review_reports', 'user_id', 'review_id')
                     ->withTimestamps();
     }
 
+/*
+|======================================
+| Challenges and Notifications
+|======================================
+*/
     public function notifications()
     {
         return $this->belongsToMany('App\Notification', 'user_notifications')
@@ -140,17 +135,4 @@ class User extends Authenticatable
     {
         return $this->challenges()->previousYears();
     }
-
-    public function attendedEvents($year)
-    {
-        return $this->events()->year($year)->wherePivot('type', 3);
-    }
-
-    /**
-     *  A user can block many organiztions
-     */
-    public function blockOrganisation (){
-        return $this->belongsToMany('App\Organization','usersBlockedOrganiztion')->withTimestamps();
-    }
-
 }

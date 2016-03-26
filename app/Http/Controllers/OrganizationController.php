@@ -43,7 +43,7 @@ class OrganizationController extends Controller
         if(auth()->guard('organization')->check())
             $state = 1;
         else if (Auth::user())
-                if (Auth::user()->isSubscribed($id))
+                if(Auth::user()->subscribedOrganizations()->find($id))
                     $state = 2;
                 else
                     $state = 3;
@@ -128,21 +128,23 @@ class OrganizationController extends Controller
         return redirect('/');
     }
 
-
     /**
      * A volunteer can block an organization to stop receiving notifications.
      */
-    public function block($organization_id){
-        $organization = Organization::find($organization_id);
-        Auth::user()->blockOrganisation()->attach($organization);
+    public function block($organization_id)
+    {
+        $organization = Organization::findOrFail($organization_id);
+        $organization->blockingVolunteers()->attach(Auth::user());
+        return redirect('/');
     }
-
 
     /**
      * A volunteer can unblock an organization.
      */
-    public function unblock($organization_id){
+    public function unblock($organization_id)
+    {
         $organization = Organization::find($organization_id);
-        Auth::user()->blockOrganisation()->detach($organization);
+        $organization->blockingVolunteers()->detach(Auth::user());
+        return redirect('/');
     }
 }
