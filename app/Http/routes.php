@@ -230,6 +230,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
 
+    /**
+     * Event Attendance Confirmation.
+     */
+    Route::get('event/{id}/confirm' , 'EventController@confirm');
+    Route::get('event/{id}/unconfirm' , 'EventController@unconfirm');
 
     /**
      *  Routes related to the event

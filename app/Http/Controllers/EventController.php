@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+<<<<<<< HEAD
+use App;
+=======
 
 use App\Event;
 use App\EventReview;
+>>>>>>> origin/master
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\PostRequest;
@@ -15,6 +19,7 @@ use App\Organization;
 use App\Question;
 use App\Notification;
 use App\Post;
+use App\User;
 
 use Auth;
 
@@ -139,12 +144,38 @@ class EventController extends Controller
         return redirect()->action('EventController@show', [$id]);
     }
 
-    /*
-    |==========================================================================
-    | Event Questions
-    |==========================================================================
-    |
-    */
+
+	public function confirm($id){
+
+		$user = Auth::user();
+		$Event = App\Event::find($id);
+
+		if($Event->timing < carbon::now())
+			$user->confirmEventAttendance($id);
+
+		return redirect()->action('EventController@show',[$id]);
+	}
+	public function unconfirm($id){
+
+		$user = Auth::user();
+		$Event = App\Event::find($id);
+
+		if($Event->timing < carbon::now())
+			$user->unconfirmEventAttendance($id);
+
+
+
+		return redirect()->action('EventController@show',[$id]);
+
+
+	}
+
+/*
+|==========================================================================
+| Event Questions
+|==========================================================================
+|
+*/
     public function askQuestion($id)
     {
         return view('event.question.ask', compact('id'));
@@ -242,10 +273,10 @@ class EventController extends Controller
 
     public function destroy($id){
     	$event = Event::findOrFail($id);
- 
+
     	if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
-    	
+
         $event->delete();
           Notification::notify($event->registrants(), $event, "Event ".($event->name)."has been deleted ",url("home"));
 
