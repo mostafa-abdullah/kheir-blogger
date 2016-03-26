@@ -35,7 +35,7 @@ class VolunteerController extends Controller
     }
 
     /**
-     * show all notifications for the authenticated user.
+     * show all new notifications for the authenticated user.
      */
     public function showNotifications()
     {
@@ -45,7 +45,7 @@ class VolunteerController extends Controller
             $notification->pivot->read = 1;
             $notification->push();
         }
-        return view('notifications.show', compact('notifications'));
+        return view('volunteer.notification.show', compact('notifications'));
     }
 
     /**
@@ -58,11 +58,17 @@ class VolunteerController extends Controller
         $notification->push();
     }
 
+    /**
+     * Feedback Page.
+     */
     public function createFeedback()
     {
       return view('feedback');
     }
 
+    /**
+     * Send feedback to the admin.
+     */
     public function storeFeedback(Request $request)
     {
         $this->validate($request, [
