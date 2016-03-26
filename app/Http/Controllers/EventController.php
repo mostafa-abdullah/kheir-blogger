@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
+use App\EventReview;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\PostRequest;
 
+
 use Carbon\Carbon;
-use App\Event;
+
 use App\Organization;
 use App\Question;
 use App\Notification;
@@ -17,6 +20,7 @@ use Auth;
 
 class EventController extends Controller
 {
+
 	public function __construct()
 	{
         $this->middleware('auth_volunteer', ['only' => [
@@ -52,6 +56,12 @@ class EventController extends Controller
 	public function show($id)
 	{
 		// TODO: show the event's page (Hossam Ahmad)
+
+        // $event = Event::findOrFail($id);
+        // $announcement = $event->posts()->get();
+        // $questions = $event->questions()->answered()->get();
+        // $reviews = $event->reviews()->get();
+        // return view('event.event', compact('event', 'announcement', 'questions', 'reviews'));
 		$event = Event::findOrFail($id);
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)

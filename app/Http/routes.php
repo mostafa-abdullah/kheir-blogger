@@ -76,6 +76,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
 
+
 /*
 |==========================================================================
 | Functional Routes
@@ -128,7 +129,7 @@ Route::group(['middleware' => ['web']], function () {
      * Organization Events.
      */
     Route::get('organization/{id}/events', 'EventController@index');
-    
+
     /**
      * Organization CRUD.
      */

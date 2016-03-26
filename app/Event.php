@@ -14,7 +14,7 @@ class Event extends Model
 
     protected $fillable = [
         'name', 'description', 'timing', 'location',
-        'required_contact_info','needed_membership'
+        'required_contact_info', 'needed_membership'
     ];
 
     protected $dates = ['timing'];
