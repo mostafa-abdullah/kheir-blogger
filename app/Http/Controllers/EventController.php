@@ -32,8 +32,10 @@ class EventController extends Controller
         $this->middleware('auth_organization', ['only' => [
             // Add all functions that are allowed for organizations only
             'create', 'store', 'edit', 'update',
-            'answerQuestion', 'viewUnansweredQuestions',
-            'createPost', 'storePost'
+
+			'answerQuestion', 'viewUnansweredQuestions',
+			'createPost', 'storePost','destroy'
+
         ]]);
 
         $this->middleware('auth_both', ['only' => [
@@ -236,6 +238,18 @@ class EventController extends Controller
             Notification::notify($event->followers(), $event, "Event " . ($event->name) . " has new posts", url("/event", $id));
         }
         return redirect()->action('EventController@show', [$event_id]);
+    }
+
+    public function destroy($id){
+    	$event = Event::findOrFail($id);
+ 
+    	if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+    	
+        $event->delete();
+          Notification::notify($event->registrants(), $event, "Event ".($event->name)."has been deleted ",url("home"));
+
+           }
     }
 
 }

@@ -19,4 +19,10 @@ class Challenge extends Model
     {
     	$query->where('year', Carbon::now()->year);
     }
+
+
+    public function scopePreviousYears($query)
+    {
+    	$query->where('year', '<' , Carbon::now()->year);
+    }
 }

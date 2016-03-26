@@ -35,6 +35,14 @@ class User extends Authenticatable
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
+    /**
+     * to check if the user already subscribed an organization
+     */
+    public function isSubscribed($id){
+        if(!$this->subscribedOrganizations()->find($id))
+           return false;
+        return true;
+    }
 
     /**
      * Unsubscribe from an organization.
@@ -47,20 +55,20 @@ class User extends Authenticatable
     public function followEvent($event_id)
     {
         if (!$this->events()->find($event_id))
-            $this->events()->attach($event_id,['type' => 1]); 
+            $this->events()->attach($event_id,['type' => 1]);
         else
-           $this->events()->find($event_id)->type = 1; 
+           $this->events()->find($event_id)->type = 1;
     }
     public function unfollowEvent($event_id)
     {
         $this->events()->detach($event_id);
     }
     public function registerEvent($event_id)
-    {   
+    {
         if (!$this->events()->find($event_id))
-            $this->events()->attach($event_id,['type' => 2]); 
+            $this->events()->attach($event_id,['type' => 2]);
         else
-           $this->events()->find($event_id)->type = 2; 
+           $this->events()->find($event_id)->type = 2;
     }
     public function unregisterEvent($event_id)
     {
@@ -74,6 +82,12 @@ class User extends Authenticatable
     public function organizationReviews(){
 
         return $this->hasMany('App\OrganizationReview');
+    }
+
+    public function reportedOrganizationReviews()
+    {
+        return $this->belongsToMany('App\OrganizationReview',
+                        'organization_review_reports', 'user_id', 'review_id')->withTimestamps();
     }
 
     public function notifications (){
@@ -90,7 +104,16 @@ class User extends Authenticatable
 
     public function eventReviews(){
 
-        return $this->hasMany('App\Review');
+        return $this->hasMany('App\EventReview');
+
+
+    }
+
+    public function reportedEventReviews()
+    {
+        return $this->belongsToMany('App\EventReview',
+            'event_review_reports', 'user_id', 'review_id')->withTimestamps();
+
     }
 
     public function eventQuestions(){
@@ -106,4 +129,23 @@ class User extends Authenticatable
 
         return $this->challenges()->currentYear()->first();
     }
+
+
+    public function previousYearsChallenges()
+    {
+        return $this->challenges()->previousYears();
+    }
+
+    public function currentYearAttendedEvents()
+    {
+        return $this->events()->currentYearAttendedEvents();
+    }
+
+    /**
+     *  A user can block many organiztions
+     */
+    public function blockOrganisation (){
+        return $this->belongsToMany('App\Organization','usersBlockedOrganiztion')->withTimestamps();
+    }
+    
 }
