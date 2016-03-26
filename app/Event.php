@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Event extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $fillable = [
         'name', 'description', 'timing', 'location',
@@ -52,7 +52,8 @@ class Event extends Model
 
     public function notifications()
     {
-        return $this->belongsToMany('App\Notification','event_notifications')->withTimestamps();
+        return $this->belongsToMany('App\Notification','event_notifications')
+                    ->withTimestamps();
     }
 
     public function posts()
@@ -71,8 +72,13 @@ class Event extends Model
         return $this->hasMany('App\EventReview');
     }
 
-    public function scopeCurrentYearAttendedEvents($query)
+    public function scopeYear($query, $year)
     {
-        $query->where('type' , '=' , '3')->whereYear('timing', '=', date('Y'));
+        $query->whereYear('timing', '=', $year);
+    }
+
+    public function scopeCurrentYear($query)
+    {
+        $query->whereYear('timing', '=', date('Y'));
     }
 }

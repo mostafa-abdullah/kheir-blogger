@@ -35,6 +35,7 @@ class User extends Authenticatable
         if(!$this->subscribedOrganizations()->find($organization_id))
             $this->subscribedOrganizations()->attach($organization_id);
     }
+
     /**
      * to check if the user already subscribed an organization
      */
@@ -50,6 +51,33 @@ class User extends Authenticatable
     public function unsubscribe($organization_id)
     {
         return $this->subscribedOrganizations()->detach($organization_id);
+    }
+
+    public function recommendations()
+    {
+        return $this->hasMany('App\Recommendation');
+    }
+
+    public function organizationReviews()
+    {
+        return $this->hasMany('App\OrganizationReview');
+    }
+
+    public function reportedOrganizationReviews()
+    {
+        return $this->belongsToMany('App\OrganizationReview', 'organization_review_reports', 'user_id', 'review_id')
+                    ->withTimestamps();
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany('App\Event','volunteers_in_events')
+                    ->withTimestamps()->withPivot('type');
+    }
+
+    public function eventReviews()
+    {
+        return $this->hasMany('App\EventReview');
     }
 
     public function followEvent($event_id)
@@ -86,40 +114,6 @@ class User extends Authenticatable
         $this->events()->detach($event_id);
     }
 
-    public function recommendations()
-    {
-        return $this->hasMany('App\Recommendation');
-    }
-
-    public function organizationReviews()
-    {
-        return $this->hasMany('App\OrganizationReview');
-    }
-
-    public function reportedOrganizationReviews()
-    {
-        return $this->belongsToMany('App\OrganizationReview', 'organization_review_reports', 'user_id', 'review_id')
-                    ->withTimestamps();
-    }
-
-    public function events()
-    {
-        return $this->belongsToMany('App\Event','volunteers_in_events')
-                    ->withTimestamps()->withPivot('type');
-    }
-
-    public function attendedEvents()
-    {
-        return $this->events()->wherePivot('type', 3);
-    }
-
-    public function eventReviews(){
-
-        return $this->hasMany('App\EventReview');
-
-
-    }
-
     public function reportedEventReviews()
     {
         return $this->belongsToMany('App\EventReview', 'event_review_reports', 'user_id', 'review_id')
@@ -132,29 +126,24 @@ class User extends Authenticatable
                     ->withTimestamps()->withPivot('read');
     }
 
-    public function eventQuestions(){
-        return $this->hasMany('App\Question');
-    }
-
-    public function challenges(){
-
+    public function challenges()
+    {
         return $this->hasMany('App\Challenge');
     }
 
-    public function currentYearChallenge(){
-
-        return $this->challenges()->currentYear()->first();
+    public function currentYearChallenge()
+    {
+        return $this->challenges()->currentYear();
     }
-
 
     public function previousYearsChallenges()
     {
         return $this->challenges()->previousYears();
     }
 
-    public function currentYearAttendedEvents()
+    public function attendedEvents($year)
     {
-        return $this->events()->currentYearAttendedEvents();
+        return $this->events()->year($year)->wherePivot('type', 3);
     }
 
     /**
