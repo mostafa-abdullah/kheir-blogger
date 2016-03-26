@@ -92,6 +92,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('auth.login');
     });
 
+
 /*
 |==========================================================================
 | Functional Routes
@@ -228,9 +229,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/register', 'EventController@register');
     Route::get('event/{id}/unregister', 'EventController@unregister');
-    Route::resource('event','EventController', ['only' => [
-         'create','store','show'
-    ]]);
+
 
     /**
      *  Routes related to the event
@@ -244,5 +243,6 @@ Route::group(['middleware' => ['web']], function () {
      Route::resource('event/{id}/review','EventReviewController', ['only' => [
           'index' , 'create' ,'store'
       ]]);
+
 
 });
