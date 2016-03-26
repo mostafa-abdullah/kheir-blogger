@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
-use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
 
-use App\Http\Controllers\Controller;
 use App\Organization;
 use App\Recommendation;
 use App\OrganizationReview;
@@ -20,98 +20,91 @@ use Auth;
 class OrganizationController extends Controller
 {
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
+            'subscribe', 'unsubscribe',
             'recommend', 'storeRecommendation',
-            'createReview', 'storeReview',
+            'block', 'unblock'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
             'edit', 'update', 'viewRecommendations'
         ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
-        ]]);
-
     }
 
     /**
-     * registers a new organization
-     */
-    public function register(RegisterOrganizationRequest $request){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('home');
-        $organization = new Organization;
-        $organization->name = $request->name;
-        $organization->email = $request->email;
-        $organization->password = bcrypt($request->password);
-        $organization->save();
-        auth()->guard('organization')->login($organization);
-        return redirect('home');
+    * Show organization profile.
+    */
+    public function show($id)
+    {
+        $organization = Organization::findOrFail($id);
+        $state = 0;
+        if(auth()->guard('organization')->check())
+            $state = 1;
+        else if (Auth::user())
+                if(Auth::user()->subscribedOrganizations()->find($id))
+                    $state = 2;
+                else
+                    $state = 3;
+        $events=$organization->events();
+        return view('organization.show',compact('organization','state','events'));
     }
 
     /**
-     * logout the logged-in organization
-     */
-    public function logout(){
-
-        Auth::guard('organization')->logout();
-        Auth::guard('user')->logout();
+    * Edit organization profile.
+    */
+    public function edit($id)
+    {
+        if(auth()->guard('organization')->id() == $id)
+        {
+            $organization = Organization::findorfail($id);
+            return view('organization.edit' , compact('organization'));
+        }
         return redirect('/');
     }
 
     /**
-    * show the profile of organization.
+    * Update organization profile.
     */
-    public function show($id){
-
-        //TODO: return a view with the organization profile (Badry)
-        $organization = Organization::findOrFail($id);
-        return $organization;
-    }
-
-
-    /**
-    * edit the profile of organization.
-    */
-    public function edit($id){
-        
-      if(auth()->guard('organization')->id()==$id){
-          $organization = Organization::findorfail($id);
-          return view('organization.edit' , compact('organization'));
-      }
-      else{
-        return redirect('home');
-      }
-    }
-
-    /**
-    * update the profile of organization.
-    */
-    public function update(OrganizationRequest $request, $id){
-
+    public function update(OrganizationRequest $request, $id)
+    {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
-        return redirect()->action('OrganizationController@show', [$organization->id]);
+        return redirect()->action('OrganizationController@show', [$id]);
     }
 
     /**
-     * returns a form to send a recommendation to the organization
-     * with the specified id
+     * A volunteer can subscribe for an organization.
      */
-    public function recommend($id){
-
-        return view('organization.recommend' , compact('id'));
+    public function subscribe($id)
+    {
+        Auth::user()->subscribe($id);
+        return redirect()->action('OrganizationController@show', [$id]);
     }
 
     /**
-     * store the sent recommendation and insert it to the database
+     * A volunteer can unsubscribe from an organization.
      */
-    public function storeRecommendation(RecommendationRequest $request , $id){
+    public function unsubscribe($id)
+    {
+        Auth::user()->unsubscribe($id);
+        return redirect()->action('OrganizationController@show', [$id]);
+    }
+
+    /**
+     * Recommendation Form.
+     */
+    public function recommend($id)
+    {
+        return view('organization.recommendation.create' , compact('id'));
+    }
+
+    /**
+     * A volunteer can send a recommendation to an organization.
+     */
+    public function storeRecommendation(RecommendationRequest $request , $id)
+    {
 
         $recommendation = new Recommendation($request->all());
         $recommendation->user_id = Auth::user()->id;
@@ -121,34 +114,37 @@ class OrganizationController extends Controller
     }
 
     /**
-     * returns a view to rate and review the organization
+     * An organization can view recommendations sent to it.
      */
-    public function createReview($id){
-
-        $organization = Organization::findorfail($id);
-        return view ('organization.review', compact('organization'));
+    public function viewRecommendations($id)
+    {
+        if(auth()->guard('organization')->id() == $id)
+        {
+            $organization = Organization::findorfail($id);
+            $recommendations = $organization->recommendations()
+                                            ->orderBy('created_at', 'desc')->get();
+            return view('organization.recommendation.index', compact('recommendations'));
+        }
+        return redirect('/');
     }
 
     /**
-     * store the organization review and insert it to the database
+     * A volunteer can block an organization to stop receiving notifications.
      */
-    public function storeReview(ReviewRequest $request, $id){
-
-        $review = new OrganizationReview($request->all());
-        $review->user_id = Auth::user()->id;
-        $organization = Organization::findorfail($id);
-        $organization->reviews()->save($review);
-        return redirect()->action('OrganizationController@show', [$id]);
+    public function block($organization_id)
+    {
+        $organization = Organization::findOrFail($organization_id);
+        $organization->blockingVolunteers()->attach(Auth::user());
+        return redirect('/');
     }
 
-   public function viewRecommendations($id)
+    /**
+     * A volunteer can unblock an organization.
+     */
+    public function unblock($organization_id)
     {
-        if(auth()->guard('organization')->id == $id){
-            $organization = Organization::findorfail($id);
-            $recommendations = $organization->recommendations();
-            return view("organization.recommendation", compact('recommendations'));
-        }else
-            return redirect('/');
-
+        $organization = Organization::find($organization_id);
+        $organization->blockingVolunteers()->detach(Auth::user());
+        return redirect('/');
     }
 }

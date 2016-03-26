@@ -8,54 +8,53 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
 
-    /**
-     * Event has many notifications
-     */
-     public function events(){
+    public function events()
+    {
+        return $this->belongsToMany('App\Event', 'event_notifications')
+                    ->withTimestamps();
+    }
 
-         return $this->belongsToMany('App\Event', 'event_notifications')->withTimestamps();
-     }
-
-     /**
-      *  Users can receive many notifications
-      */
-     public function users(){
-
+    public function notifiedVolunteers()
+    {
          return $this->belongsToMany('App\User', 'user_notifications')
                      ->withTimestamps()->withPivot('read');
-     }
+    }
 
-    /**
-     * Get all the not read notifications.
-     * @param $query
-     * @return mixed
-     */
     public function scopeUnread($query)
     {
         return $query->where('read', '=', '0');
     }
 
-    /**
-     * Get all the read notifications.
-     * @param $query
-     * @return mixed
-     */
     public function scopeRead($query)
     {
         return $query->where('read', '=', '1');
     }
 
-    public static function notify($usersToNotify, $event, $description, $link){
-
+    public static function notify($usersToNotify, $event, $description, $link)
+    {
         $notification = new Notification;
         $notification['description'] = $description;
         $notification['link'] = $link;
         $notification->save();
-        $event->notifications()->attach($notification);
-
+        if($event)
+        {
+            $event->notifications()->attach($notification);
+            $usersToNotify = Notification::filter($usersToNotify, $event->organization_id);
+        }
         foreach($usersToNotify as $user)
             $user->notifications()->attach($notification, ['read' => 0 ]);
+    }
 
+    public static function filter($usersToNotify, $organization_id)
+    {
+        $organization = Organization::findOrFail($organization_id);
 
+        $filteredUsersToNotify = array();
+        foreach($usersToNotify as $user)
+        {
+            if(!$organization->blockingVolunteers()->find($user->id))
+                 $filteredUsersToNotify[] = $user;
+        }
+        return $filteredUsersToNotify;
     }
 }
