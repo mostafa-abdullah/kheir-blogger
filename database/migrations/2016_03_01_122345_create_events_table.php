@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
             $table->boolean('needed_membership');
             $table->double('rate', 15, 8)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
 

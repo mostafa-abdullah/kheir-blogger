@@ -36,10 +36,11 @@ class Notification extends Model
         $notification['description'] = $description;
         $notification['link'] = $link;
         $notification->save();
-        $event->notifications()->attach($notification);
-
-        $usersToNotify = Notification::filter($usersToNotify, $event->organization_id);
-
+        if($event)
+        {
+            $event->notifications()->attach($notification);
+            $usersToNotify = Notification::filter($usersToNotify, $event->organization_id);
+        }
         foreach($usersToNotify as $user)
             $user->notifications()->attach($notification, ['read' => 0 ]);
     }

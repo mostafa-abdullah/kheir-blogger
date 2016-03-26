@@ -14,12 +14,12 @@ class Question extends Model
 
     public function event()
     {
-    	return $this->belongsTo('App\Event')->first();
+    	return $this->belongsTo('App\Event');
     }
 
     public function user()
     {
-    	return $this->belongsTo('App\User')->first();
+    	return $this->belongsTo('App\User');
     }
 
     public function scopeAnswered($query)

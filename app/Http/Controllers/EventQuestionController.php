@@ -75,7 +75,7 @@ class EventQuestionController extends Controller
 	 	$this->validate($request, ['answer' => 'required']);
 
         $question = Question::findOrFail($question_id);
-		$event = $question->event();
+		$event = $question->event()->first();
 
         if($event->organization()->id != auth()->guard('organization')->user()->id)
 			return redirect()->action('EventController@show', [$event_id])
@@ -84,7 +84,7 @@ class EventQuestionController extends Controller
 		$question->answer = $request['answer'];
 		$question->answered_at = Carbon::now();
 		$question->save();
-		Notification::notify(array($question->user()), $event, "Your question has been answered", url("/event/".$question->event_id."question/".$question->id));
+		Notification::notify(array($question->user()->first()), $event, "Your question has been answered", url("/event/".$question->event_id."question/".$question->id));
 
 		return redirect()->action('EventQuestionController@viewUnansweredQuestions', [$event_id]);
     }

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Event extends Model
 {
-    // use SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'name', 'description', 'timing', 'location',
@@ -65,7 +65,6 @@ class Event extends Model
     {
         return $this->hasMany('App\Question');
     }
-
 
     public function reviews()
     {

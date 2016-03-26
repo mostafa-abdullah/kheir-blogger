@@ -40,7 +40,11 @@ class EventController extends Controller
 	public function show($id)
 	{
 		// TODO: show the event's page (Hossam Ahmad)
-		return Event::findOrFail($id);
+		$event = Event::findOrFail($id);
+		$creator = null;
+		if(Auth::guard('organization')->id() == $event->organization_id)
+			$creator = true;
+		return view('event.show', compact('event', 'creator'));
 	}
 
 	public function create()
@@ -112,14 +116,11 @@ class EventController extends Controller
     public function destroy($id)
 	{
     	$event = Event::findOrFail($id);
-
     	if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
-
-        $event->delete();
-          Notification::notify($event->registrants(), $event, "Event ".($event->name)."has been deleted ",url("home"));
-
-           }
-    }
-
+			$event->delete();
+          	Notification::notify($event->volunteers(), null, "Event ".($event->name)."has been cancelled", url("/"));
+	  	}
+		return redirect('/');
+	}
 }
