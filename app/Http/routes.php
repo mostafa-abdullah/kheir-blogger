@@ -125,6 +125,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organization/{id}/unblock','OrganizationController@unblock');
 
     /**
+     * Organization Events.
+     */
+    Route::get('organization/{id}/events', 'EventController@index');
+    
+    /**
      * Organization CRUD.
      */
     Route::resource('organization', 'OrganizationController', ['only' => [
