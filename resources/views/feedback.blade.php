@@ -3,7 +3,7 @@
 
 @section('content')
 
-{!! Form::open(['action' => ['HomeController@storeFeedback']]) !!}
+{!! Form::open(['action' => ['VolunteerController@storeFeedback']]) !!}
 
     <div class = "form-group">
         {!! Form::label('subject' , 'subject') !!}

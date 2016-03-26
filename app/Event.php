@@ -5,47 +5,65 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Carbon\Carbon;
+
+
 class Event extends Model
 {
-
-
     use SoftDeletes;
 
-    protected $dates = ['timing'];
     protected $fillable = [
         'name', 'description', 'timing', 'location',
         'required_contact_info', 'needed_membership'
     ];
 
+    protected $dates = ['timing'];
+
+    public function setTimingAttribute($timing)
+    {
+        $this->attributes['timing'] = Carbon::parse($timing);
+    }
+
     public function organization()
     {
+    	return $this->belongsTo('App\Organization')->first();
+	}
 
-        return $this->belongsTo('App\Organization')->first();
-    }
-
-    public function notifications()
+    public function volunteers()
     {
-
-        return $this->belongsToMany('App\Notification', 'event_notifications')->withTimestamps();
-    }
-
-    public function users()
-    {
-
-        return $this->belongsToMany('App\User', 'volunteers_in_events')
-            ->withTimestamps()->withPivot('type');
+        return $this->belongsToMany('App\User','volunteers_in_events')
+                    ->withTimestamps()->withPivot('type');
     }
 
     public function followers()
     {
-
-        return $this->users()->where('type', '=', '1')->get();
+        return $this->volunteers()->where('type', 1);
     }
 
     public function registrants()
     {
+        return $this->volunteers()->where('type', 2);
+    }
 
-        return $this->users()->where('type', '=', '2')->get();
+    public function attendees()
+    {
+        return $this->volunteers()->where('type', 3);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany('App\Notification','event_notifications')
+                    ->withTimestamps();
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\EventPost');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
     }
 
     public function reviews()
@@ -53,24 +71,13 @@ class Event extends Model
         return $this->hasMany('App\EventReview');
     }
 
-
-    public function questions()
+    public function scopeYear($query, $year)
     {
-
-        return $this->hasMany('App\Question');
+        $query->whereYear('timing', '=', $year);
     }
 
-
-    public function posts(){
-        return $this->hasMany('App\Post');
-    }
-
-
-
-    public function scopeCurrentYearAttendedEvents($query)
+    public function scopeCurrentYear($query)
     {
-        $query->where('type' , '=' , '3')->whereYear('timing', '=', date('Y'));
+        $query->whereYear('timing', '=', date('Y'));
     }
-
-
 }

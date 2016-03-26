@@ -2,61 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\EventReview;
-use App\Event;
 use App\Http\Requests\EventReviewRequest;
 
+use App\EventReview;
+use App\Event;
+
 use Auth;
-use App\Http\Requests;
+
 
 class EventReviewController extends Controller
 {
-    //
-    /**
-    * Creat new review for event.
-    *
-    * @return view
-    */
+    public function __construct()
+    {
+        $this->middleware('auth_volunteer', ['only' => [
+            'create', 'store', 'edit', 'update', 'report'
+        ]]);
+    }
 
-    public function create($id){
+    /**
+     * Show all reviews of a certain event
+     */
+    public function index($event_id)
+    {
+        $event = Event::findOrFail($event_id);
+        return $event->reviews;
+    }
+
+    /**
+     * Show a certain event review
+     */
+    public function show($event_id, $review_id)
+    {
+        return Event::findOrFail($event_id)->reviews()->find($review_id);
+    }
+
+    /**
+     * Create a new event review
+     */
+    public function create($id)
+    {
         $event = Event::findorfail($id);
-        return view ('event.review.create',compact('event'));
-
-    }
-    /**
-    * Find all Reviews on event.
-    *
-    * @return view
-    */
-
-    public function index($id){
-
-    return  $event_review = EventReview::all()->where('event_id', '=', $id)->toArray();
-
+        if(!$event->attendees()->find(Auth::user()->id))
+            return redirect()->action('EventController@show', [$id]);
+        if($event->reviews()->where('user_id', Auth::user()->id))
+            return redirect()->action('EventController@show', [$id]);
+        return view ('event.review.create', compact('event'));
     }
 
-
     /**
-    * Store the evet review.
-    *
-    * @return view
-    */
-
-    public function store(EventReviewRequest $request, $id){
-
-        if(Auth::user()){
+     * Store the created event review
+     */
+    public function store(EventReviewRequest $request, $id)
+    {
           $review = new EventReview($request->all());
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
-
-      }
-        return redirect('events/'.$id);
-
-
+          return redirect()->action('EventController@show', [$id]);
     }
 
+    /**
+     * Edit an event review
+     */
+    public function edit()
+    {
+        //TODO
+    }
 
+    /**
+     * Update the edited event review
+     */
+    public function update()
+    {
+        //TODO
+    }
 
+    /**
+     * Delete an event review
+     */
+    public function destroy($event_id, $review_id)
+    {
+        //TODO
+    }
+
+    public function report($event_id, $review_id)
+    {
+        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
+        if(!$review->reportingUsers()->find(Auth::user()->id))
+            Auth::user()->reportedEventReviews()->attach($review);
+        return redirect()->action('EventController@show', [$event_id]);
+    }
 }
