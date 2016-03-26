@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Event as Event;
+
 
 class Kernel extends ConsoleKernel
 {
@@ -25,11 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $EventsList = Event::all();
-        foreach($EventsList as $event){
-            echo $event->timing;
-        }
-
+        
         $schedule->command('confirmations:send')->everyMinute();
     }
 }

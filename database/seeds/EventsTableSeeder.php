@@ -16,5 +16,10 @@ class EventsTableSeeder extends Seeder
           'organization_id' => '1',
         ]);
 
+         DB::table('events')->insert([
+          'name' => 'You Shall Not Pass',
+          'organization_id' => '2',
+        ]);
+
     }
 }

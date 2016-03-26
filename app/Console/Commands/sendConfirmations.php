@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Event as Event;
+use App\Notification;
+use Carbon\Carbon;
+
 class sendConfirmations extends Command
 {
     /**
@@ -38,5 +41,17 @@ class sendConfirmations extends Command
     public function handle()
     {
        
+            $EventsList = Event::all();
+            foreach($EventsList as $event){
+                $EventsList = Event::all();
+                if($event->timing < carbon::now()){
+                    $description = "Confirm Attendance for ".$event->name;
+                    Notification::notify($event->registrants()->get(), $event,
+                        $description, action('EventController@confirm',[$event->id]));
+                }
+
+            }
+
+
     }
 }
