@@ -78,6 +78,11 @@ class User extends Authenticatable
         $this->events()->detach($event_id);
     }
 
+    public function followedEvents()
+    {
+        return $this->events()->wherePivot('type', 1);
+    }
+
     public function registerEvent($event_id)
     {
         if (!$this->events()->find($event_id))
@@ -90,40 +95,41 @@ class User extends Authenticatable
         }
     }
 
-    public function confirmEventAttendance($event_id){
-
-      if($this->events()->find($event_id))
-      if($this->events()->find($event_id)->registrants()->find($this->id)) {
-          $record = $this->events()->find($event_id)->pivot;
-          $record->type = 3;
-          $record->save();
-       }
-
-
-
-    }
-
-    public function unconfirmEventAttendance($event_id){
-
-
-
-        if($this->events()->find($event_id))
-            if($this->events()->find($event_id)->registrants()->find($this->id)) {
-
-            $record = $this->events()->find($event_id)->pivot;
-            $record->type = 4;
-            $record->save();
-        }
-
-    }
     public function unregisterEvent($event_id)
     {
         $this->events()->detach($event_id);
     }
 
-    public function attendedEvents($year)
+    public function registeredEvents()
     {
-        return $this->events()->year($year)->wherePivot('type', 3);
+        return $this->events()->wherePivot('type', 2);
+    }
+
+    public function attendEvent($event_id)
+    {
+        $event = $this->registeredEvents()->find($event_id);
+        if($event)
+        {
+            $record = $event->pivot;
+            $record->type = 3;
+            $record->save();
+        }
+    }
+
+    public function unattendEvent($event_id)
+    {
+        $event = $this->registeredEvents()->find($event_id);
+        if($event)
+        {
+            $record = $event->pivot;
+            $record->type = 4;
+            $record->save();
+        }
+    }
+
+    public function attendedEvents()
+    {
+        return $this->events()->wherePivot('type', 3);
     }
 
     public function eventReviews()

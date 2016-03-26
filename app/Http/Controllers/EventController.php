@@ -4,19 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
-use App\Http\Requests\PostRequest;
-
-
-use Carbon\Carbon;
 
 use App\Organization;
-use App\Question;
 use App\Notification;
-use App\Post;
-use App\User;
 use App\Event;
-use App\EventReview;
 
+use Carbon\Carbon;
 use Auth;
 
 class EventController extends Controller
@@ -26,13 +19,11 @@ class EventController extends Controller
 	{
         $this->middleware('auth_volunteer', ['only' => [
 			'follow', 'unfollow', 'register', 'unregister',
-			'askQuestion', 'storeQuestion',
-
+			'confirm', 'unconfirm'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
             'create', 'store', 'edit', 'update', 'destroy',
-			'answerQuestion', 'viewUnansweredQuestions',
         ]]);
     }
 
@@ -56,18 +47,15 @@ class EventController extends Controller
 	 */
 	public function show($id)
 	{
-		// TODO: show the event's page (Hossam Ahmad)
-
-        // $event = Event::findOrFail($id);
-        // $announcement = $event->posts()->get();
-        // $questions = $event->questions()->answered()->get();
-        // $reviews = $event->reviews()->get();
-        // return view('event.event', compact('event', 'announcement', 'questions', 'reviews'));
-		$event = Event::findOrFail($id);
+        $event = Event::findOrFail($id);
+        $posts = $event->posts;
+        $questions = $event->questions()->answered()->get();
+        $reviews = $event->reviews;
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
-		return view('event.show', compact('event', 'creator'));
+		return view('event.show',
+			compact('event', 'posts', 'questions', 'reviews', 'creator'));
 	}
 
 	/**
@@ -153,7 +141,9 @@ class EventController extends Controller
 
 	public function register($id)
 	{
-		Auth::user()->registerEvent($id);
+		$event = Event::findOrFail($id);
+		if($event->timing > carbon::now())
+			Auth::user()->registerEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
@@ -163,25 +153,19 @@ class EventController extends Controller
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-	public function confirm($id){
-
-		$user = Auth::user();
-		$Event = App\Event::find($id);
-
-		if($Event->timing < carbon::now())
-			$user->confirmEventAttendance($id);
-
+	public function confirm($id)
+	{
+		$event = Event::findOrFail($id);
+		if($event->timing < carbon::now())
+			Auth::user()->attendEvent($id);
 		return redirect()->action('EventController@show',[$id]);
 	}
-	public function unconfirm($id){
 
-		$user = Auth::user();
-		$Event = App\Event::find($id);
-
-		if($Event->timing < carbon::now())
-			$user->unconfirmEventAttendance($id);
-
+	public function unconfirm($id)
+	{
+		$event = Event::findOrFail($id);
+		if($event->timing < carbon::now())
+			Auth::user()->unattendEvent($id);
 		return redirect()->action('EventController@show',[$id]);
-
 	}
 }

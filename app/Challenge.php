@@ -16,7 +16,7 @@ class Challenge extends Model
 
     public function attendedEvents()
     {
-        return $this->user()->first()->attendedEvents($this->year);
+        return $this->user()->first()->attendedEvents()->year($this->year);
     }
 
     public function scopeCurrentYear($query)

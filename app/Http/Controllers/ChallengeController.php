@@ -73,7 +73,7 @@ class ChallengeController extends Controller
      */
     public function viewCurrentYearAttendedEvents()
     {
-        $events = Auth::user()->attendedEvents(Carbon::now()->year)->get();
+        $events = Auth::user()->attendedEvents()->year(Carbon::now()->year)->get();
         return view('volunteer.challenge.achieved' , compact('events'));
     }
 }
