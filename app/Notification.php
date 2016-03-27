@@ -30,9 +30,10 @@ class Notification extends Model
         return $query->where('read', '=', '1');
     }
 
-    public static function notify($usersToNotify, $event, $description, $link)
+    public static function notify($usersToNotify, $type, $event, $description, $link)
     {
         $notification = new Notification;
+        $notification['type'] = $type;
         $notification['description'] = $description;
         $notification['link'] = $link;
         $notification->save();
@@ -42,7 +43,7 @@ class Notification extends Model
             $usersToNotify = Notification::filter($usersToNotify, $event->organization_id);
         }
         foreach($usersToNotify as $user)
-            $user->notifications()->attach($notification, ['read' => 0 ]);
+            $user->notifications()->attach($notification, ['read' => 0]);
     }
 
     public static function filter($usersToNotify, $organization_id)
