@@ -4,8 +4,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Event as Event;
-use App\Notification;
+use App\Notification as Notification;
 use Carbon\Carbon;
+
+define("EVENT_TYPE_CONFIRM_ATTENDANCE", 6);
 
 class sendConfirmations extends Command
 {
@@ -40,18 +42,28 @@ class sendConfirmations extends Command
      */
     public function handle()
     {
-       
-            $EventsList = Event::all();
-            foreach($EventsList as $event){
-                $EventsList = Event::all();
-                if($event->timing < carbon::now()){
-                    $description = "Confirm Attendance for ".$event->name;
-                    Notification::notify($event->registrants()->get(), $event,
-                        $description, action('EventController@confirm',[$event->id]));
-                }
+           $EventsList = Event::all();
+           foreach($EventsList as $event){
+               $event_notifications = $event->notifications()->get();
+               $event_attendees = $event->registrants()->get();
+               $sentBefore=false;
+               if($event->timing < carbon::now()){
+                   foreach($event_notifications as $notification){
+                       $notification_id = $notification->id;
+                       $mainNotification = Notification::findOrFail($notification_id);
+                       if($mainNotification->type == EVENT_TYPE_CONFIRM_ATTENDANCE){
+                           $sentBefore=true;
+                           break;
+                       }
+                   }
+                   if(!$sentBefore){
+                      $description = "Confirm Attendance for ".$event->name;
+                   Notification::notify($event_attendees,EVENT_TYPE_CONFIRM_ATTENDANCE, $event,
+                       $description, action('EventController@confirm',[$event->id])); 
+                   }
+                   
+               }
 
-            }
-
-
+           }
     }
 }
