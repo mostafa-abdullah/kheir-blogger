@@ -116,7 +116,7 @@ return [
         ],
         'organizations' => [
             'provider' => 'organizations',
-            'email' => 'auth.emails.password',
+            'email' => 'auth.emails.password_organization',
             'table' => 'password_resets',
             'expire' => 60,
         ]

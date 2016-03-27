@@ -143,6 +143,8 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('/password_organization/reset','OrganizationForgetPassword@getEmail');
     Route::post('/password_organization/email','OrganizationForgetPassword@sendResetLinkEmail');
+    Route::get('/password_organization/reset/{token}','OrganizationForgetPassword@getReset');
+    Route::post('/password_organization/reset','OrganizationForgetPassword@reset');
 /*
 |-----------------------
 | Volunteer Routes
