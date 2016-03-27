@@ -80,4 +80,9 @@ class Event extends Model
     {
         $query->whereYear('timing', '=', date('Y'));
     }
+
+    public function scopeBetweenTiming($query, $start, $end)
+    {
+        $query->whereBetween('timing', [$start, $end]);
+    }
 }
