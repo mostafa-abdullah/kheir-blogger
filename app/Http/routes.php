@@ -138,11 +138,11 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update',
     ]]);
 
-/*
-|-----------------------
-| Volunteer Routes
-|-----------------------
-*/
+    /*
+    |-----------------------
+    | Volunteer Routes
+    |-----------------------
+    */
     /**
      *  Challenges Routes.
      */

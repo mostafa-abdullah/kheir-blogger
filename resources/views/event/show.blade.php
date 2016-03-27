@@ -25,7 +25,7 @@
             {{$event->name}}
                <small>
                    @if($event->timing < Carbon\Carbon::now())
-                        This event was on {{$event->timing->format('Y-m-d')}}
+                        This event was on {{$event->timing}}
                        ({{$event->timing->diffForHumans()}}).
                    @else
                         This event will be held on  {{$event->timing->format('Y-m-d')}}

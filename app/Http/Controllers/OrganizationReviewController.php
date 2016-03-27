@@ -89,12 +89,12 @@ class OrganizationReviewController extends Controller
         return redirect()->action('OrganizationController@show', [$organization_id]);
     }
 
+    /**
+     * Get organization reviews
+     */
     public function organizationReviews($organization_id){
-        $reviews = OrganizationReview::where('organization_id' , $organization_id)->get();
-        if($reviews != null){
-            $organization_name = Organization::find($organization_id)->name;
-            return view('organization\review\reviews')->with('reviews' , $reviews)
-                ->with('organization_name' ,$organization_name);
-        }
+        $organization = Organization::findOrFail($organization_id);
+        return view('organization\review\reviews')->with('reviews' , $organization->reviews)
+            ->with('organization_name' ,$organization->name);
     }
 }
