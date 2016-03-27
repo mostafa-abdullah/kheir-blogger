@@ -137,6 +137,12 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update',
     ]]);
 
+
+    /**
+     * Organization forget password
+     */
+    Route::get('/password_organization/reset','OrganizationForgetPassword@getEmail');
+    Route::post('/password_organization/email','OrganizationForgetPassword@sendResetLinkEmail');
 /*
 |-----------------------
 | Volunteer Routes
@@ -171,6 +177,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show',
     ]]);
+
+
 
 /*
 |-----------------------
