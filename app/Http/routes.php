@@ -193,7 +193,8 @@ Route::group(['middleware' => ['web']], function () {
      * Event Attendance Confirmation.
      */
     Route::get('event/{id}/confirm' , 'EventController@confirm');
-    Route::get('event/{id}/unconfirm' , 'EventController@unconfirm');
+    Route::get('event/{id}/attend' , 'EventController@attend');
+    Route::get('event/{id}/unattend' , 'EventController@unattend');
 
     /**
      * Event Post.

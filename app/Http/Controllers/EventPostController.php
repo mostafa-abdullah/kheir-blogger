@@ -58,7 +58,7 @@ class EventPostController extends Controller
         {
             $event = Event::find($event_id);
             $description = "Event ".($event->name)." has a new post";
-            $link = url("/event",$id);
+            $link = url("/event", $id);
             Notification::notify($event->volunteers, 4, $event, $description, $link);
         }
         return redirect()->action('EventController@show', [$event_id]);

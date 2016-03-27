@@ -45,28 +45,33 @@ class sendConfirmations extends Command
         $start = Carbon::now();
         $start->hour -= 3;
         $end = Carbon::now();
-       $EventsList = Event::betweenTiming($start,$end)->get();
-       foreach($EventsList as $event){
-           $event_notifications = $event->notifications()->get();
-           $event_attendees = $event->registrants()->get();
-           $sentBefore=false;
-           if($event->timing < carbon::now()){
-               foreach($event_notifications as $notification){
-                   $notification_id = $notification->id;
-                   $mainNotification = Notification::findOrFail($notification_id);
-                   if($mainNotification->type == EVENT_TYPE_CONFIRM_ATTENDANCE){
-                       $sentBefore=true;
-                       break;
-                   }
-               }
-               if(!$sentBefore){
-                  $description = "Confirm Attendance for ".$event->name;
-               Notification::notify($event_attendees,EVENT_TYPE_CONFIRM_ATTENDANCE, $event,
-                   $description, action('EventController@confirm',[$event->id])); 
-               }
-               
-           }
 
-       }
+        $EventsList = Event::betweenTiming($start,$end)->get();
+        foreach($EventsList as $event)
+        {
+            $event_notifications = $event->notifications()->get();
+            $event_attendees = $event->registrants()->get();
+            $sentBefore=false;
+            if($event->timing < carbon::now())
+            {
+                foreach($event_notifications as $notification)
+                {
+                    $notification_id = $notification->id;
+                    $mainNotification = Notification::findOrFail($notification_id);
+                    if($mainNotification->type == EVENT_TYPE_CONFIRM_ATTENDANCE)
+                    {
+                        $sentBefore=true;
+                        break;
+                    }
+                }
+                if(!$sentBefore)
+                {
+                    $description = "Confirm Attendance for ".$event->name;
+                    Notification::notify($event_attendees, EVENT_TYPE_CONFIRM_ATTENDANCE,
+                                $event, $description, url("event/{$event->id}/confirm"))); 
+                }
+
+            }
+        }
     }
 }
