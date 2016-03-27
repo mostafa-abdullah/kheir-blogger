@@ -118,6 +118,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/review/{r_id}/report', 'OrganizationReviewController@report');
     Route::resource('organization/{id}/review', 'OrganizationReviewController');
+    Route::get('organization/{id}/reviews' , 'OrganizationReviewController@organizationReviews');
 
     /**
      * Organizaton Blocking.
