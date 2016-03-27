@@ -73,9 +73,9 @@ class EventController extends Controller
 	{
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
-		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($organization->subscribers()->get(), $event,
-							$notification_description, url("/event", $event->id));
+		$description = $organization->name." created a new event ".$request->name;
+		$link = url("/event", $event->id);
+		Notification::notify($organization->subscribers, 1, $event, $description, $link);
 		return redirect()->action('EventController@show', [$event->id]);
 	}
 
@@ -100,8 +100,9 @@ class EventController extends Controller
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
-			Notification::notify($event->volunteers()->get(), $event,
-								"Event ".($event->name)." has been updated", url("/event",$id));
+			$description = "Event ".($event->name)." has been updated";
+			$link = url("/event",$id);
+			Notification::notify($event->volunteers, 2, $event, $description, $link);
 		}
 		return redirect()->action('EventController@show', [$id]);
 	}
@@ -115,7 +116,7 @@ class EventController extends Controller
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
 			$event->delete();
-			Notification::notify($event->volunteers(), null,
+			Notification::notify($event->volunteers(), 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
 		return redirect('/');
