@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserBlocksOrganization extends Migration
+class CreateVolunteersBlockOrganizationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateUserBlocksOrganization extends Migration
      */
     public function up()
     {
-        Schema::create('usersBlockedOrganiztion', function (Blueprint $table) {
+        Schema::create('volunteers_block_organizations', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('user_id')->unsigned()->index();
@@ -32,6 +32,6 @@ class CreateUserBlocksOrganization extends Migration
      */
     public function down()
     {
-        Schema::drop('usersBlockedOrganiztion');
+        Schema::drop('volunteers_block_organizations');
     }
 }

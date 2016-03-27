@@ -4,20 +4,20 @@
 </header>
 @section('content')
 
-	{!! Form::open(['action' => ['EventController@storeQuestion', $id]]) !!}
+	{!! Form::open(['action' => ['EventQuestionController@store', $id]]) !!}
 
         <div class = "form-group">
-            {!! Form::label('recommendation' , 'question') !!}
+            {!! Form::label('question' , 'question') !!}
             {!! Form::text('question' , null , array('class' => 'form-control')) !!}
         </div>
 
         <div class = "form-group">
-            {!! Form::label('recommendation' , 'question_body') !!}
+            {!! Form::label('question_body' , 'Question Body') !!}
             {!! Form::textArea('question_body' , null , array('class' => 'form-control')) !!}
         </div>
 
         <div class = "form-group">
-            {!! Form::submit('Send' , array('class' => 'btn btn-default' )) !!}
+            {!! Form::submit('Ask!' , array('class' => 'btn btn-default' )) !!}
         </div>
 
     {!! Form::close() !!}

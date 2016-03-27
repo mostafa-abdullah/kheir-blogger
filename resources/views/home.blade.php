@@ -16,4 +16,15 @@
         </div>
     </div>
 </div>
+@if(auth()->guard('organization')->check())
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form method="" action="{{url('event/create')}}">
+                <input type="submit" value="Create Event" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 @endsection
