@@ -2,10 +2,22 @@
 
 @section('content')
 
-<h1>{{ $volunteer->name }}</h1>
+<h1>{{ $volunteer->first_name }} {{ $volunteer->last_name }}</h1>
 
     <ul>
        <li>Email: {{ $volunteer->email }}</li>
+       @if ($volunteer->phone)
+           <li>Phone: {{ $volunteer->phone }}</li>
+       @endif
+       @if ($volunteer->address)
+           <li>Address: {{ $volunteer->address }}</li>
+       @endif
+       @if ($volunteer->city)
+           <li>City: {{ $volunteer->city }}</li>
+       @endif
+       @if ($volunteer->birth_date)
+           <li>Age: {{ $volunteer->birth_date }}</li>
+       @endif
     </ul>
 
     <h1>Events</h1>
