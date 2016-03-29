@@ -1,12 +1,32 @@
+
 @extends('layouts.app')
 
 @section('content')
 
-<h1>{{ $volunteer->name }}</h1>
+<h1>{{ $volunteer->first_name }} {{ $volunteer->last_name }}</h1>
 
     <ul>
        <li>Email: {{ $volunteer->email }}</li>
+       @if ($volunteer->phone)
+           <li>Phone: {{ $volunteer->phone }}</li>
+       @endif
+       @if ($volunteer->address)
+           <li>Address: {{ $volunteer->address }}</li>
+       @endif
+       @if ($volunteer->city)
+           <li>City: {{ $volunteer->city }}</li>
+       @endif
+       @if ($volunteer->birth_date)
+           <li>Age: {{ \Carbon\Carbon::parse($volunteer->birth_date)->diffInYears() }}</li>
+       @endif
     </ul>
+    @if ($can_update)
+        {!! Form::open(['action' => ['VolunteerController@edit',$volunteer->id],'method'=>'get']) !!}
+        <div>
+           {!! Form::submit('Edit' , array('class' => 'vol-act btn btn-default' )) !!}
+        </div>
+        {!! Form::close() !!}
+    @endif
 
     <h1>Events</h1>
     <ul>

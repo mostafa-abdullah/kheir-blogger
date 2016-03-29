@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 
 use App\Http\Requests;
 
-class OrganizationForgetPassword extends Controller
+class OrganizationPasswordController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
