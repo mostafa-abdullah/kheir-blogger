@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>{{$organization_name}} Events</h1>
+    <h1>{{$organization_name}}'s Events</h1>
     @foreach($events as $event)
         <div style="float: right;">
             <div>
@@ -12,11 +12,11 @@
             </div>
         </div>
         <h2 style="margin-top: 20px">
-            <a href="#">
+            <a href="{{url('event',$event->id)}}">
                 {{$event->name}}
             </a>
         </h2>
         <div>{{$event->description}}</div>
-        <hr style="clear:both;"/>
+        <hr style="clear:both"/>
     @endforeach
 @endsection

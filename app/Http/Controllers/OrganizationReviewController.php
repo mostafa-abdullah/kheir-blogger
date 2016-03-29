@@ -7,7 +7,6 @@ use App\Http\Requests\OrganizationReviewRequest;
 use App\Organization;
 use App\OrganizationReview;
 
-use App\User;
 use Auth;
 
 class OrganizationReviewController extends Controller
@@ -25,7 +24,7 @@ class OrganizationReviewController extends Controller
     public function index($id)
     {
         $organization = Organization::findorfail($id);
-        return $organization->reviews;
+        return view('organization.review.index', compact('organization'));
     }
 
     /**
@@ -87,14 +86,5 @@ class OrganizationReviewController extends Controller
         if(!$review->reportingUsers()->find(Auth::user()->id))
             Auth::user()->reportedOrganizationReviews()->attach($review);
         return redirect()->action('OrganizationController@show', [$organization_id]);
-    }
-
-    /**
-     * Get organization reviews
-     */
-    public function organizationReviews($organization_id){
-        $organization = Organization::findOrFail($organization_id);
-        return view('organization\review\reviews')->with('reviews' , $organization->reviews)
-            ->with('organization_name' ,$organization->name);
     }
 }
