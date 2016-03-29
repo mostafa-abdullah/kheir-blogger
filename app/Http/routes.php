@@ -123,6 +123,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Reviewing.
      */
+    Route::get('organization/{id}/reviews' , 'OrganizationReviewController@index');
     Route::get('organization/{id}/review/{r_id}/report', 'OrganizationReviewController@report');
     Route::resource('organization/{id}/review', 'OrganizationReviewController');
 

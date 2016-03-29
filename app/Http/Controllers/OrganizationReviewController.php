@@ -24,7 +24,7 @@ class OrganizationReviewController extends Controller
     public function index($id)
     {
         $organization = Organization::findorfail($id);
-        return $organization->reviews;
+        return view('organization.review.index', compact('organization'));
     }
 
     /**

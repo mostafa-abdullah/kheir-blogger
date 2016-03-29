@@ -39,12 +39,15 @@ class EventController extends Controller
 	public function index($organization_id)
 	{
 		$organization = Organization::findOrFail($organization_id);
-		return $organization->events;
+		$organization_name = $organization->name;
+		$events = $organization->events;
+		return view('event.index', compact('organization_name', 'events'));
 	}
 
 	/**
 	 * Show Event's page.
 	 */
+
 	public function show($id)
 	{
         $event = Event::findOrFail($id);
