@@ -75,7 +75,7 @@ class EventController extends Controller
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
 		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($organization->subscribers()->get(), $event,
+		Notification::notify($organization->subscribers, $event,
 							$notification_description, url("/event", $event->id));
 		return redirect()->action('EventController@show', [$event->id]);
 	}
@@ -101,7 +101,7 @@ class EventController extends Controller
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
-			Notification::notify($event->volunteers()->get(), $event,
+			Notification::notify($event->volunteers, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
 		return redirect()->action('EventController@show', [$id]);
@@ -116,7 +116,7 @@ class EventController extends Controller
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
 			$event->delete();
-			Notification::notify($event->volunteers(), null,
+			Notification::notify($event->volunteers, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
 		return redirect('/');
@@ -156,13 +156,20 @@ class EventController extends Controller
 
 	public function confirm($id)
 	{
+		$event = Auth::registeredEvents()->findOrFail($id);
+		if($event->timing < carbon::now())
+			return view('event.confirm', compact('id'));
+	}
+
+	public function attend($id)
+	{
 		$event = Event::findOrFail($id);
 		if($event->timing < carbon::now())
 			Auth::user()->attendEvent($id);
 		return redirect()->action('EventController@show',[$id]);
 	}
 
-	public function unconfirm($id)
+	public function unattend($id)
 	{
 		$event = Event::findOrFail($id);
 		if($event->timing < carbon::now())

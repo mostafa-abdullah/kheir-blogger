@@ -84,7 +84,10 @@ class EventQuestionController extends Controller
 		$question->answer = $request['answer'];
 		$question->answered_at = Carbon::now();
 		$question->save();
-		Notification::notify(array($question->user()->first()), $event, "Your question has been answered", url("/event/".$question->event_id."question/".$question->id));
+
+        $description = "Your question has been answered";
+        $link = url("/event/".$question->event_id."question/".$question->id);
+		Notification::notify(array($question->user()->first()), 5, $event, $description, $link);
 
 		return redirect()->action('EventQuestionController@viewUnansweredQuestions', [$event_id]);
     }
