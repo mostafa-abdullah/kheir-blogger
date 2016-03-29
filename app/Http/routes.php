@@ -63,6 +63,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('logout_organization','OrganizationAuthController@logout');
 
     /**
+     * Organization forget password.
+     */
+    Route::get('/password_organization/reset','OrganizationPasswordController@getEmail');
+    Route::post('/password_organization/email','OrganizationPasswordController@sendResetLinkEmail');
+    Route::get('/password_organization/reset/{token}','OrganizationPasswordController@getReset');
+    Route::post('/password_organization/reset','OrganizationPasswordController@reset');
+    /**
      *  Volunteer Authentication (register/login/logout)
      */
     Route::auth();

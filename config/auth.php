@@ -114,6 +114,12 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+        'organizations' => [
+            'provider' => 'organizations',
+            'email' => 'auth.emails.password_organization',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ]
     ],
 
 ];
