@@ -13,7 +13,7 @@
 </div>
 <div class="form-group">
     {!! Form::label('timing','Timing:');!!}
-    {!! Form::input('timing','timing',date('Y-m-d h:i a'),array('class' => 'form-control'));!!}
+    {!! Form::input(null,'timing',date('d-m-Y h:i a'),array('class' => 'form-control'));!!}
 </div>
 <div class="form-group">
     {!! Form::checkbox('required_contact_info', 1); !!}

@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -16,9 +17,16 @@
            <li>City: {{ $volunteer->city }}</li>
        @endif
        @if ($volunteer->birth_date)
-           <li>Age: {{ $volunteer->birth_date }}</li>
+           <li>Age: {{ \Carbon\Carbon::parse($volunteer->birth_date)->diffInYears() }}</li>
        @endif
     </ul>
+    @if ($can_update)
+        {!! Form::open(['action' => ['VolunteerController@edit',$volunteer->id],'method'=>'get']) !!}
+        <div>
+           {!! Form::submit('Edit' , array('class' => 'vol-act btn btn-default' )) !!}
+        </div>
+        {!! Form::close() !!}
+    @endif
 
     <h1>Events</h1>
     <ul>

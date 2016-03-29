@@ -177,7 +177,7 @@ Route::group(['middleware' => ['web']], function () {
      * Volunteer CRUD.
      */
     Route::resource('volunteer','VolunteerController', ['only' => [
-        'show',
+        'show', 'edit', 'update'
     ]]);
 
 /*
