@@ -3,9 +3,22 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Elasticquent\ElasticquentTrait;
 
 class Organization extends Authenticatable
+
 {
+
+    use ElasticquentTrait;
+
+
+    protected $mappingProperties = array(
+        'name' => array(
+            'type' => 'string',
+            'analyzer' => 'standard'
+        )
+    );
+
     protected $fillable = [
         'name', 'email', 'password','bio','slogan','phone','location'
     ];
