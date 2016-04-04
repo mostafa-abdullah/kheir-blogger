@@ -105,4 +105,16 @@ class VolunteerController extends Controller
         \Session::flash('flash_message','feedback successfully sent!');
         return redirect('/');
     }
+    /**
+     * [showDashboard  prepare the events and posts from database]
+     * @return [view]           [thr view of the page]
+     */
+    public function showDashboard()
+    {
+      $events = Auth::user()->interestingEvents()->first();
+      // $posts = Auth::user()->previousYearsChallenges()->latest('year')->get();
+      return view('volunteer.dashboard' , compact('currentChallenge' , 'previousChallenges'));
+    }
+
+
 }

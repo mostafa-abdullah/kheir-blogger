@@ -64,6 +64,16 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Event','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
     }
+    /**
+     * [events description]
+     * @return [collection] [event from folowed organization]
+     */
+    public function interestingEvents()
+    {
+        return $this->hasManyThrough('App\Event', 'App\Organization');
+    }
+
+
 
     public function followEvent($event_id)
     {
