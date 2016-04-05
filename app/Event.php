@@ -85,4 +85,9 @@ class Event extends Model
     {
         $query->whereBetween('timing', [$start, $end]);
     }
+
+    public function gallery($id)
+    {
+        return $this->hasMany('App/Image')->where('event_id',$id);
+    }
 }
