@@ -13,8 +13,12 @@ class CreateImagesTable extends Migration
     public function up()
     {
         Schema::create('images', function (Blueprint $table) {
+
             $table->increments('id');
-            $table->integer('event_id');
+            $table->integer('event_id')->unsigned();
+            $table->foreign('event_id')->references('id')
+                ->on('events')->onDelete('cascade');
+
             $table->string('path');
             $table->text('caption')->nullable();
             $table->timestamps();
