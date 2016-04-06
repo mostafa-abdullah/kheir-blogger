@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Photo extends Model
 {
-    protected $fillable= [
-        'caption'
+    protected $fillable = [
+      'caption'
     ];
 }
