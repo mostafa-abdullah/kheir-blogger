@@ -61,5 +61,10 @@
                     <a href="{{ action('VolunteerController@viewReviews', [$volunteer->id])}}">View More >></a>
             @endif
         </ul>
+        {{--check if the logged in user is admin to show the validation form --}}
+            @if( Auth::user()->role == 8)
+                    @include('volunteer/adminPanel/validate')
+            @endif
     </ul>
+
 @endsection
