@@ -2,39 +2,38 @@
 
 @section('content')
 
-  {!! Form::model($volunteer, array( 'method' => 'PATCH','action' => ['VolunteerController@update',$volunteer->id])) !!}
+  <div class="container">
+     <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+           <div id="postlist">
+             @for ($i = 0; $i < 3 && $i < count($events); $i++)
+              <div class="panel">
+                 <div class="panel-heading">
+                    <div class="text-center">
+                       <div class="row">
+                          <div class="col-sm-9">
+                             <h3 class="pull-left">{{$events[$i]->name}}</h3>
+                          </div>
+                          <div class="col-sm-3">
+                             <h4 class="pull-right"> <small><em>{{$events[$i]->timing}}</em></small> </h4>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 <div class="panel-body">{{$events[$i]->description}}<a href="#">subscribe</a> </div>
+              </div>
+            @endfor
+           </div>
+           @if(count($events) > 1)
+              <div class="text-center"><a href="#" id="loadmore" class="btn btn-primary">Older Posts...</a></div>
+           @endif
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3"> </div>
+        <div class="col-md-1"> </div>
+     </div>
+  </div>
 
-    <div class="form-group">
-      {!!Form::label('first_name', 'First name');!!}
-      {!!Form::text('first_name',null,array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('last_name', 'Last name');!!}
-      {!!Form::text('last_name',null,array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('email', 'Email');!!}
-      {!!Form::text('email',null,array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('phone', 'Phone');!!}
-      {!!Form::text('phone',null,array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('birth_date', 'Birth Date');!!}
-      {!!Form::input('date', 'birth_date', date('d-m-Y'),array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('address', 'Address');!!}
-      {!!Form::text('address',null,array('class' => 'form-control'));!!}
-    </div>
-    <div class="form-group">
-      {!!Form::label('city', 'City');!!}
-      {!!Form::text('city',null,array('class' => 'form-control'));!!}
-    </div>
-     {!!Form::submit('Update', array('class'=>'btn btn-default'));!!}
-  {!! Form::close() !!}
-
-  @include('errors')
 
 @stop

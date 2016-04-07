@@ -111,9 +111,13 @@ class VolunteerController extends Controller
      */
     public function showDashboard()
     {
-      $events = Auth::user()->interestingEvents()->first();
+      // $events = Auth::user()->interestingEvents()->first();
+      $organization = Organization::findOrFail(1);
+  		$organization_name = $organization->name;
+  		$events = $organization->events;
+
       // $posts = Auth::user()->previousYearsChallenges()->latest('year')->get();
-      return view('volunteer.dashboard' , compact('currentChallenge' , 'previousChallenges'));
+      return view('volunteer.dashboard' , compact('events'));
     }
 
 

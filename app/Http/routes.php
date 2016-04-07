@@ -182,7 +182,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Volunteer dashboard.
      */
-     Route::get('volunteer/dashboard', 'VolunteerController@showDashboard');
+     Route::get('dashboard', 'VolunteerController@showDashboard');
 
 
 /*
