@@ -105,4 +105,13 @@ class VolunteerController extends Controller
         \Session::flash('flash_message','feedback successfully sent!');
         return redirect('/');
     }
+    /**
+     * Show all my events
+     */
+    public function showEvents()
+    {
+        $user = Auth::user();
+        $followedEvents = $user->events();
+        return view('volunteer.events',compact('followedEvents'));
+    }
 }
