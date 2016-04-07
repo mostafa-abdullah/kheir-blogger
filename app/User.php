@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use DB;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -68,9 +69,12 @@ class User extends Authenticatable
      * [events description]
      * @return [collection] [event from folowed organization]
      */
-    public function interestingEvents()
+    public function interestingEvents($user_id)
     {
-        return $this->hasManyThrough('App\Event', 'App\Organization');
+      return DB::table('volunteers_subscribe_organizations')
+                  ->join('events', 'volunteers_subscribe_organizations.organization_id', '=', 'events.organization_id')
+                  -> where('volunteers_subscribe_organizations.user_id', '=', $user_id)
+                  ->select('events.*');
     }
 
 
