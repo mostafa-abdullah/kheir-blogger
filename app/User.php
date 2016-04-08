@@ -77,7 +77,17 @@ class User extends Authenticatable
                   ->select('events.*');
     }
 
-
+    /**
+     *	the posts which will viewed at dashboard
+     *	It contain the posts from the events of the user 
+     */
+     public function interestingPosts($user_id)
+     {
+       return DB::table('volunteers_in_events')
+                   ->join('event_posts', 'volunteers_in_events.event_id', '=', 'event_posts.event_id')
+                   -> where('volunteers_in_events.user_id', '=', $user_id)
+                   ->select('event_posts.*');
+     }
 
     public function followEvent($event_id)
     {
