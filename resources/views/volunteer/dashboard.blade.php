@@ -1,31 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-
   <div class="container">
      <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-6">
            <div id="postlist">
-             @for ($i = 0; $i < 3 && $i < count($events); $i++)
+             @foreach ($data as $record)
+               @if(property_exists($record, 'name'))
+                 <div class="panel">
+                    <div class="panel-heading">
+                       <div class="text-center">
+                          <div class="row">
+                             <div class="col-sm-9">
+                                <h3 class="pull-left">{{$record->name}}</h3>
+                             </div>
+                             <div class="col-sm-3">
+                                <h4 class="pull-right"> <small><em>{{$record->timing}}</em></small> </h4>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="panel-body">{{$record->description}}<a href="#">subscribe</a> </div>
+                 </div>
+               @else
               <div class="panel">
                  <div class="panel-heading">
                     <div class="text-center">
                        <div class="row">
                           <div class="col-sm-9">
-                             <h3 class="pull-left">{{$events[$i]->name}}</h3>
+                             <h3 class="pull-left">{{$record->title}}</h3>
                           </div>
                           <div class="col-sm-3">
-                             <h4 class="pull-right"> <small><em>{{$events[$i]->timing}}</em></small> </h4>
+                             <h4 class="pull-right"> <small><em>{{$record->updated_at}}</em></small> </h4>
                           </div>
                        </div>
                     </div>
                  </div>
-                 <div class="panel-body">{{$events[$i]->description}}<a href="#">subscribe</a> </div>
+                 <div class="panel-body">{{$record->description}}<a href="#">subscribe</a> </div>
               </div>
-            @endfor
+            @endif
+            @endforeach
            </div>
-           @if(count($events) > 1)
+           @if(count($record) > 1)
               <div class="text-center"><a href="#" id="loadmore" class="btn btn-primary">Older Posts...</a></div>
            @endif
         </div>
