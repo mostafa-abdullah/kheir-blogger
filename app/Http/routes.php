@@ -227,3 +227,13 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','EventController', ['except' => 'index']);
 });
+
+/*
+|-----------------------
+| Admin Routes
+|-----------------------
+*/
+    /**
+     * admin view organizations. 
+     */
+    Route::get('admin/organizations', 'AdminController@adminViewOrganizations');
