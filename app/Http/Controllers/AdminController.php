@@ -15,6 +15,9 @@ use Auth;
 
 class AdminController  extends Controller{
 
+  /**
+  * retrieve all organizations and pass them to view
+  **/
   public function adminViewOrganizations(){
     $organization = Organization::all();
     return view('admin.organizations',compact('organization'));
