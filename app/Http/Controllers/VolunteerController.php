@@ -105,15 +105,4 @@ class VolunteerController extends Controller
         \Session::flash('flash_message','feedback successfully sent!');
         return redirect('/');
     }
-
-    public function adminAssignValidator($id){
-                $volunteer = User::findorfail($id);
-                if($volunteer->role == 5)
-                    $volunteer->role = 1 ;
-                else
-                    $volunteer->role = 5 ;
-
-                    $volunteer->save();
-                    return redirect()->action('VolunteerController@show', [$id]);
-    }
 }

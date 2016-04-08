@@ -180,9 +180,6 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update'
     ]]);
 
-    Route::post('volunteer/{id}', array('uses' => 'VolunteerController@adminAssignValidator'));
-
-
     /*
     |-----------------------
     | Event Routes
@@ -230,6 +227,14 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','EventController', ['except' => 'index']);
 
-
+    /*
+    |-----------------------
+    | Admin Routes
+    |-----------------------
+    */
+    /**
+     * Admin Assign/UnAssign Validator
+     */
+    Route::post('volunteer/{id}/validate', array('uses' => 'AdminController@adminAssignValidator'));
 
 });

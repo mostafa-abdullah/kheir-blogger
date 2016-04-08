@@ -1,16 +1,12 @@
-    {{--form for validate/unValidate users from the admin --}}
+        {{--form for validate/unValidate users from the admin --}}
+    {!! Form::open(array('action' => array('AdminController@adminAssignValidator',$volunteer->id))) !!}
 
-
-    {!! Form::open(array('action' => array('VolunteerController@adminAssignValidator',$volunteer->id))) !!}
-
-
-    {{-- check if this user is validator  --}}
+        {{-- check if this user is validator  --}}
     @if($volunteer->role == 5)
         <div>
             {!! Form::submit('unValidate' , array('class' => 'vol-act btn btn-default' )) !!}
         </div>
-
-         {{-- else means this user is normal user --}}
+        {{-- else means this user is normal user --}}
     @else
 
         <div>
@@ -19,7 +15,3 @@
 
     @endif
     {!! Form::close() !!}
-
-
-
-    @include('errors')

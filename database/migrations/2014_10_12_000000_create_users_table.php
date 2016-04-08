@@ -27,6 +27,13 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->rememberToken();
             $table->timestamps();
+            /*
+             ** We will have different roles for website users:
+              0 => banned
+              1 => normal user
+              5 => validator
+              8 => admin
+             */
             $table->integer('role')->default(1);
         });
     }
