@@ -21,14 +21,14 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     });
 
-    /*
-    |==========================================================================
-    | Authentication Routes
-    |==========================================================================
-    |
-    | These routes are related to the authentication of volunteers/organizations.
-    |
-    */
+/*
+|==========================================================================
+| Authentication Routes
+|==========================================================================
+|
+| These routes are related to the authentication of volunteers/organizations.
+|
+*/
     /**
      * Organization login page.
      */
@@ -84,28 +84,28 @@ Route::group(['middleware' => ['web']], function () {
     });
 
 
-    /*
-    |==========================================================================
-    | Functional Routes
-    |==========================================================================
-    |
-    | These routes are related to the main actions of the applications
-    | associated with volunteers, organizations or events.
-    | For the resource, use the following functions:
-    |       index   => view page for all models
-    |       show    => view page for a single model
-    |       create  => view page for creating a model
-    |       store   => create a model with the passed request
-    |       edit    => view page for updating a model
-    |       update  => update a model with the passed request
-    |       destroy => delete a model
-    */
+/*
+|==========================================================================
+| Functional Routes
+|==========================================================================
+|
+| These routes are related to the main actions of the applications
+| associated with volunteers, organizations or events.
+| For the resource, use the following functions:
+|       index   => view page for all models
+|       show    => view page for a single model
+|       create  => view page for creating a model
+|       store   => create a model with the passed request
+|       edit    => view page for updating a model
+|       update  => update a model with the passed request
+|       destroy => delete a model
+*/
 
-    /*
-    |-----------------------
-    | Organization Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Organization Routes
+|-----------------------
+*/
 
     /**
      * Organization Subscription.
@@ -145,11 +145,11 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update',
     ]]);
 
-    /*
-    |-----------------------
-    | Volunteer Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Volunteer Routes
+|-----------------------
+*/
     /**
      *  Challenges Routes.
      */
@@ -180,11 +180,11 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update'
     ]]);
 
-    /*
-    |-----------------------
-    | Event Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Event Routes
+|-----------------------
+*/
     /**
      *	Event Following.
      */
@@ -227,13 +227,13 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','EventController', ['except' => 'index']);
 
-    /*
-    |-----------------------
-    | Admin Routes
-    |-----------------------
-    */
+/*
+|-----------------------
+| Admin Routes
+|-----------------------
+*/
     /**
-     * Admin Assigning  Validator.
+     * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 });
