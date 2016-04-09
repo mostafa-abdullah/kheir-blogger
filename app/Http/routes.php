@@ -226,4 +226,14 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','EventController', ['except' => 'index']);
+
+/*
+|-----------------------
+| Admin Routes
+|-----------------------
+*/
+    /**
+     * Admin Assign  Validator.
+     */
+    Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 });
