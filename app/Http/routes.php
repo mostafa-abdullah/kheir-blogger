@@ -49,7 +49,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('register_organization',function(){
         if(Auth::user() || auth()->guard('organization')->check())
             return redirect('/');
-        return view('auth.register_organization');
+       return view('auth.register_organization');
     });
 
     /**
@@ -159,7 +159,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('volunteer/challenge/edit', 'ChallengeController@edit');
     Route::patch('volunteer/challenge', 'ChallengeController@update');
     Route::get('volunteer/challenge/achieved',
-        'ChallengeController@viewCurrentYearAttendedEvents');
+               'ChallengeController@viewCurrentYearAttendedEvents');
 
     /**
      * Notification Routes.
