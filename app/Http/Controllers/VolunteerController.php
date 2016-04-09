@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
-
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use App\User;
 use App\Event;
 use App\Challenge;
@@ -112,12 +112,16 @@ class VolunteerController extends Controller
     public function showDashboard()
     {
         if(Auth::user()){
+          $numPerPage = 2;
+          $page = (Input::get('page')) ? Input::get('page') : 1;
           $id = Auth::user()->id;
           $events = Auth::user()->interestingEvents($id)->get();
           $posts  = Auth::user()->interestingPosts($id)->get();
           $data = array_merge($posts,$events);
           usort($data, array($this, "cmp"));
-          return view('volunteer.dashboard' , compact('data'));
+          $total = count($data);
+          $supdata=   new Paginator($data, $total, $numPerPage, $page, array("path" => '/dashboard'));
+          return view('volunteer.dashboard' , compact('supdata'));
         }else
           return redirect('/login');
 

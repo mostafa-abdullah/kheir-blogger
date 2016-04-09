@@ -6,7 +6,7 @@
         <div class="col-md-1"></div>
         <div class="col-md-6">
            <div id="postlist">
-             @foreach ($data as $record)
+             @foreach ($supdata as $record)
                @if(property_exists($record, 'name'))
                  <div class="panel">
                     <div class="panel-heading">
@@ -42,8 +42,8 @@
             @endif
             @endforeach
            </div>
-           @if(count($record) > 1)
-              <div class="text-center"><a href="#" id="loadmore" class="btn btn-primary">Older Posts...</a></div>
+           @if(count($supdata) > 1)
+              <div class="text-center"><a href="#" id="loadmore" class="btn btn-primary">{{ $supdata->links() }} tool</a></div>
            @endif
         </div>
         <div class="col-md-1"></div>
