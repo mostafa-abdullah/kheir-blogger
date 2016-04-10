@@ -13,10 +13,23 @@ class OrganizationAPIController extends Controller
     /**
      *  get json list of all organizations
      */
-    public function showList()
+    public function index()
     {
         $organizations = Organization::all();
-        return response()->json($organizations);
+        return $organizations;
+    }
+
+
+    /**
+     *  show a json of an organization and all its events, reviews and subscribers
+     */
+    public function show($id)
+    {
+        $organization = Organization::findOrFail($id);
+        $organization->events = $organization->events()->get();
+        $organization->reviews = $organization->reviews()->get();
+        $organization->subscribers = $organization->subscribers()->get();
+        return $organization;
     }
 
 }
