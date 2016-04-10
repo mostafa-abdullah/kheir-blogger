@@ -236,4 +236,15 @@ Route::group(['middleware' => ['web']], function () {
      * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+
+/*
+|-----------------------
+| API Routes
+|-----------------------
+*/
+
+    /**
+    * Volunteer API resource.
+    */
+    Route::get('api/volunteer/{id}', 'VolunteerApiControllerl@show');
 });
