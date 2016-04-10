@@ -238,4 +238,14 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('test/','EventController@test');
     Route::post('add_photos','EventController@add_photos');
     Route::post('store_gallery','EventController@store_gallery');
+
+/*
+|-----------------------
+| Admin Routes
+|-----------------------
+*/
+    /**
+     * Admin Assign  Validator.
+     */
+    Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 });
