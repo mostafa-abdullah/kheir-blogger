@@ -236,4 +236,19 @@ Route::group(['middleware' => ['web']], function () {
      * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+
+    /*
+|-----------------------
+| validator Routes
+|-----------------------
+*/
+    /**
+     * valiadatpr view all reports
+     */
+    Route::get('review/reports','EventReviewController@validatorViewReports');
+
+    /**
+     * validator make report to be viewed
+     */
+    Route::post('review/report/{id}/viewed','EventReviewController@reportViewed');
 });

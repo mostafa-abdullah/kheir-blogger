@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EventReviewReport;
 use App\Http\Requests\EventReviewRequest;
 
 use App\EventReview;
@@ -92,4 +93,26 @@ class EventReviewController extends Controller
             Auth::user()->reportedEventReviews()->attach($review);
         return redirect()->action('EventController@show', [$event_id]);
     }
+
+    public function validatorViewReports (){
+
+            if(Auth::user()->role == 5){
+                $event_reviews_reports = EventReviewReport::all();
+                return view('volunteer.validator.eventReviewsReports',compact('event_reviews_reports'));
+
+            }
+    }
+        /**
+         * validator assign report to be viewed
+         */
+        public function reportViewed($id){
+            $report = EventReviewReport::findOrFail($id);
+            $report->viewed = 1 ;
+            $report->save();
+            return redirect()->action('EventReviewController@validatorViewReports');
+
+        }
+
+
+
 }
