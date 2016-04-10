@@ -226,4 +226,16 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','EventController', ['except' => 'index']);
+
+    /**
+     * Event gallery
+     */
+    Route::get('event/{id}/add_photos','EventController@add_photos');
+    Route::post('event/{id}/add_caption','EventController@add_caption');
+    Route::post('event/{id}/store_gallery','EventController@store_gallery');
+
+
+    Route::get('test/','EventController@test');
+    Route::post('add_photos','EventController@add_photos');
+    Route::post('store_gallery','EventController@store_gallery');
 });

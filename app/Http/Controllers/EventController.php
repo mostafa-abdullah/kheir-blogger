@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GalleryCaptionRequest;
+use App\Http\Requests\GalleryRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 
 use App\Organization;
 use App\Notification;
 use App\Event;
+use App\Photo;
 
 use Carbon\Carbon;
 use Auth;
+use Input;
+use Validator;
+use Session;
 
 class EventController extends Controller
 {
@@ -124,12 +130,90 @@ class EventController extends Controller
 		return redirect('/');
 	}
 
-/*
-|==========================================================================
-| Volunteers' Interaction with Event
-|==========================================================================
-|
-*/
+    /**
+     * Event Gallery.
+     */
+
+    /*public function add_photos($id)
+    {
+        $event = Event::findOrFail($id);
+        if(auth()->guard('organization')->user()->id == $event->organization()->id)
+            return view('event.gallery.upload', compact('event'));
+        return redirect()->action('EventController@index', [$id]);
+
+    }*/
+
+    public function test()
+    {
+        //$event = Event::findOrFail($id);
+
+        return view('event.gallery.upload');
+    }
+
+
+    public function add_photos()
+    {
+        $files = Input::file('images');
+        $uploaded = 0;
+        $failed = 0;
+        $paths=array();
+        $counter=0;
+        foreach ($files as $file) {
+            $rules = array('file' => 'required|image');
+            $validator = Validator::make(array('file'=> $file), $rules);
+
+            if($validator->passes()) {
+                $destinationPath = 'db/gallery';
+                //$filename = $file->getClientOriginalName();
+                $filename =$counter;
+                $counter++;
+                $upload_success = $file->move($destinationPath,$filename);
+                if($upload_success){
+                    array_push($paths,$destinationPath.'/'.$filename);
+                    $uploaded ++;
+                }
+                else {
+                    $failed ++;
+                }
+            } else {
+                $failed ++;
+            }
+        }
+
+        if($failed > 0)
+        {
+            return redirect()->action('EventController@test');
+        }
+        else
+        {
+            return view('event.gallery.add_caption',compact('paths'));
+            //return 'lolo';
+        }
+
+    }
+
+    public function store_gallery(Request $req)
+    {
+        $input = $req->all();
+        $captions =$input['captions'];
+        //$captions = Input::text('captions');
+        echo sizeof($captions).'\n';
+        foreach($captions as $caption)
+            if($caption)
+                echo 'whynot ';
+            else
+                echo '1 ';
+        //echo sizeof($paths);
+        return 'lolo stores';
+    }
+
+
+    /*
+    |==========================================================================
+    | Volunteers' Interaction with Event
+    |==========================================================================
+    |
+    */
 	public function follow($id)
 	{
 		Auth::user()->followEvent($id);
