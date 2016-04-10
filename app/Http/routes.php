@@ -237,3 +237,17 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 });
+
+
+/*
+|--------------------------
+| Organizations API Routes
+|--------------------------
+*/
+
+    //get a list of all organizations
+    Route::get('api/organization/list' , 'OrganizationAPIController@index');
+
+    //show an organization, its events, reviews, subscribers
+    Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
+
