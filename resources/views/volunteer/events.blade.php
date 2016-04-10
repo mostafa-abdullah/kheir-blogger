@@ -2,11 +2,11 @@
 
 @section('content')
 
-    @if ($followedEvents)
+    @if ($followedAndRegisteredAndReEvents)
         <h1>My Events</h1>
         <hr>
-            @foreach($followedEvents as $followedEvent)
-            <p>  {{$followedEvent->name}}</p>
+            @foreach($followedAndRegisteredEvents as $followedAndRegisteredEvent)
+            <p>  {{$followedAndRegisteredEvent->name}}</p>
             @endforeach
     @endif
 

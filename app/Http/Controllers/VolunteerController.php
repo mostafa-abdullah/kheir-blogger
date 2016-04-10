@@ -108,10 +108,10 @@ class VolunteerController extends Controller
     /**
      * Show all my events
      */
-    public function showEvents()
+    public function showAllEvents()
     {
         $user = Auth::user();
-        $followedEvents = $user->events();
-        return view('volunteer.events',compact('followedEvents'));
+        $followedAndRegisteredEvents = $user->events();
+        return view('dashboard.events',compact('followedAndRegisteredEvents'));
     }
 }
