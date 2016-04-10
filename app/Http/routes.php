@@ -179,6 +179,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
+     /**
+     * Volunteer view his events.
+     */
+    Route::get('volunteer/events','VolunteerController@showEvents');
 
 /*
 |-----------------------
