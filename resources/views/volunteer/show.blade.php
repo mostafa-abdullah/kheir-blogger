@@ -67,7 +67,7 @@
                     @include('volunteer.adminPanel.assign-validator')
             @endif
 
-            @if( Auth::user()->role == 8)
+            @if( Auth::user()->role == 5)
                     @include('volunteer.adminPanel.ban-user')
             @endif
 
