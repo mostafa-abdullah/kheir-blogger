@@ -246,5 +246,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
     * Volunteer API resource.
     */
-    Route::get('api/volunteer/{id}', 'VolunteerApiControllerl@show');
+    Route::resource('api/volunteer/{id}','VolunteerController', ['only' => [
+        'show', 'update'
+    ]]);
 });
