@@ -250,3 +250,4 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'update'
     ]]);
 });
+
