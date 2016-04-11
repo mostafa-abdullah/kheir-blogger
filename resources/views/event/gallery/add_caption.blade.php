@@ -6,7 +6,7 @@
 
     {!! Form::model($paths, array( 'method' => 'POST','action' =>array('EventController@save_gallery',$event->id))) !!}
     @foreach($paths as $path)
-        <img src="{{asset($path)}}" style="">
+        <img src="{{asset($path)}}" style="" width="250" height="250">
         <div class="form-group">
             {!! Form::label('caption','Caption:')!!}
             {!! Form::textArea('captions[]',null,array('class' => 'form-control'))!!}
