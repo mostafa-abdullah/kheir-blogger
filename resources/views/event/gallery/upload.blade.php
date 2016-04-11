@@ -2,12 +2,12 @@
 
 @section('content')
 
-    <h1 class="well well-lg">Upload Photos to your event</h1>
+    <h1 class="well well-lg">Upload Photos to your event: {{$event->name}}</h1>
     <div class="container">
         @if(isset($success))
             <div class="alert alert-success"> {{$success}} </div>
         @endif
-        {!! Form::open(array('url'=>'add_photos','method'=>'POST', 'files'=>true)) !!}
+            {!! Form::model($event, array( 'method' => 'POST','files'=> true,'action' =>array('EventController@save_photos',$event->id))) !!}
         <div class="form-group">
             {!! Form::label('image', 'Choose photos') !!}
             {!! Form::file('images[]',array('multiple'=>true)) !!}

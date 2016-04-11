@@ -134,15 +134,14 @@ class EventController extends Controller
      * Event Gallery.
      */
 
-    /*public function add_photos($id)
-    {
-        $event = Event::findOrFail($id);
-        if(auth()->guard('organization')->user()->id == $event->organization()->id)
-            return view('event.gallery.upload', compact('event'));
-        return redirect()->action('EventController@index', [$id]);
-
-    }*/
-
+	public function add_photos($id)
+	{
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id){
+			return view('event.gallery.upload',compact('event'));
+		}
+		return redirect('/');
+	}
     public function test()
     {
         //$event = Event::findOrFail($id);
@@ -151,61 +150,57 @@ class EventController extends Controller
     }
 
 
-    public function add_photos()
+    public function save_photos(Request $request,$id)
     {
-        $files = Input::file('images');
-        $uploaded = 0;
-        $failed = 0;
-        $paths=array();
-        $counter=0;
-        foreach ($files as $file) {
-            $rules = array('file' => 'required|image');
-            $validator = Validator::make(array('file'=> $file), $rules);
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id) {
+			$input = $request->all();
+			$files = $input['images'];
+			$paths = array();
 
-            if($validator->passes()) {
-                $destinationPath = 'db/gallery';
-                //$filename = $file->getClientOriginalName();
-                $filename =$counter;
-                $counter++;
-                $upload_success = $file->move($destinationPath,$filename);
-                if($upload_success){
-                    array_push($paths,$destinationPath.'/'.$filename);
-                    $uploaded ++;
-                }
-                else {
-                    $failed ++;
-                }
-            } else {
-                $failed ++;
-            }
-        }
+			foreach ($files as $file) {
+				$rules = array('file' => 'required|image');
+				$validator = Validator::make(array('file' => $file), $rules);
 
-        if($failed > 0)
-        {
-            return redirect()->action('EventController@test');
-        }
-        else
-        {
-            return view('event.gallery.add_caption',compact('paths'));
-            //return 'lolo';
-        }
+				if ($validator->passes()) {
+					$path = 'app/storage/db/gallery/' . $event->id;
+					$filename = md5($file->getClientOriginalName(), false);
+					$upload_success = $file->move($path, $filename);
+					if ($upload_success) {
+						array_push($paths, $path . '/' . $filename);
+					} else {
+						return redirect()->action('EventController@test');
+					}
+				} else {
+					return redirect()->action('EventController@test');
+				}
+			}
 
+
+			return view('event.gallery.add_caption', compact('paths','event'));
+		}
+		return redirect('/');
     }
 
-    public function store_gallery(Request $req)
-    {
-        $input = $req->all();
-        $captions =$input['captions'];
-        //$captions = Input::text('captions');
-        echo sizeof($captions).'\n';
-        foreach($captions as $caption)
-            if($caption)
-                echo 'whynot ';
-            else
-                echo '1 ';
-        //echo sizeof($paths);
-        return 'lolo stores';
-    }
+    public function save_gallery(Request $request,$id)
+	{
+		$event = Event::findorfail($id);
+		if (auth()->guard('organization')->user()->id == $event->organization()->id) {
+			$input = $request->all();
+			$captions = $input['captions'];
+			$paths = $input['paths'];
+			$counter = 0;
+			foreach (array_combine($paths, $captions) as $path => $caption) {
+				$photo = $event->create_photo(Request::create($caption));
+				$photo->path = $path;
+				$photo->save();
+				$counter++;
+			}
+			return 'Gallery view';
+		}
+		return redirect('/');
+
+	}
 
 
     /*
