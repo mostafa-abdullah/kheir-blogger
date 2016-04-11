@@ -236,4 +236,7 @@ Route::group(['middleware' => ['web']], function () {
      * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+
+
+    Route::post('volunteer/{id}/ban','AdminController@adminBanUsers');
 });

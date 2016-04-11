@@ -28,4 +28,14 @@ class AdminController  extends Controller{
         $volunteer->save();
         return redirect()->action('VolunteerController@show', [$id]);
     }
+
+     public function adminBanUsers($id){
+        $volunteer = User::findorfail($id);
+            $volunteer->role = 0 ;
+        $volunteer->save();
+        return redirect()->action('VolunteerController@show', [$id]);
+    }
+
+
+
 }
