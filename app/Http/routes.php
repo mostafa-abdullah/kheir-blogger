@@ -237,13 +237,29 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 
-    /*
+
+
+
+
+/*
+|--------------------------
+| Organizations API Routes
+|--------------------------
+*/
+
+    //get a list of all organizations
+    Route::get('api/organization/list' , 'OrganizationAPIController@index');
+
+    //show an organization, its events, reviews, subscribers
+    Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
+
+/*
 |-----------------------
 | validator Routes
 |-----------------------
 */
     /**
-     * valiadatpr view all reports
+     * valiadator view all reports
      */
     Route::get('review/reports','EventReviewController@validatorViewReports');
 
@@ -252,3 +268,4 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('review/report/{id}/viewed','EventReviewController@reportViewed');
 });
+
