@@ -2,11 +2,11 @@
 
 @section('content')
 
-    @if ($followedEvents)
+    @if ($allEvents)
         <h1>My Events</h1>
         <hr>
-            @foreach($followedEvents as $followedEvent)
-            <p>  {{$followedEvent->name}}</p>
+            @foreach($event as $allEvents)
+            <p>  {{$event->name}}</p>
             @endforeach
     @endif
 

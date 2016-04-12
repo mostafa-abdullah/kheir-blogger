@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
-
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use App\User;
 use App\Event;
 use App\Challenge;
@@ -112,6 +112,45 @@ class VolunteerController extends Controller
     {
         $user = Auth::user();
         $followedAndRegisteredEvents = $user->events();
-        return view('dashboard.events',compact('followedAndRegisteredEvents'));
+        $subscribedOrganizationEvents = $user->interestingEvents($user->id)->get();
+        $allEvents = array_merge($followedAndRegisteredEvents,$subscribedOrganizationEvents);
+        usort($allEvents, array($this, "cmp"));
+        return view('dashboard.events',compact('allEvents'));
     }
+    /**
+     * [showDashboard  prepare the events and posts from database]
+     * @return [view]           [thr view of the page]
+     */
+    public function showDashboard()
+    {
+        if(Auth::user()){
+          $numPerPage = 2;
+          $page = (Input::get('page')) ? Input::get('page') : 1;
+          $id = Auth::user()->id;
+          $events = Auth::user()->interestingEvents($id)->get();
+          $posts  = Auth::user()->interestingPosts($id)->get();
+          $data = array_merge($posts,$events);
+          usort($data, array($this, "cmp"));
+          $total = count($data);
+          $supdata=   new Paginator($data, $total, $numPerPage, $page, array("path" => '/dashboard'));
+          return view('volunteer.dashboard' , compact('supdata'));
+        }else
+          return redirect('/login');
+
+
+    }
+    /**
+     * [cmp comparing method for the sort]
+     * @param  [type] $record1 [first record in data array]
+     * @param  [type] $record2 [second record in data array]
+     * @return [type]          [signal]
+     */
+    public function cmp($record1, $record2)
+     {
+         if ($record1->updated_at == $record2->updated_at) {
+             return 0;
+         }
+         return ($record1->updated_at > $record2->updated_at) ? -1 : 1;
+     }
+
 }
