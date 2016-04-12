@@ -232,7 +232,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('event/{id}/add_photos','EventController@add_photos');
     Route::post('event/{id}/add_caption','EventController@add_caption');
-    Route::post('event/{id}/store_gallery','EventController@store_gallery');
+    Route::post('event/{id}/saveGallery','EventController@saveGallery');
 /*
 |-----------------------
 | Admin Routes

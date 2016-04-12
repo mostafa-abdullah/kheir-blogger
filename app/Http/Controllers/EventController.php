@@ -142,13 +142,6 @@ class EventController extends Controller
 		}
 		return redirect('/');
 	}
-    public function test()
-    {
-        //$event = Event::findOrFail($id);
-
-        return view('event.gallery.upload');
-    }
-
 
     public function save_photos(Request $request,$id)
     {
@@ -182,7 +175,7 @@ class EventController extends Controller
 		return redirect('/');
     }
 
-    public function save_gallery(Request $request,$id)
+    public function saveGallery(Request $request,$id)
 	{
 		$event = Event::findorfail($id);
 		if (auth()->guard('organization')->user()->id == $event->organization()->id) {
@@ -201,8 +194,6 @@ class EventController extends Controller
 		return redirect('/');
 
 	}
-
-
     /*
     |==========================================================================
     | Volunteers' Interaction with Event
