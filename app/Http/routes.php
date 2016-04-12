@@ -256,7 +256,6 @@ Route::group(['middleware' => ['web']], function () {
 | Events API Routes
 |--------------------------
 */
-
 //get a list of all organizations
 Route::get('api/events/list' , 'EventsAPIController@index');
 
