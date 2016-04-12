@@ -2,6 +2,10 @@
 
 @section('content')
 
+<link rel="stylesheet" type="text/css" src="../../../css/dataTables.css">
+<script type="text/javascript" charset="utf8" src="../../../js/dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="../../../js/view-organizations.js"></script>
+
 <table id="table_id" class="display">
     <thead>
         <tr>
