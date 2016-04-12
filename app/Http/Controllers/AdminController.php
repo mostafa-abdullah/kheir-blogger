@@ -29,6 +29,9 @@ class AdminController  extends Controller{
         return redirect()->action('VolunteerController@show', [$id]);
     }
 
+    /**
+     * admin can view organizations.
+     */
     public function adminViewOrganizations(){
       $organizations = Organization::all();
       return view('volunteer.adminPanel.view-organizations',compact('organizations'));

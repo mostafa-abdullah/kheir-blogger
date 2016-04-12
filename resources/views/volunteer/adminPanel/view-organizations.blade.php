@@ -6,7 +6,7 @@
 <script type="text/javascript" charset="utf8" src="../../../js/dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="../../../js/view-organizations.js"></script>
 
-<table id="table_id" class="display">
+<table id="table_id" class=".table display">
     <thead>
         <tr>
             <th>Name</th>
