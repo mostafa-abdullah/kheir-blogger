@@ -16,7 +16,7 @@ class VolunteerApiController extends Controller
     {
     	$volunteer = User::findOrFail($id);
 
-    	return response()->toJson(['organizationReviews' => $volunteer->organizationReviews()->get(), 'eventReviews' => $volunteer->eventReviews()->get(), 'followedEvents' => $volunteer->followedEvents()->get(), 'registeredEvents' => $volunteer->registeredEvents()->get(), 'user' => $volunteer]);
+    	return response()->json(['organizationReviews' => $volunteer->organizationReviews()->get(), 'eventReviews' => $volunteer->eventReviews()->get(), 'followedEvents' => $volunteer->followedEvents()->get(), 'registeredEvents' => $volunteer->registeredEvents()->get(), 'user' => $volunteer]);
     }
 
     public function update(VolunteerRequest $request, $id)
