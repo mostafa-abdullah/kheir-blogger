@@ -30,7 +30,7 @@ class AdminController  extends Controller{
     }
 
     public function adminViewOrganizations(){
-      $organization = Organization::all();
-      return view('volunteer.adminPanel.view-organizations',compact('organization'));
+      $organizations = Organization::all();
+      return view('volunteer.adminPanel.view-organizations',compact('organizations'));
     }
 }
