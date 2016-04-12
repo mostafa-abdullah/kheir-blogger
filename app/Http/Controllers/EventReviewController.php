@@ -98,6 +98,14 @@ class EventReviewController extends Controller
 
             if(Auth::user()->role == 5){
                 $event_reviews_reports = EventReviewReport::all();
+                foreach($event_reviews_reports as $event_reviews_report) {
+                    $event_review = EventReview::findOrFail($event_reviews_report->review_id);
+                    $event_id = $event_review->event_id;
+                    $user_id = $event_review->user_id ;
+                    $event_reviews_report->event_id = $event_id ;
+                    $event_reviews_report->user_id = $user_id;
+                }
+
                 return view('volunteer.validator.eventReviewsReports',compact('event_reviews_reports'));
 
             }
