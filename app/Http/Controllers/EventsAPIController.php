@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Event;
+use App\Photo;
 
 class EventsAPIController extends Controller
 {
@@ -24,10 +25,11 @@ class EventsAPIController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+          $event = Event::findOrFail($id);
         $event->posts = $event->posts()->get();
         $event->reviews = $event->reviews()->get();
         $event->questions = $event->questions()->get();
+        $event->photos = $event->photos()->get();
         return $event;
     }
 
