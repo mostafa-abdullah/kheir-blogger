@@ -236,6 +236,11 @@ Route::group(['middleware' => ['web']], function () {
      * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+
+    /**
+     * admin view organizations.
+     */
+    Route::get('admin/organizations', 'AdminController@adminViewOrganizations');
 });
 
 
@@ -250,4 +255,3 @@ Route::group(['middleware' => ['web']], function () {
 
     //show an organization, its events, reviews, subscribers
     Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
-
