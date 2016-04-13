@@ -45,7 +45,7 @@
           <li role="presentation" class="active" id="posts-tab"><a href="#">Posts</a></li>
           <li role="presentation" id="questions-tab"><a href="#">Questions</a></li>
           <li role="presentation" id="reviews-tab"><a href="#">Reviews</a></li>
-          <li role="presentation" id="reviews-tab"><a href="#">Gallery</a></li>
+          <li role="presentation" id="gallery-tab"><a href="#">Gallery</a></li>
        </ul>
 
         <div class="container panel-body">
@@ -90,6 +90,22 @@
                 @endforeach
                 @endif
             </div>
+
+            <div class="container panel-body">
+                <div class="tab-body" id="gallery">
+                    @if($photos->count()==0)
+                        <h3 class="alert-info">This Event has no gallery</h3>
+                    @else
+                        @foreach($photos as $photo)
+                            <img src="{{asset($photo->path)}}" style="" width="250" height="250">
+                            @if($photo->caption)
+                                <h1>{{$photo->caption}}</h1>
+                            @else
+                                <h1>......</h1>
+                            @endif
+                        @endforeach
+                </div>
+
         </div>
     </div>
 @stop
@@ -116,6 +132,13 @@
                 $("#reviews-tab").attr("class", "active");
                 $(".tab-body").css("display", "none");
                 $("#reviews").css("display", "block");
+            });
+
+            $("#gallery-tab").click(function(){
+                $("li.active").attr("class", null);
+                $("#gallery-tab").attr("class", "active");
+                $(".tab-body").css("display", "none");
+                $("#gallery").css("display", "block");
             });
         });
     </script>

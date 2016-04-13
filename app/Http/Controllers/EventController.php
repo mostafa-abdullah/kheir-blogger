@@ -60,11 +60,12 @@ class EventController extends Controller
         $posts = $event->posts;
         $questions = $event->questions()->answered()->get();
         $reviews = $event->reviews;
+		$photos=$event->photos()->orderBy('created_at', 'desc')->get();
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
 		return view('event.show',
-			compact('event', 'posts', 'questions', 'reviews', 'creator'));
+			compact('event', 'posts', 'questions', 'reviews', 'photos','creator'));
 	}
 
 	/**
@@ -189,7 +190,7 @@ class EventController extends Controller
 				$photo->save();
 				$counter++;
 			}
-			return 'Gallery view';
+			return redirect()->action('EventController@show', [$id]);
 		}
 		return redirect('/');
 
