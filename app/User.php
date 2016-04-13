@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     /**
      *	the posts which will viewed at dashboard
-     *	It contain the posts from the events of the user 
+     *	It contain the posts from the events of the user
      */
      public function interestingPosts($user_id)
      {
@@ -88,6 +88,15 @@ class User extends Authenticatable
                    -> where('volunteers_in_events.user_id', '=', $user_id)
                    ->select('event_posts.*');
      }
+     /**
+      * remove followed event from interestingEvents
+      */
+     public function FilterInterestingEvents($user_id)
+     {
+       $sub = $this->events->pluck('id')->toArray();
+       return $this->interestingEvents($user_id)->whereNotIn('id',$sub);
+     }
+
 
     public function followEvent($event_id)
     {

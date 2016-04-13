@@ -114,7 +114,9 @@ class VolunteerController extends Controller
         if(Auth::user()){
           $offset  = 2;
           $id = Auth::user()->id;
-          $events = Auth::user()->interestingEvents($id)->get();
+          // $attendedEvents =  Auth::user()->events;
+          $events = Auth::user()->FilterInterestingEvents($id)->get();
+          // $events = $events->diff($attendedEvents)->all();
           $posts  = Auth::user()->interestingPosts($id)->get();
           $data = array_merge($posts,$events);
           usort($data, array($this, "cmp"));
