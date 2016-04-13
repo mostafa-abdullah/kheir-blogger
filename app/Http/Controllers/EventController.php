@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GalleryCaptionRequest;
+use App\Http\Requests\GalleryRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 
 use App\Organization;
 use App\Notification;
 use App\Event;
+use App\Photo;
 
 use Carbon\Carbon;
 use Auth;
+use Input;
+use Validator;
+use Session;
 
 class EventController extends Controller
 {
@@ -124,12 +130,76 @@ class EventController extends Controller
 		return redirect('/');
 	}
 
-/*
-|==========================================================================
-| Volunteers' Interaction with Event
-|==========================================================================
-|
-*/
+    /**
+     * Event Gallery.
+     */
+
+	public function add_photos($id)
+	{
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id){
+			return view('event.gallery.upload',compact('event'));
+		}
+		return redirect('/');
+	}
+
+    public function save_photos(Request $request,$id)
+    {
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id) {
+			$input = $request->all();
+			$files = $input['images'];
+			$paths = array();
+
+			foreach ($files as $file) {
+				$rules = array('file' => 'required|image');
+				$validator = Validator::make(array('file' => $file), $rules);
+
+				if ($validator->passes()) {
+					$path = 'app/storage/db/gallery/' . $event->id;
+					$filename = md5($file->getClientOriginalName(), false);
+					$upload_success = $file->move($path, $filename);
+					if ($upload_success) {
+						array_push($paths, $path . '/' . $filename);
+					} else {
+						return redirect()->action('EventController@test');
+					}
+				} else {
+					return redirect()->action('EventController@test');
+				}
+			}
+
+
+			return view('event.gallery.add_caption', compact('paths','event'));
+		}
+		return redirect('/');
+    }
+
+    public function saveGallery(Request $request,$id)
+	{
+		$event = Event::findorfail($id);
+		if (auth()->guard('organization')->user()->id == $event->organization()->id) {
+			$input = $request->all();
+			$captions = $input['captions'];
+			$paths = $input['paths'];
+			$counter = 0;
+			foreach (array_combine($paths, $captions) as $path => $caption) {
+				$photo = $event->create_photo(Request::create($caption));
+				$photo->path = $path;
+				$photo->save();
+				$counter++;
+			}
+			return 'Gallery view';
+		}
+		return redirect('/');
+
+	}
+    /*
+    |==========================================================================
+    | Volunteers' Interaction with Event
+    |==========================================================================
+    |
+    */
 	public function follow($id)
 	{
 		Auth::user()->followEvent($id);

@@ -227,6 +227,12 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','EventController', ['except' => 'index']);
 
+    /**
+     * Event gallery
+     */
+    Route::get('event/{id}/add_photos','EventController@add_photos');
+    Route::post('event/{id}/add_caption','EventController@add_caption');
+    Route::post('event/{id}/saveGallery','EventController@saveGallery');
 /*
 |-----------------------
 | Admin Routes
@@ -236,6 +242,7 @@ Route::group(['middleware' => ['web']], function () {
      * Admin Assign  Validator.
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+
 
 
     Route::post('volunteer/{id}/ban','AdminController@adminBanUsers');
@@ -253,4 +260,5 @@ Route::group(['middleware' => ['web']], function () {
 
     //show an organization, its events, reviews, subscribers
     Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
+});
 
