@@ -231,4 +231,32 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','EventController', ['except' => 'index']);
+
+    /**
+     * Event gallery
+     */
+    Route::get('event/{id}/add_photos','EventController@add_photos');
+    Route::post('event/{id}/add_caption','EventController@add_caption');
+    Route::post('event/{id}/saveGallery','EventController@saveGallery');
+/*
+|-----------------------
+| Admin Routes
+|-----------------------
+*/
+    /**
+     * Admin Assign  Validator.
+     */
+    Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
+/*
+|--------------------------
+| Organizations API Routes
+|--------------------------
+*/
+
+    //get a list of all organizations
+    Route::get('api/organization/list' , 'OrganizationAPIController@index');
+
+    //show an organization, its events, reviews, subscribers
+    Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
 });
+
