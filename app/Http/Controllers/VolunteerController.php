@@ -112,16 +112,15 @@ class VolunteerController extends Controller
     public function showDashboard()
     {
         if(Auth::user()){
-          $numPerPage = 2;
-          $page = (Input::get('page')) ? Input::get('page') : 1;
+          $offset  = 2;
           $id = Auth::user()->id;
           $events = Auth::user()->interestingEvents($id)->get();
           $posts  = Auth::user()->interestingPosts($id)->get();
           $data = array_merge($posts,$events);
           usort($data, array($this, "cmp"));
-          $total = count($data);
-          $supdata=   new Paginator($data, $total, $numPerPage, $page, array("path" => '/dashboard'));
-          return view('volunteer.dashboard' , compact('supdata'));
+          $sz = count($data);
+
+          return view('volunteer.dashboard' , compact('sz','offset','data'));
         }else
           return redirect('/login');
 
