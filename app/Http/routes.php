@@ -256,8 +256,8 @@ Route::group(['middleware' => ['web']], function () {
 | Events API Routes
 |--------------------------
 */
-//get a list of all organizations
-Route::get('api/events/list' , 'EventsAPIController@index');
+//get a list of all events
+Route::get('api/events/list' , 'EventAPIController@index');
 
-//show an organization, its events, reviews, subscribers
-Route::get('api/event/{id}' , 'EventsAPIController@show');
+//show an event, its posts, reviews, questions and photos
+Route::get('api/event/{id}' , 'EventAPIController@show');

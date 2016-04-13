@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Photo;
 use App\Event;
 
-class EventsAPIController extends Controller
+class EventAPIController extends Controller
 {
 
     /**
