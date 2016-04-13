@@ -25,5 +25,12 @@ class VolunteerApiController extends Controller
         $volunteer->update($request->all());
         return redirect()->action('VolunteerApiController@show', [$id]);
     }
+
+    public function store(VolunteerRequest $request, $id)
+    {
+        $volunteer = User::findorfail($id);
+        $volunteer->update($request->all());
+        return redirect()->action('VolunteerApiController@show', [$id]);
+    }
 }
 	

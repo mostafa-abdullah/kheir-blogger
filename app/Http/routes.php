@@ -247,7 +247,7 @@ Route::group(['middleware' => ['web']], function () {
     * Volunteer API resource.
     */
     Route::resource('api/volunteer','VolunteerApiController', ['only' => [
-        'show', 'update'
+        'show', 'update', 'store'
     ]]);
 });
 
