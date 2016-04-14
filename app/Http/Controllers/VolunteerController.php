@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Organization;
+use App\Http\Services\VolunteerService;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
-
 use App\User;
-use App\Event;
-use App\Challenge;
-use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
@@ -17,8 +14,11 @@ use Auth;
 
 class VolunteerController extends Controller
 {
-    public function __construct(){
+    private $volunteerService;
 
+    public function __construct()
+    {
+        $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification',
             'createFeedback', 'storeFeedback', 'edit', 'update'
@@ -53,8 +53,7 @@ class VolunteerController extends Controller
     */
     public function update(VolunteerRequest $request, $id)
     {
-        $volunteer = User::findorfail($id);
-        $volunteer->update($request->all());
+        $this->volunteerService->update($request, $id);
         return redirect()->action('VolunteerController@show', [$id]);
     }
 
@@ -95,14 +94,47 @@ class VolunteerController extends Controller
      */
     public function storeFeedback(Request $request)
     {
-        $this->validate($request, [
-            'subject' => 'required|max:60',
-            'message' => 'required',
-        ]);
-        $feedback = new Feedback($request->all());
-        $feedback->user_id = Auth::user()->id;
-        $feedback->save();
-        \Session::flash('flash_message','feedback successfully sent!');
+        $this->volunteerService->storeFeedback($request);
         return redirect('/');
     }
+    /**
+     * [showDashboard  prepare the events and posts from database]
+     * @return [view]           [thr view of the page]
+     */
+    public function showDashboard()
+    {
+        if(Auth::user()){
+          $offset  = 2;
+          $id = Auth::user()->id;
+          // $attendedEvents =  Auth::user()->events;
+          $events = Auth::user()->FilterInterestingEvents($id)->get();
+          // $events = $events->diff($attendedEvents)->all();
+          $posts  = Auth::user()->interestingPosts($id)->get();
+          $data = array_merge($posts,$events);
+          usort($data, array($this, "cmp"));
+          $sz = count($data);
+
+          return view('volunteer.dashboard' , compact('sz','offset','data'));
+        }else
+          return redirect('/login');
+
+
+    }
+    /**
+     * [cmp comparing method for the sort]
+     * @param  [type] $record1 [first record in data array]
+     * @param  [type] $record2 [second record in data array]
+     * @return [type]          [signal]
+     */
+    public function cmp($record1, $record2)
+     {
+         if ($record1->updated_at == $record2->updated_at) {
+             return 0;
+         }
+         return ($record1->updated_at > $record2->updated_at) ? -1 : 1;
+     }
+
+
+
+
 }
