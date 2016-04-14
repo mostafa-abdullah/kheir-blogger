@@ -227,6 +227,12 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','EventController', ['except' => 'index']);
 
+    /**
+     * Event gallery
+     */
+    Route::get('event/{id}/add_photos','EventController@add_photos');
+    Route::post('event/{id}/add_caption','EventController@add_caption');
+    Route::post('event/{id}/saveGallery','EventController@saveGallery');
 /*
 |-----------------------
 | Admin Routes
@@ -237,17 +243,44 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 
+
 /*
 |-----------------------
-| API Routes
+| Volunteer API Routes
 |-----------------------
 */
 
+    Route::post('api/feedback' , 'API\VolunteerAPIController@storeFeedback');
     /**
     * Volunteer API resource.
     */
-    Route::resource('api/volunteer','VolunteerApiController', ['only' => [
-        'show', 'update', 'store'
+    Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
+        'show', 'update',
     ]]);
-});
 
+
+
+/*
+|--------------------------
+| Organizations API Routes
+|--------------------------
+*/
+
+    //get a list of all organizations
+    Route::get('api/organization/list' , 'API\OrganizationAPIController@index');
+
+    //show an organization, its events, reviews, subscribers
+    Route::get('api/organization/{id}' , 'API\OrganizationAPIController@show');
+
+
+/*
+|--------------------------
+| Events API Routes
+|--------------------------
+*/
+    //get a list of all events
+    Route::get('api/events/list' , 'API\EventAPIController@index');
+
+    //show an event, its posts, reviews, questions and photos
+    Route::get('api/event/{id}' , 'API\EventAPIController@show');
+});
