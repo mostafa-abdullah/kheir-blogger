@@ -244,6 +244,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 
 
+
+    Route::post('volunteer/{id}/ban','AdminController@adminBanUsers');
+
+
 /*
 |-----------------------
 | Volunteer API Routes
@@ -257,7 +261,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
     ]]);
-
 
 
 /*
