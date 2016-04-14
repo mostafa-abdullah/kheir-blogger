@@ -4,9 +4,9 @@
 
     <h1>Add caption to your images</h1>
 
-    {!! Form::model($paths, array( 'method' => 'POST','action' =>array('EventController@saveGallery',$event->id))) !!}
+    {!! Form::model($paths, array( 'method' => 'POST','action' =>array('EventController@test2'))) !!}
     @foreach($paths as $path)
-        <img src="{{asset($path)}}" style="" width="250" height="250">
+        <img src="{{asset($path)}}" class="img-responsive" width="300" height="200">
         <div class="form-group">
             {!! Form::label('caption','Caption:')!!}
             {!! Form::textArea('captions[]',null,array('class' => 'form-control'))!!}

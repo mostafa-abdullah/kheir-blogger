@@ -253,5 +253,9 @@ Route::group(['middleware' => ['web']], function () {
 
     //show an organization, its events, reviews, subscribers
     Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
+
+    Route::get('test','EventController@test');
+    Route::post('test1','EventController@test1');
+    Route::post('test2','EventController@test2');
 });
 
