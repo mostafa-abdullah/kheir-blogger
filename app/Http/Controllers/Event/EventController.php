@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GalleryCaptionRequest;
 use App\Http\Requests\GalleryRequest;
 use Illuminate\Http\Request;

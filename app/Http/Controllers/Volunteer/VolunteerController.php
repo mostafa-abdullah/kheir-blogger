@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Volunteer;
 
+use App\Http\Controllers\Controller;
 use App\Http\Services\VolunteerService;
 
 use Illuminate\Http\Request;

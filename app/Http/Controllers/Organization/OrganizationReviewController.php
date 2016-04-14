@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Organization;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Requests\OrganizationReviewRequest;
 
