@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Organization;
+use App\Http\Services\VolunteerService;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
 
 use App\User;
-use App\Event;
-use App\Challenge;
-use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
@@ -17,8 +15,11 @@ use Auth;
 
 class VolunteerController extends Controller
 {
-    public function __construct(){
+    private $volunteerService;
 
+    public function __construct()
+    {
+        $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification',
             'createFeedback', 'storeFeedback', 'edit', 'update'
@@ -53,8 +54,7 @@ class VolunteerController extends Controller
     */
     public function update(VolunteerRequest $request, $id)
     {
-        $volunteer = User::findorfail($id);
-        $volunteer->update($request->all());
+        $this->volunteerService->update($request, $id);
         return redirect()->action('VolunteerController@show', [$id]);
     }
 
@@ -95,14 +95,7 @@ class VolunteerController extends Controller
      */
     public function storeFeedback(Request $request)
     {
-        $this->validate($request, [
-            'subject' => 'required|max:60',
-            'message' => 'required',
-        ]);
-        $feedback = new Feedback($request->all());
-        $feedback->user_id = Auth::user()->id;
-        $feedback->save();
-        \Session::flash('flash_message','feedback successfully sent!');
+        $this->volunteerService->storeFeedback($request);
         return redirect('/');
     }
 }
