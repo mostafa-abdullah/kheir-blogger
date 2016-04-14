@@ -6,7 +6,6 @@ use App\Http\Services\VolunteerService;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
-
 use App\User;
 
 use Carbon\Carbon;
@@ -98,4 +97,44 @@ class VolunteerController extends Controller
         $this->volunteerService->storeFeedback($request);
         return redirect('/');
     }
+    /**
+     * [showDashboard  prepare the events and posts from database]
+     * @return [view]           [thr view of the page]
+     */
+    public function showDashboard()
+    {
+        if(Auth::user()){
+          $offset  = 2;
+          $id = Auth::user()->id;
+          // $attendedEvents =  Auth::user()->events;
+          $events = Auth::user()->FilterInterestingEvents($id)->get();
+          // $events = $events->diff($attendedEvents)->all();
+          $posts  = Auth::user()->interestingPosts($id)->get();
+          $data = array_merge($posts,$events);
+          usort($data, array($this, "cmp"));
+          $sz = count($data);
+
+          return view('volunteer.dashboard' , compact('sz','offset','data'));
+        }else
+          return redirect('/login');
+
+
+    }
+    /**
+     * [cmp comparing method for the sort]
+     * @param  [type] $record1 [first record in data array]
+     * @param  [type] $record2 [second record in data array]
+     * @return [type]          [signal]
+     */
+    public function cmp($record1, $record2)
+     {
+         if ($record1->updated_at == $record2->updated_at) {
+             return 0;
+         }
+         return ($record1->updated_at > $record2->updated_at) ? -1 : 1;
+     }
+
+
+
+
 }

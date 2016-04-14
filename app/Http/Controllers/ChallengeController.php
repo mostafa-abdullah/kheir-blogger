@@ -11,6 +11,11 @@ use Auth;
 
 class ChallengeController extends Controller
 {
+
+
+
+
+
     public function __construct()
     {
         $this->middleware('auth_volunteer');
