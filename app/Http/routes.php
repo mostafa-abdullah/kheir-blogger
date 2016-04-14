@@ -255,3 +255,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
 });
 
+/*
+|--------------------------
+| Events API Routes
+|--------------------------
+*/
+//get a list of all events
+Route::get('api/events/list' , 'EventAPIController@index');
+
+//show an event, its posts, reviews, questions and photos
+Route::get('api/event/{id}' , 'EventAPIController@show');
