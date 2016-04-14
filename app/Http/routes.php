@@ -233,9 +233,9 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event Gallery
      */
-    Route::get('event/{id}/add_photos','Event\EventController@add_photos');
-    Route::post('event/{id}/add_caption','Event\EventController@add_caption');
-    Route::post('event/{id}/saveGallery','Event\EventController@saveGallery');
+    Route::get('event/{id}/gallery/upload','Event\EventGalleryController@add');
+    Route::post('event/{id}/gallery/upload','Event\EventGalleryController@upload');
+    Route::post('event/{id}/gallery','Event\EventGalleryController@store');
 
     /**
      * Event Reviewing.
