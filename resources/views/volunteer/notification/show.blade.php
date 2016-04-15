@@ -5,14 +5,14 @@
         @if (!count($newNotifications))
             <h1>No new notifications</h1>
         @else
-            <h1>Your new notifications:-</h1>
+            <h1>Your new notifications</h1>
             <ul>
                 @foreach($newNotifications as $notification)
                     <li>
                         <div>
                             <a href="{{ url($notification->link) }}">{{ $notification->description }}</a>
                             <br/>
-                            {{ $notification->date_time }}
+                            {{ $notification->created_at }}
                             <br/>
                         </div>
                         <br/>
@@ -29,9 +29,9 @@
                 <li>
                     <div>
                         <a href="{{ url($notification->link) }}">{{ $notification->description }}</a>
-                        <br/>
-                        {{ $notification->date_time }}
-                        <br/>
+
+                        {{ $notification->created_at }}
+
                         <button class="btn btn-secondary" name="{{ $notification->id}}" type="button">mark as unread</button>
                     </div>
                     <br/>

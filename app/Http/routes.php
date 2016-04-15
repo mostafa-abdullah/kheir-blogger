@@ -216,7 +216,6 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event Attendance Confirmation.
      */
-    Route::get('event/{id}/confirm' , 'Event\EventController@confirm');
     Route::get('event/{id}/attend' , 'Event\EventController@attend');
     Route::get('event/{id}/unattend' , 'Event\EventController@unattend');
 
@@ -249,7 +248,6 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','Event\EventController', ['except' => 'index']);
-
 
 /*
 |==========================================================================

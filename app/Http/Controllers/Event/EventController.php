@@ -57,14 +57,21 @@ class EventController extends Controller
 	public function show($id)
 	{
         $event = Event::findOrFail($id);
-        $posts = $event->posts;
+        $posts = $event->posts()->latest()->get();
         $questions = $event->questions()->answered()->get();
         $reviews = $event->reviews;
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
+		$volunteerState = 0;
+		if(Auth::user())
+		{
+			$record = Auth::user()->events()->find($id);
+			if($record)
+				$volunteerState = $record->pivot->type;
+		}
 		return view('event.show',
-			compact('event', 'posts', 'questions', 'reviews', 'creator'));
+			compact('event', 'posts', 'questions', 'reviews', 'creator', 'volunteerState'));
 	}
 
 	/**
@@ -160,13 +167,6 @@ class EventController extends Controller
 	{
 		Auth::user()->unregisterEvent($id);
 		return redirect()->action('Event\EventController@show', [$id]);
-	}
-
-	public function confirm($id)
-	{
-		$event = Auth::user()->registeredEvents()->findOrFail($id);
-		if($event->timing < carbon::now())
-			return view('event.confirm', compact('id'));
 	}
 
 	public function attend($id)

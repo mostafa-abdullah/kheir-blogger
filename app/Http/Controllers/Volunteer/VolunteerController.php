@@ -21,7 +21,7 @@ class VolunteerController extends Controller
     {
         $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
-            'showNotifications', 'unreadNotification',
+            'showNotifications', 'unreadNotification', 'showDashboard',
             'createFeedback', 'storeFeedback', 'edit', 'update'
         ]]);
     }
@@ -55,7 +55,7 @@ class VolunteerController extends Controller
     public function update(VolunteerRequest $request, $id)
     {
         $this->volunteerService->update($request, $id);
-        return redirect()->action('VolunteerController@show', [$id]);
+        return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
     /**
@@ -99,44 +99,33 @@ class VolunteerController extends Controller
         $this->volunteerService->storeFeedback($request);
         return redirect('/');
     }
+
     /**
-     * [showDashboard  prepare the events and posts from database]
-     * @return [view]           [thr view of the page]
+     * Shows the logged-in volunteer's dashboard
+     * @return [view]           [the dashboard view]
      */
     public function showDashboard()
     {
-        if(Auth::user()){
-          $offset  = 2;
-          $id = Auth::user()->id;
-          // $attendedEvents =  Auth::user()->events;
-          $events = Auth::user()->FilterInterestingEvents($id)->get();
-          // $events = $events->diff($attendedEvents)->all();
-          $posts  = Auth::user()->interestingPosts($id)->get();
-          $data = array_merge($posts,$events);
-          usort($data, array($this, "cmp"));
-          $sz = count($data);
-
-          return view('volunteer.dashboard' , compact('sz','offset','data'));
-        }else
-          return redirect('/login');
-
-
+        $offset  = 2;
+        $id = Auth::user()->id;
+        $events = Auth::user()->FilterInterestingEvents($id)->get();
+        $posts  = Auth::user()->interestingPosts($id)->get();
+        $data = array_merge($posts, $events);
+        usort($data, array($this, "compare"));
+        $size = count($data);
+        return view('volunteer.dashboard' , compact('size','offset','data'));
     }
+
     /**
-     * [cmp comparing method for the sort]
+     * Comparator used for sorting events and posts
      * @param  [type] $record1 [first record in data array]
      * @param  [type] $record2 [second record in data array]
      * @return [type]          [signal]
      */
-    public function cmp($record1, $record2)
-     {
-         if ($record1->updated_at == $record2->updated_at) {
+    public function compare($record1, $record2)
+    {
+         if ($record1->updated_at == $record2->updated_at)
              return 0;
-         }
          return ($record1->updated_at > $record2->updated_at) ? -1 : 1;
-     }
-
-
-
-
+    }
 }

@@ -71,38 +71,6 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Event','volunteers_in_events')
                     ->withTimestamps()->withPivot('type');
     }
-    /**
-     * [events description]
-     * @return [collection] [event from folowed organization]
-     */
-    public function interestingEvents($user_id)
-    {
-      return DB::table('volunteers_subscribe_organizations')
-                  ->join('events', 'volunteers_subscribe_organizations.organization_id', '=', 'events.organization_id')
-                  -> where('volunteers_subscribe_organizations.user_id', '=', $user_id)
-                  ->select('events.*');
-    }
-
-    /**
-     *	the posts which will viewed at dashboard
-     *	It contain the posts from the events of the user
-     */
-     public function interestingPosts($user_id)
-     {
-       return DB::table('volunteers_in_events')
-                   ->join('event_posts', 'volunteers_in_events.event_id', '=', 'event_posts.event_id')
-                   -> where('volunteers_in_events.user_id', '=', $user_id)
-                   ->select('event_posts.*');
-     }
-     /**
-      * remove followed event from interestingEvents
-      */
-     public function FilterInterestingEvents($user_id)
-     {
-       $sub = $this->events->pluck('id')->toArray();
-       return $this->interestingEvents($user_id)->whereNotIn('id',$sub);
-     }
-
 
     public function followEvent($event_id)
     {
@@ -210,5 +178,43 @@ class User extends Authenticatable
     public function previousYearsChallenges()
     {
         return $this->challenges()->previousYears();
+    }
+
+
+/*
+|======================================
+| Volunteer Dashboard
+|======================================
+*/
+
+    /**
+    * Events of subscribed organizations
+    */
+    public function interestingEvents($user_id)
+    {
+        return DB::table('volunteers_subscribe_organizations')
+              ->join('events', 'volunteers_subscribe_organizations.organization_id', '=', 'events.organization_id')
+              -> where('volunteers_subscribe_organizations.user_id', '=', $user_id)
+              ->select('events.*');
+    }
+
+    /**
+    * Posts of followed/registered/attended events.
+    */
+    public function interestingPosts($user_id)
+    {
+        return DB::table('volunteers_in_events')
+               ->join('event_posts', 'volunteers_in_events.event_id', '=', 'event_posts.event_id')
+               -> where('volunteers_in_events.user_id', '=', $user_id)
+               ->select('event_posts.*');
+    }
+
+    /**
+    * Remove followed event from interestingEvents
+    */
+    public function FilterInterestingEvents($user_id)
+    {
+        $sub = $this->events->pluck('id')->toArray();
+        return $this->interestingEvents($user_id)->whereNotIn('id', $sub);
     }
 }

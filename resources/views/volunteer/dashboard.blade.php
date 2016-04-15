@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="container">
+  <div class="container dashboard" style="display:none">
      <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-6">
@@ -21,7 +21,7 @@
                          </div>
                       </div>
                    </div>
-                   <div class="panel-body">{{$record->description}}<a href="#">subscribe</a> </div>
+                   <div class="panel-body">{{$record->description}}  <a href="#">subscribe</a> </div>
                 </div>
               @else
              <div class="panel">
@@ -37,7 +37,7 @@
                       </div>
                    </div>
                 </div>
-                <div class="panel-body">{{$record->description}}<a href="#">subscribe</a> </div>
+                <div class="panel-body">{{$record->description}}  <a href="#">subscribe</a> </div>
              </div>
             @endif
           @endforeach
@@ -51,19 +51,22 @@
   </div>
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script>
-  var sz = {{$sz}};
-  var offset = {{$offset}};
-  var com = offset;
-  $('.feed-box').children().hide();
-  $('.feed-box').children().slice(0,com).show();
-  $(".see-more").click(function(){ // click event for load more
-            com+=offset;
-            $('.feed-box').children().slice(0,com).show();
-            if(com>=sz){ // check if any hidden divs
-               $(".see-more").replaceWith("There is no more"); // if there are none left
-            }
+  $(document).ready(function(){
+    var size = {{$size}};
+    var offset = {{$offset}};
+    var com = offset;
+    $('.feed-box').children().hide();
+    $('.feed-box').children().slice(0,com).show();
+    $(".see-more").click(function(){ // click event for load more
+              com+=offset;
+              $('.feed-box').children().slice(0,com).show();
+              if(com>=size){ // check if any hidden divs
+                 $(".see-more").replaceWith("There is no more"); // if there are none left
+              }
 
-         });
+           });
+    $(".dashboard").show();
+  });
   </script>
 
 

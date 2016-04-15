@@ -56,8 +56,7 @@ class OrganizationController extends Controller
             else
                 $state = 3;
         }
-        $events=$organization->events();
-        return view('organization.show',compact('organization','state','events', 'blocked'));
+        return view('organization.show',compact('organization', 'state', 'blocked'));
     }
 
     /**
