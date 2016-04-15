@@ -228,7 +228,7 @@ Route::group(['middleware' => ['web']], function () {
      * Event Question.
      */
     Route::get('event/{id}/question/answer', 'Event\EventQuestionController@viewUnansweredQuestions');
-    Route::post('event/{id}/question/{q_id}/answer', 'Event\EventQuestionController@answer');
+    Route::post('event/{id}/question/{question}/answer', 'Event\EventQuestionController@answer');
     Route::resource('event/{id}/question', 'Event\EventQuestionController');
 
     /**

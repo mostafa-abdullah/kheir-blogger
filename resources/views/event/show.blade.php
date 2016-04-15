@@ -75,37 +75,14 @@
        </ul>
 
         <div class="container panel-body">
-            @include('event.post.index', ['posts' => $posts])
-
-            <div class="tab-body" id="questions" hidden>
-                @if($questions->count()==0)
-                    <h3 class="alert-info">This Event has no answered Questions</h3>
-                @else
-                @foreach($questions as $question)
-                    <ul>
-                        <li>{{$question->question_body .'?'}}</li>
-                        <h6>by {{\App\User::findOrFail($question->user_id)->name}}</h6>
-                         <h4>{{$question->answer}}</h4>
-                    </ul>
-                @endforeach
-                @endif
-            </div>
-
-            <div class="tab-body" id="reviews" hidden>
-                @if($reviews->count()==0)
-                    <h3 class="alert-info">This Event has no Reviews</h3>
-                @else
-                @foreach($reviews as $review)
-                    <div class="jumbotron">
-
-                        <h3>
-                            {{$review->review}}
-                        </h3>
-                            <h5>By {{\App\User::findOrFail($review->user_id)->name}}</h5>
-                    </div>
-                @endforeach
-                @endif
-            </div>
+            {{--  Event Posts --}}
+            @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
+            {{--  Event Questions --}}
+            @include('event.question.index', ['questions' => $event->questions()->answered()->get()])
+            {{--  Event Reviews --}}
+            @include('event.review.index', ['reviews' => $event->reviews])
+            {{--  Event Gallery --}}
+            {{--   TODO: Kojak  --}}
         </div>
     </div>
 @stop

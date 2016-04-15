@@ -57,9 +57,6 @@ class EventController extends Controller
 	public function show($id)
 	{
         $event = Event::findOrFail($id);
-        $posts = $event->posts()->latest()->get();
-        $questions = $event->questions()->answered()->get();
-        $reviews = $event->reviews;
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
@@ -71,7 +68,7 @@ class EventController extends Controller
 				$volunteerState = $record->pivot->type;
 		}
 		return view('event.show',
-			compact('event', 'posts', 'questions', 'reviews', 'creator', 'volunteerState'));
+			compact('event', 'creator', 'volunteerState'));
 	}
 
 	/**
