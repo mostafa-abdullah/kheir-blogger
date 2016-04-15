@@ -37,7 +37,7 @@ class EventQuestionController extends Controller
     {
         $question = Event::findOrFail($event_id)->questions()->findOrFail($question_id);
         if(!$question->answer)
-            return redirect()->action('EventController@show', [$event_id]);
+            return redirect()->action('Event\EventController@show', [$event_id]);
         return view('event.question.show', compact('question'));
     }
 
@@ -54,7 +54,7 @@ class EventQuestionController extends Controller
         $question->user_id = Auth::user()->id;
         Event::findOrFail($id)->questions()->save($question);
 
-        return redirect()->action('EventController@show', [$id]);
+        return redirect()->action('Event\EventController@show', [$id]);
     }
 
     public function edit($event_id, $question_id)
@@ -80,7 +80,7 @@ class EventQuestionController extends Controller
 		$event = $question->event()->first();
 
         if($event->organization()->id != auth()->guard('organization')->user()->id)
-			return redirect()->action('EventController@show', [$event_id])
+			return redirect()->action('Event\EventController@show', [$event_id])
 							 ->withErrors(['Permission' => 'You do not have Permission to answer this question']);
 
 		$question->answer = $request['answer'];
@@ -91,7 +91,7 @@ class EventQuestionController extends Controller
         $link = url("/event/".$question->event_id."question/".$question->id);
 		Notification::notify(array($question->user()->first()), 5, $event, $description, $link);
 
-		return redirect()->action('EventQuestionController@viewUnansweredQuestions', [$event_id]);
+		return redirect()->action('Event\EventQuestionController@viewUnansweredQuestions', [$event_id]);
     }
 
     public function viewUnansweredQuestions($event_id)
@@ -100,9 +100,9 @@ class EventQuestionController extends Controller
 		if(auth()->guard('organization')->user()->id == $event->organization_id)
 		{
         	$questions = $event->questions()->Unanswered()->get();
-        	return view("event.question.answer", compact('questions'));
+        	return view("event.question.answer", compact('questions', 'event'));
         }
-		return redirect()->action('EventController@show', [$event_id])
+		return redirect()->action('Event\EventController@show', [$event_id])
 						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
     }
 

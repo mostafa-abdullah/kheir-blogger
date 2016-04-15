@@ -15,6 +15,8 @@ class Organization extends Authenticatable implements CanResetPassword
         'name', 'email', 'password','bio','slogan','phone','location'
     ];
 
+    protected $hidden = ['password', 'remember_token'];
+    
     public function subscribers()
     {
       return $this->belongsToMany("App\User",

@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
-<header>
-	<title>Ask a Question</title>
-</header>
-
 @section('content')
-	<h1>Questions From volunteers</h1>
+	<h1>Questions From volunteers on <a href="/event/{{$event->id}}">{{ $event->name }}</a></h1>
 		<ul>
 			@foreach($questions as $question)
 				{!! Form::open(['action' => ['Event\EventQuestionController@answer', $question->event_id, $question->id]]) !!}

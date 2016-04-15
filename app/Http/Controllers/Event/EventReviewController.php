@@ -45,9 +45,9 @@ class EventReviewController extends Controller
     {
         $event = Event::findorfail($id);
         if(!$event->attendees()->find(Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
-        if($event->reviews()->where('user_id', Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
+            return redirect()->action('Event\EventController@show', [$id]);
+        if($event->reviews()->where('user_id', Auth::user()->id)->first())
+            return redirect()->action('Event\EventController@show', [$id]);
         return view ('event.review.create', compact('event'));
     }
 
@@ -60,7 +60,7 @@ class EventReviewController extends Controller
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
-          return redirect()->action('EventController@show', [$id]);
+          return redirect()->action('Event\EventController@show', [$id]);
     }
 
     /**
@@ -92,6 +92,6 @@ class EventReviewController extends Controller
         $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
         if(!$review->reportingUsers()->find(Auth::user()->id))
             Auth::user()->reportedEventReviews()->attach($review);
-        return redirect()->action('EventController@show', [$event_id]);
+        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 }

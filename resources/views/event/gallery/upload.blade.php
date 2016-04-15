@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1 class="well well-lg">Upload Photos to your event: {{$event->name}}</h1>
+    <h1 class="well well-lg">Upload Photos to your event: <a href="/event/{{$event->id}}">{{$event->name}}</a></h1>
     <div class="container">
         @if(isset($success))
             <div class="alert alert-success"> {{$success}} </div>

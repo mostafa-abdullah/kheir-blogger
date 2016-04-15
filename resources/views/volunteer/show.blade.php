@@ -62,13 +62,14 @@
             @endif
         </ul>
     </ul>
-        {{--check if the logged in user is admin to show the validation form --}}
-            @if( Auth::user()->role == 8)
-                    @include('volunteer.adminPanel.assign-validator')
-            @endif
 
-            @if( Auth::user()->role == 5)
-                    @include('volunteer.adminPanel.ban-user')
-            @endif
+    {{--check if the logged in user is admin/validator --}}
+    @if( Auth::user()->role >= 8)
+            @include('admin.assign-validator')
+    @endif
+
+    @if( Auth::user()->role >= 5)
+            @include('admin.ban-volunteer')
+    @endif
 
 @endsection

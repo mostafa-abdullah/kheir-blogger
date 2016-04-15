@@ -2,8 +2,9 @@
 
 @section('styling')
     <style media="screen">
-        #cancel-event{
+        .btn-event{
             float: right;
+            margin: 3px;
         }
     </style>
 @endsection
@@ -12,25 +13,51 @@
        <div class="panel-heading">
 
            <h1>
+               {{--  Cancel Event --}}
                @if($creator)
                  <form action="{{ url('event/'.$event->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
-
-                      <button type="submit" class="btn btn-danger" id="cancel-event">
-                      <i class="fa fa-trash"></i> Cancel
-                      </button>
+                      <button type="submit" class="btn btn-danger btn-event">Cancel</button>
                  </form>
+                 @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
+                @endif
+                {{--  Volunteer Interaction with events --}}
+                @if(Auth::user())
+                    @if($event->timing >= Carbon\Carbon::now())
+                        {{--  Follow --}}
+                        @if($volunteerState != 1)
+                            @include('event.partials.button', ['buttonText' => 'Follow', 'action' => 'follow'])
+                        @else
+                            @include('event.partials.button', ['buttonText' => 'Unfollow', 'action' => 'unfollow'])
+                        @endif
+                         {{-- Register  --}}
+                        @if($volunteerState != 2)
+                            @include('event.partials.button', ['buttonText' => 'Register', 'action' => 'register'])
+                        @else
+                            @include('event.partials.button', ['buttonText' => 'Unregister', 'action' => 'unregister'])
+                        @endif
+                    @else
+                        {{--  Confirm Attendance --}}
+                        @if($volunteerState == 2 || $volunteerState == 4)
+                            @include('event.partials.button', ['buttonText' => 'Attend', 'action' => 'attend'])
+                        @endif
+                        @if($volunteerState == 3)
+                            @include('event.partials.button', ['buttonText' => 'Unattend', 'action' => 'Unattend'])
+                        @endif
+                    @endif
                 @endif
             {{$event->name}}
                <small>
-                   @if($event->timing < Carbon\Carbon::now())
-                        This event was on {{$event->timing}}
-                       ({{$event->timing->diffForHumans()}}).
-                   @else
-                        This event will be held on  {{$event->timing->format('Y-m-d')}}
-                        ({{$event->timing->diffForHumans()}}).
-                   @endif
+                   <h4>
+                       @if($event->timing < Carbon\Carbon::now())
+                            This event was on {{$event->timing}}
+                           ({{$event->timing->diffForHumans()}}).
+                       @else
+                            This event will be held on  {{$event->timing->format('Y-m-d')}}
+                            ({{$event->timing->diffForHumans()}}).
+                       @endif
+                   </h4>
                 </small>
             </h1>
        </div>
@@ -45,51 +72,19 @@
           <li role="presentation" class="active" id="posts-tab"><a href="#">Posts</a></li>
           <li role="presentation" id="questions-tab"><a href="#">Questions</a></li>
           <li role="presentation" id="reviews-tab"><a href="#">Reviews</a></li>
-          <li role="presentation" id="reviews-tab"><a href="#">Gallery</a></li>
+          <li role="presentation" id="gallery-tab"><a href="#">Gallery</a></li>
        </ul>
 
-        <div class="container panel-body">
-            <div class="tab-body" id="posts">
-                @if($posts->count()==0)
-                 <h3 class="alert-info">This Event has no posts</h3>
-                @else
-                 @foreach($posts as $post)
-                     <ul>
-                         <li>{{$post->description}}</li>
-                     </ul>
-                 @endforeach
-                @endif
-            </div>
-
-            <div class="tab-body" id="questions" hidden>
-                @if($questions->count()==0)
-                    <h3 class="alert-info">This Event has no answered Questions</h3>
-                @else
-                @foreach($questions as $question)
-                    <ul>
-                        <li>{{$question->question_body .'?'}}</li>
-                        <h6>by {{\App\User::findOrFail($question->user_id)->name}}</h6>
-                         <h4>{{$question->answer}}</h4>
-                    </ul>
-                @endforeach
-                @endif
-            </div>
-
-            <div class="tab-body" id="reviews" hidden>
-                @if($reviews->count()==0)
-                    <h3 class="alert-info">This Event has no Reviews</h3>
-                @else
-                @foreach($reviews as $review)
-                    <div class="jumbotron">
-
-                        <h3>
-                            {{$review->review}}
-                        </h3>
-                            <h5>By {{\App\User::findOrFail($review->user_id)->name}}</h5>
-                    </div>
-                @endforeach
-                @endif
-            </div>
+        <div class="panel-body">
+            {{--  Event Posts --}}
+            @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
+            {{--  Event Questions --}}
+            @include('event.question.index', ['questions' => $event->questions()->answered()->get()])
+            {{--  Event Reviews --}}
+            @include('event.review.index', ['reviews' => $event->reviews])
+            {{--  Event Gallery --}}
+            @include('event.gallery.index')
+            {{--   TODO: Kojak  --}}
         </div>
     </div>
 @stop
@@ -116,6 +111,13 @@
                 $("#reviews-tab").attr("class", "active");
                 $(".tab-body").css("display", "none");
                 $("#reviews").css("display", "block");
+            });
+
+            $("#gallery-tab").click(function(){
+                $("li.active").attr("class", null);
+                $("#gallery-tab").attr("class", "active");
+                $(".tab-body").css("display", "none");
+                $("#gallery").css("display", "block");
             });
         });
     </script>

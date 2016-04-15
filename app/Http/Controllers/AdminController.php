@@ -15,27 +15,37 @@ use Auth;
 
 class AdminController  extends Controller{
 
+    public function __construct()
+    {
+        $this->middleware('auth_admin', ['only' => ['assignValidator']]);
+        $this->middleware('auth_validator');
+    }
+
     /**
-     * admin can assign or unAssign validators.
+     * Admin can assign or unAssign validators.
      */
-    public function adminAssignValidator($id){
+    public function assignValidator($id)
+    {
         $volunteer = User::findorfail($id);
         if($volunteer->role == 5)
             $volunteer->role = 1 ;
         else
             $volunteer->role = 5 ;
-
         $volunteer->save();
-        return redirect()->action('VolunteerController@show', [$id]);
+        return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
-     public function adminBanUsers($id){
+    /**
+     * Validator can ban or unban volunteers.
+     */
+     public function banVolunteer($id)
+     {
         $volunteer = User::findorfail($id);
-            $volunteer->role = 0 ;
+        if($volunteer->role == 1)
+            $volunteer->role = 0;
+        else if($volunteer->role == 0)
+            $volunteer->role = 1;
         $volunteer->save();
-        return redirect()->action('VolunteerController@show', [$id]);
+        return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
-
-
-
 }
