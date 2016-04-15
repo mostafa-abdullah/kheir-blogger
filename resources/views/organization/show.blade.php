@@ -19,26 +19,50 @@
     <div class="jumbotron">
         <h1>{{$organization->name}}</h1>
         @if($state==3)
-             {!! Form::open(['action' => ['OrganizationController@subscribe',$organization->id],'method'=>'get']) !!}
+             {!! Form::open(['url' => '/organization/'.$organization->id.'/subscribe','method'=>'get']) !!}
              <div>
                 {!! Form::submit('Subscribe' , array('class' => 'vol-act btn btn-default' )) !!}
              </div>
              {!! Form::close() !!}
         @elseif($state==2)
-             {!! Form::open(['action' => ['OrganizationController@unsubscribe',$organization->id],'method'=>'get']) !!}
+             {!! Form::open(['url' => '/organization/'.$organization->id.'/unsubscribe','method'=>'get']) !!}
              <div>
                 {!! Form::submit('Unsubscribe' , array('class' => 'vol-act btn btn-default' )) !!}
              </div>
              {!! Form::close() !!}
         @endif
-        <p>Slogan: {{$organization->slogan}}</p>
         @if($state==2 || $state==3)
-            {!! Form::open(['action' => ['OrganizationController@recommend', $organization->id],'method'=>'get']) !!}
+            {!! Form::open(['url' => '/organization/'.$organization->id.'/recommend','method'=>'get']) !!}
             <div>
                 {!! Form::submit('Recommend' , array('class' => 'vol-act btn btn-default' )) !!}
             </div>
             {!! Form::close() !!}
         @endif
+        @if($state >= 2 && !$blocked)
+            {!! Form::open(['url' => '/organization/'.$organization->id.'/block','method'=>'get']) !!}
+            <div>
+                {!! Form::submit('Block' , array('class' => 'vol-act btn btn-default' )) !!}
+            </div>
+            {!! Form::close() !!}
+        @endif
+
+        @if($state >= 2 && $blocked)
+            {!! Form::open(['url' => '/organization/'.$organization->id.'/unblock','method'=>'get']) !!}
+            <div>
+                {!! Form::submit('Unblock' , array('class' => 'vol-act btn btn-default' )) !!}
+            </div>
+            {!! Form::close() !!}
+        @endif
+
+        @if(Auth::guard('organization')->id() == $organization->id)
+            {!! Form::open(['url' => '/organization/'.$organization->id.'/edit','method'=>'get']) !!}
+            <div>
+                {!! Form::submit('Edit Profile' , array('class' => 'vol-act btn btn-default' )) !!}
+            </div>
+            {!! Form::close() !!}
+        @endif
+
+        <p>Slogan: {{$organization->slogan}}</p>
         <p>Bio: {{$organization->bio}}</p>
         <p>Location: {{$organization->location}}</p>
         <p>Phone: {{$organization->phone}}</p>
@@ -59,7 +83,7 @@
                 <li>{{$organization->events[$i]->name}}</li>
             @endfor
             @if(count($organization->events) > 1)
-                    <a href="{{ action('EventController@index', [$organization->id])}}">View More >></a>
+                    <a href="/organization/{{$organization->id}}/events">View More >></a>
             @endif
 
         </ul>
@@ -70,7 +94,7 @@
                 <li>{{$organization->reviews[$i]->review}}, {{$organization->reviews[$i]->rate}}</li>
             @endfor
             @if(count($organization->reviews) > 3)
-                    <a href="{{ action('OrganizationReviewController@index', [$organization->id])}}">View More >></a>
+                    <a href="/organization/{{$organization->id}}/reviews">View More >></a>
             @endif
         </ul>
     </div>

@@ -21,7 +21,7 @@
        @endif
     </ul>
     @if ($can_update)
-        {!! Form::open(['action' => ['VolunteerController@edit',$volunteer->id],'method'=>'get']) !!}
+        {!! Form::open(['action' => ['Volunteer\VolunteerController@edit',$volunteer->id],'method'=>'get']) !!}
         <div>
            {!! Form::submit('Edit' , array('class' => 'vol-act btn btn-default' )) !!}
         </div>
@@ -34,7 +34,7 @@
             <li>{{ $volunteer->events[$i]->name }}</li>
         @endfor
         @if (count($volunteer->events) > 3)
-                <a href="{{ action('VolunteerController@viewEvents', [$volunteer->id])}}">
+                <a href="{{ action('Volunteer\VolunteerController@viewEvents', [$volunteer->id])}}">
                     View More >></a>
         @endif
     </ul>
@@ -47,7 +47,7 @@
                 <li>{{ $volunteer->eventReviews[$i]->review }}, {{  $volunteer->eventReviews[$i]->rate}}</li>
             @endfor
             @if (count($volunteer->eventReviews) > 3)
-                    <a href="{{ action('VolunteerController@viewReviews', [$volunteer->id])}}">View More >></a>
+                    <a href="{{ action('Volunteer\VolunteerController@viewReviews', [$volunteer->id])}}">View More >></a>
             @endif
 
         </ul>
