@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-@section('head')
 @section('content')
     <div class="panel panel-default">
 
@@ -46,18 +45,21 @@
                             </div>
                         </div>
                     </div>
-                        @foreach($photos as $photo)
-                        <div class="img">
+                    <div class="row" style=" max-width:100% ;display:block; height: auto">
+                    @foreach($photos as $photo)
+                            <div class="col-sm-4">
                             <a href="{{$photo->path}}" title="{{$photo->caption}}" data-gallery>
-                            <img src="{{$photo->path}}" class="thumbnail" width="300" height="200">
+                            <img src="{{$photo->path}}" class="thumbnail" style=" max-width:100% ;display:block; height: auto;">
                                </a>
-                        </div>
                     @if($photo->caption)
                                 <h1>{{$photo->caption}}</h1>
                             @else
                                 <h1>......</h1>
                             @endif
+                                </div>
                         @endforeach
+                    </div>
+
                 </div>
 
             </div>
