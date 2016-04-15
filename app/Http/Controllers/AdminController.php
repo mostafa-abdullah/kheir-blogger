@@ -48,7 +48,4 @@ class AdminController  extends Controller{
         $volunteer->save();
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
-
-
-
 }

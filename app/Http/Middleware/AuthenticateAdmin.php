@@ -18,7 +18,7 @@ class AuthenticateAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::user() || Auth::user() < 8) {
+        if (!Auth::user() || Auth::user()->role < 8) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {

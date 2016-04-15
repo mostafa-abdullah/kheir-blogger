@@ -7,7 +7,7 @@ use Auth;
 /**
  * Handles requests that are only allowed for validators.
  */
-class AuthenticateAdmin
+class AuthenticateValidator
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,7 @@ class AuthenticateAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::user() || Auth::user() < 5) {
+        if (!Auth::user() || Auth::user()->role < 5) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
