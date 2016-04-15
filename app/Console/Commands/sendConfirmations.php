@@ -68,7 +68,7 @@ class sendConfirmations extends Command
                 {
                     $description = "Confirm Attendance for ".$event->name;
                     Notification::notify($event_attendees, EVENT_TYPE_CONFIRM_ATTENDANCE,
-                                $event, $description, url("event/{$event->id}/confirm")); 
+                                $event, $description, "/event/{$event->id}"); 
                 }
 
             }

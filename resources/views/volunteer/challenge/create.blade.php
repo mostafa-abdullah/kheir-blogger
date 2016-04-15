@@ -5,7 +5,7 @@
     <h1>Challenge Yourself!</h1>
     <hr>
 
-    {!! Form::open(['action' => ['ChallengeController@store']]) !!}
+    {!! Form::open(['action' => ['Volunteer\ChallengeController@store']]) !!}
 
     <div class = "form-group">
         {!! Form::label('events' , 'How many events will you attend?') !!}

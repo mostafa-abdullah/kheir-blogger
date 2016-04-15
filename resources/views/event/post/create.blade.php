@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-{!! Form::open(['action' => ['EventPostController@store', $event_id]]) !!}
+{!! Form::open(['action' => ['Event\EventPostController@store', $event_id]]) !!}
 
 
 

@@ -16,5 +16,3 @@
             {!! Form::close() !!} 
     @include('errors')
 @stop
-
-

@@ -2,8 +2,9 @@
 
 @section('styling')
     <style media="screen">
-        #cancel-event{
+        .btn-event{
             float: right;
+            margin: 3px;
         }
     </style>
 @endsection
@@ -12,25 +13,51 @@
        <div class="panel-heading">
 
            <h1>
+               {{--  Cancel Event --}}
                @if($creator)
                  <form action="{{ url('event/'.$event->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
-
-                      <button type="submit" class="btn btn-danger" id="cancel-event">
-                      <i class="fa fa-trash"></i> Cancel
-                      </button>
+                      <button type="submit" class="btn btn-danger btn-event">Cancel</button>
                  </form>
+                 @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
+                @endif
+                {{--  Volunteer Interaction with events --}}
+                @if(Auth::user())
+                    @if($event->timing >= Carbon\Carbon::now())
+                        {{--  Follow --}}
+                        @if($volunteerState != 1)
+                            @include('event.partials.button', ['buttonText' => 'Follow', 'action' => 'follow'])
+                        @else
+                            @include('event.partials.button', ['buttonText' => 'Unfollow', 'action' => 'unfollow'])
+                        @endif
+                         {{-- Register  --}}
+                        @if($volunteerState != 2)
+                            @include('event.partials.button', ['buttonText' => 'Register', 'action' => 'register'])
+                        @else
+                            @include('event.partials.button', ['buttonText' => 'Unregister', 'action' => 'unregister'])
+                        @endif
+                    @else
+                        {{--  Confirm Attendance --}}
+                        @if($volunteerState == 2 || $volunteerState == 4)
+                            @include('event.partials.button', ['buttonText' => 'Attend', 'action' => 'attend'])
+                        @endif
+                        @if($volunteerState == 3)
+                            @include('event.partials.button', ['buttonText' => 'Unattend', 'action' => 'Unattend'])
+                        @endif
+                    @endif
                 @endif
             {{$event->name}}
                <small>
-                   @if($event->timing < Carbon\Carbon::now())
-                        This event was on {{$event->timing}}
-                       ({{$event->timing->diffForHumans()}}).
-                   @else
-                        This event will be held on  {{$event->timing->format('Y-m-d')}}
-                        ({{$event->timing->diffForHumans()}}).
-                   @endif
+                   <h4>
+                       @if($event->timing < Carbon\Carbon::now())
+                            This event was on {{$event->timing}}
+                           ({{$event->timing->diffForHumans()}}).
+                       @else
+                            This event will be held on  {{$event->timing->format('Y-m-d')}}
+                            ({{$event->timing->diffForHumans()}}).
+                       @endif
+                   </h4>
                 </small>
             </h1>
        </div>
@@ -106,6 +133,16 @@
                         @endforeach
                 </div>
 
+        <div class="panel-body">
+            {{--  Event Posts --}}
+            @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
+            {{--  Event Questions --}}
+            @include('event.question.index', ['questions' => $event->questions()->answered()->get()])
+            {{--  Event Reviews --}}
+            @include('event.review.index', ['reviews' => $event->reviews])
+            {{--  Event Gallery --}}
+            @include('event.gallery.index')
+            {{--   TODO: Kojak  --}}
         </div>
     </div>
 @stop
