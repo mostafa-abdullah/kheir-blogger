@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Volunteer;
 
+use App\Http\Controllers\Controller;
 use App\Http\Services\VolunteerService;
 
 use Illuminate\Http\Request;
@@ -62,13 +63,14 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-        $notifications = Auth::user()->notifications()->unread()->get();
-        foreach($notifications as $notification)
+        $oldNotifications = Auth::user()->notifications()->read()->get();
+        $newNotifications = Auth::user()->notifications()->unread()->get();
+        foreach($newNotifications as $notification)
         {
             $notification->pivot->read = 1;
             $notification->push();
         }
-        return view('volunteer.notification.show', compact('notifications'));
+        return view('volunteer.notification.show', compact('newNotifications', 'oldNotifications'));
     }
 
     /**

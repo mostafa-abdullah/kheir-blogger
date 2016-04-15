@@ -45,6 +45,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Recommendation');
     }
 
+    public function blockedOrganizations()
+    {
+        return $this->belongsToMany('App\Organization','volunteers_block_organizations')
+                    ->withTimestamps();
+    }
+
     public function organizationReviews()
     {
         return $this->hasMany('App\OrganizationReview');

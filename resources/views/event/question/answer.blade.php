@@ -8,7 +8,7 @@
 	<h1>Questions From volunteers</h1>
 		<ul>
 			@foreach($questions as $question)
-				{!! Form::open(['action' => ['EventQuestionController@answer', $question->event_id, $question->id]]) !!}
+				{!! Form::open(['action' => ['Event\EventQuestionController@answer', $question->event_id, $question->id]]) !!}
 				<div class="container">
 					<h4>{{ $question->question }}</h4>
 					<p>{{ $question->question_body }}</p>

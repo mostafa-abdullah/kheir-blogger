@@ -4,7 +4,7 @@
     <h1>Did you attend the event?</h1>
 
     <p>
-        <a href="{{ action('EventController@attend', [$id])}}">Yes</a>
-        <a href="{{ action('EventController@unattend', [$id])}}">No</a>
+        <a href="{{ action('Event\EventController@attend', [$id])}}">Yes</a>
+        <a href="{{ action('Event\EventController@unattend', [$id])}}">No</a>
     </p>
 @endsection
