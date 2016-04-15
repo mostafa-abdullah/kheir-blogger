@@ -286,7 +286,6 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('api/organization/{id}' , 'OrganizationAPIController@show');
     Route::get('api/organization/{id}' , 'API\OrganizationAPIController@show');
-    
 /*
 |--------------------------
 | Events API Routes
