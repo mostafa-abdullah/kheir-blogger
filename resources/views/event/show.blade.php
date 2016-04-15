@@ -20,29 +20,30 @@
                       {!! method_field('DELETE') !!}
                       <button type="submit" class="btn btn-danger btn-event">Cancel</button>
                  </form>
+                 @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
                 @endif
                 {{--  Volunteer Interaction with events --}}
                 @if(Auth::user())
                     @if($event->timing >= Carbon\Carbon::now())
                         {{--  Follow --}}
                         @if($volunteerState != 1)
-                            @include('event.partials.button', ['buttonText' => 'Follow', 'action' => 'follow', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Follow', 'action' => 'follow'])
                         @else
-                            @include('event.partials.button', ['buttonText' => 'Unfollow', 'action' => 'unfollow', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Unfollow', 'action' => 'unfollow'])
                         @endif
                          {{-- Register  --}}
                         @if($volunteerState != 2)
-                            @include('event.partials.button', ['buttonText' => 'Register', 'action' => 'register', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Register', 'action' => 'register'])
                         @else
-                            @include('event.partials.button', ['buttonText' => 'Unregister', 'action' => 'unregister', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Unregister', 'action' => 'unregister'])
                         @endif
                     @else
                         {{--  Confirm Attendance --}}
                         @if($volunteerState == 2 || $volunteerState == 4)
-                            @include('event.partials.button', ['buttonText' => 'Attend', 'action' => 'attend', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Attend', 'action' => 'attend'])
                         @endif
                         @if($volunteerState == 3)
-                            @include('event.partials.button', ['buttonText' => 'Unattend', 'action' => 'Unattend', 'event_id' => $event->id])
+                            @include('event.partials.button', ['buttonText' => 'Unattend', 'action' => 'Unattend'])
                         @endif
                     @endif
                 @endif
@@ -71,10 +72,10 @@
           <li role="presentation" class="active" id="posts-tab"><a href="#">Posts</a></li>
           <li role="presentation" id="questions-tab"><a href="#">Questions</a></li>
           <li role="presentation" id="reviews-tab"><a href="#">Reviews</a></li>
-          <li role="presentation" id="reviews-tab"><a href="#">Gallery</a></li>
+          <li role="presentation" id="gallery-tab"><a href="#">Gallery</a></li>
        </ul>
 
-        <div class="container panel-body">
+        <div class="panel-body">
             {{--  Event Posts --}}
             @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
             {{--  Event Questions --}}
@@ -82,6 +83,7 @@
             {{--  Event Reviews --}}
             @include('event.review.index', ['reviews' => $event->reviews])
             {{--  Event Gallery --}}
+            @include('event.gallery.index')
             {{--   TODO: Kojak  --}}
         </div>
     </div>
@@ -109,6 +111,13 @@
                 $("#reviews-tab").attr("class", "active");
                 $(".tab-body").css("display", "none");
                 $("#reviews").css("display", "block");
+            });
+
+            $("#gallery-tab").click(function(){
+                $("li.active").attr("class", null);
+                $("#gallery-tab").attr("class", "active");
+                $(".tab-body").css("display", "none");
+                $("#gallery").css("display", "block");
             });
         });
     </script>

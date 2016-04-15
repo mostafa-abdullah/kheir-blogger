@@ -46,7 +46,7 @@ class EventReviewController extends Controller
         $event = Event::findorfail($id);
         if(!$event->attendees()->find(Auth::user()->id))
             return redirect()->action('Event\EventController@show', [$id]);
-        if($event->reviews()->where('user_id', Auth::user()->id))
+        if($event->reviews()->where('user_id', Auth::user()->id)->first())
             return redirect()->action('Event\EventController@show', [$id]);
         return view ('event.review.create', compact('event'));
     }

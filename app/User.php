@@ -118,8 +118,8 @@ class User extends Authenticatable
 
     public function attendEvent($event_id)
     {
-        $event = $this->registeredEvents()->find($event_id);
-        if($event)
+        $event = $this->events()->find($event_id);
+        if($event->pivot->type == 2 || $event->pivot->type == 4)
         {
             $record = $event->pivot;
             $record->type = 3;
