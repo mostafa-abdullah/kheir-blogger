@@ -288,9 +288,13 @@ Route::group(['middleware' => ['web']], function () {
     /**
     * Organization API resource.
     */
+    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
+
     Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
         'index', 'show',
     ]]);
+    Route::get('api/organization/{organization_id}/{review_id}' ,
+     'API\OrganizationReviewAPIController@report');
 
     /*
     |-----------------------
@@ -317,10 +321,23 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-    * Organization API resource.
+    * Event Review route
+    */
+    Route::post('api/review/event' , 'API\EventReviewAPIController@store');
+
+    /**
+    * Event API resource.
     */
     Route::resource('api/event','API\EventAPIController', ['only' => [
-        'index', 'show',
+        'index', 'show'
     ]]);
+
+    Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
+    Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
+    Route::get('api/event/register/{id}' , 'API\EventAPIController@register');
+    Route::get('api/event/unregister/{id}' , 'API\EventAPIController@unregister');
+    Route::get('api/event/attend/{id}' , 'API\EventAPIController@attend');
+    Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
+    Route::get('api/event/{event_id}/report/{review_id}' , 'API\EventAPIController@report');
 
 });

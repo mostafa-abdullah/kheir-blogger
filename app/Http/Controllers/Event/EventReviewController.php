@@ -14,8 +14,10 @@ use Auth;
 
 class EventReviewController extends Controller
 {
+    private $eventService;
     public function __construct()
     {
+        $this->eventService = new EventService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
@@ -56,10 +58,7 @@ class EventReviewController extends Controller
      */
     public function store(EventReviewRequest $request, $id)
     {
-          $review = new EventReview($request->all());
-          $review->user_id = Auth::user()->id;
-          $event = Event::findorfail($id);
-          $event->reviews()->save($review);
+          $this->eventService->store($request,$id);
           return redirect()->action('Event\EventController@show', [$id]);
     }
 
@@ -89,9 +88,7 @@ class EventReviewController extends Controller
 
     public function report($event_id, $review_id)
     {
-        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
-        if(!$review->reportingUsers()->find(Auth::user()->id))
-            Auth::user()->reportedEventReviews()->attach($review);
+        $this->eventService->report($event_id,$review_id);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
 }
