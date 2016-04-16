@@ -11,6 +11,8 @@ use Auth;
 
 class OrganizationService
 {
+  private $organizationService;
+
   /**
    * Store the created organization review.
    */
