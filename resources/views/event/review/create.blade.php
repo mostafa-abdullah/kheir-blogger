@@ -4,7 +4,7 @@
 
             <h1> create organization review on {{ $event->name }}</h1>
 
-            {!! Form::open(array('action' => array('EventReviewController@store',$event->id))) !!}
+            {!! Form::open(['url' => 'event/'.$event->id.'/review']) !!}
 
             <div class = "form_group">
 

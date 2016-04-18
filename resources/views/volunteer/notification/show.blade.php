@@ -2,25 +2,42 @@
 
 @section('content')
     <div class="container">
-        @if (!count($notifications))
+        @if (!count($newNotifications))
             <h1>No new notifications</h1>
         @else
-            <h1>Your new notifications:-</h1>
+            <h1>Your new notifications</h1>
             <ul>
-                @foreach($notifications as $notification)
+                @foreach($newNotifications as $notification)
                     <li>
                         <div>
-                            <a href="{{ $notification->link }}">{{ $notification->description }}</a>
+                            <a href="{{ url($notification->link) }}">{{ $notification->description }}</a>
                             <br/>
-                            {{ $notification->date_time }}
+                            {{ $notification->created_at }}
                             <br/>
-                            <button class="btn btn-secondary" name="{{ $notification->id}}" type="button">mark as unread</button>
                         </div>
                         <br/>
                     </li>
                 @endforeach
             </ul>
         @endif
+    </div>
+    <hr>
+    <div class="container">
+        <h1>Older Notifications</h1>
+        <ul>
+            @foreach($oldNotifications as $notification)
+                <li>
+                    <div>
+                        <a href="{{ url($notification->link) }}">{{ $notification->description }}</a>
+
+                        {{ $notification->created_at }}
+
+                        <button class="btn btn-secondary" name="{{ $notification->id}}" type="button">mark as unread</button>
+                    </div>
+                    <br/>
+                </li>
+            @endforeach
+        </ul>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">

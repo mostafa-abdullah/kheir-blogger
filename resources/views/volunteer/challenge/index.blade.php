@@ -2,9 +2,9 @@
 
 @section('content')
 
+    <h1>Current Challenge</h1>
+    <hr>
     @if ($currentChallenge)
-        <h1>Current Challenge</h1>
-        <hr>
         <p>This year, You attended {{$currentChallenge->attendedEvents()->count()}}/{{$currentChallenge->events}} events</p>
 
         {!! Form::open(['method' => 'get' , 'url' => 'volunteer/challenge/achieved']) !!}
@@ -18,6 +18,8 @@
             {!! Form::submit('Edit Challenge' , ['class' => 'btn btn-secondary']) !!}
         </div>
         {!! Form::close() !!}
+    @else
+        <h3><a href="/volunteer/challenge/create">Set current year's challenge!</a></h3>
     @endif
 
     <br><br><br>

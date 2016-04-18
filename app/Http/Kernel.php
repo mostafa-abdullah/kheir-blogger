@@ -48,6 +48,8 @@ class Kernel extends HttpKernel
         'auth_organization' => \App\Http\Middleware\AuthenticateOrganization::class,
         'auth_volunteer' => \App\Http\Middleware\AuthenticateVolunteer::class,
         'auth_both' => \App\Http\Middleware\AuthVolunteerOrOrganization::class,
+        'auth_admin' => \App\Http\Middleware\AuthenticateAdmin::class,
+        'auth_validator' => \App\Http\Middleware\AuthenticateValidator::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,

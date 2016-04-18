@@ -17,7 +17,13 @@ class CreateVolunteersInEventsTable extends Migration
             $table->integer('event_id')->unsigned()->index();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
 
-            $table->integer('type')->unsigned();    //1 for followers, 2 for registered
+            /**
+             * 1 => following
+             * 2 => registered
+             * 3 => attended
+             * 4 => didin't attended
+             */
+            $table->integer('type')->unsigned();
 
             $table->timestamps();
 
