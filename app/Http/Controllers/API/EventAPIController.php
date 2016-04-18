@@ -11,7 +11,6 @@ use App\Photo;
 use App\Event;
 class EventAPIController extends Controller
 {
-
   private $eventService;
 
   public function __construct()
