@@ -35,13 +35,22 @@ class AdminController  extends Controller{
     public function adminViewOrganizations(){
       $organizations = Organization::all();
       foreach ($organizations as $organization) {
+        // get the number of subscribers for this organization.
         $organization->numberOfSubscribers = $organization->subscribers()->count();
+
+        // get the number of events held by this organization.
         $organization->numberOfEvents = $organization->events()->count();
+
+        //get the number of cancelled events by this organization.
         $organization->numberOfCancelledEvents = $organization->events()->withTrashed()->count();
+
+        //get the rate of this organization.
         if($organization->rate)
             $organization-> rate  = number_format($organization->rate, 1);
         else
-            $organization->rate = "Not rated yet!";
+            $organization->rate = "-";
+
+        // calculate the cancellation rate of this organization.
         $organization->cancellationRate = $organization->numberOfEvents - $organization->numberOfCancelledEvents;
       }
       return view('volunteer.adminPanel.view-organizations',compact('organizations'));
