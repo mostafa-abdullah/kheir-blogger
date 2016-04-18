@@ -37,6 +37,11 @@ class AdminController  extends Controller{
       foreach ($organizations as $organization) {
         $organization->numberOfSubscribers = $organization->subscribers()->count();
         $organization->numberOfEvents = $organization->events()->count();
+        $organization->numberOfCancelledEvents = $organization->events()->withTrashed()->count();
+        if($organization->rate)
+            $organization-> rate  = number_format($organization->rate, 1);
+        else
+            $organization->rate = "Not rated yet!";
       }
       return view('volunteer.adminPanel.view-organizations',compact('organizations'));
     }
