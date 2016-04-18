@@ -34,6 +34,10 @@ class AdminController  extends Controller{
      */
     public function adminViewOrganizations(){
       $organizations = Organization::all();
+      foreach ($organizations as $organization) {
+        $organization->numberOfSubscribers = $organization->subscribers()->count();
+        $organization->numberOfEvents = $organization->events()->count();
+      }
       return view('volunteer.adminPanel.view-organizations',compact('organizations'));
     }
 }
