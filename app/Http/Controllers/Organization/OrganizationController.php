@@ -155,4 +155,16 @@ class OrganizationController extends Controller
         $organization->blockingVolunteers()->detach(Auth::user());
         return redirect('/');
     }
+
+    public function delete($organization_id)
+    {
+
+        if(Auth::user() &&  Auth::user()->role == 8 ){
+            $organization = Organization:: find($organization_id);
+            $organization->delete();
+        }
+
+        return redirect('/');
+
+    }
 }

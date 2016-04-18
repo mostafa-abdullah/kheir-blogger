@@ -41,6 +41,10 @@
             @include('organization.partials.button', ['action' => 'edit', 'buttonText' => 'Edit Profile'])
         @endif
 
+        @if(Auth::user() && Auth::user()->role == 8)
+            <a onclick="return confirm('Are you sure?');" href="{{ url('/organization/delete/'.$organization->id) }}">Delete organization</a>
+        @endif
+
         <p>Slogan: {{$organization->slogan}}</p>
         <p>Bio: {{$organization->bio}}</p>
         <p>Location: {{$organization->location}}</p>
