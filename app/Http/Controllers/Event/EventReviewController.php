@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Event;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\EventReviewRequest;
+use App\Http\Services\EventReviewService;
 
 use App\EventReview;
 use App\Event;
@@ -14,10 +15,11 @@ use Auth;
 
 class EventReviewController extends Controller
 {
-    private $eventService;
+    private $eventReviewService;
+
     public function __construct()
     {
-        $this->eventService = new EventService();
+        $this->eventReviewService = new EventReviewService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
@@ -58,7 +60,7 @@ class EventReviewController extends Controller
      */
     public function store(EventReviewRequest $request, $id)
     {
-          $this->eventService->store($request,$id);
+          $this->eventReviewService->store($request,$id);
           return redirect()->action('Event\EventController@show', [$id]);
     }
 
@@ -88,7 +90,7 @@ class EventReviewController extends Controller
 
     public function report($event_id, $review_id)
     {
-        $this->eventService->report($event_id,$review_id);
+        $this->eventReviewService->report($event_id,$review_id);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
 }

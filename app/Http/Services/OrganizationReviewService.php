@@ -9,10 +9,8 @@ use App\Organization;
 
 use Auth;
 
-class OrganizationService
+class OrganizationReviewService
 {
-  private $organizationService;
-
   /**
    * Store the created organization review.
    */

@@ -13,12 +13,13 @@ class EventAPIController extends Controller
 {
 
   private $eventService;
+
   public function __construct()
   {
       $this->eventService = new EventService();
       $this->middleware('auth_volunteer', ['only' => [
         'follow', 'unfollow', 'register', 'unregister',
-        'confirm', 'attend', 'unattend'
+        'attend', 'unattend'
       ]]);
 
       $this->middleware('auth_organization', ['only' => [
@@ -57,31 +58,31 @@ class EventAPIController extends Controller
     */
     public function follow($id)
     {
-      $this->eventService->follow($id);
+        $this->eventService->follow($id);
     }
 
     public function unfollow($id)
     {
-      $this->eventService->unfollow($id);
+        $this->eventService->unfollow($id);
     }
 
     public function register($id)
     {
-      $this->eventService->register($id);
+        $this->eventService->register($id);
     }
 
     public function unregister($id)
     {
-      $this->eventService->unregister($id);
+        $this->eventService->unregister($id);
     }
 
     public function attend($id)
     {
-      $this->eventService->attend($id);
+        $this->eventService->attend($id);
     }
 
     public function unattend($id)
     {
-      $this->eventService->unattend($id);
+        $this->eventService->unattend($id);
     }
 }

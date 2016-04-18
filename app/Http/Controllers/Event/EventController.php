@@ -25,10 +25,10 @@ class EventController extends Controller
 
 	public function __construct()
 	{
-			$this->$eventService = new EventService();
+		$this->eventService = new EventService();
         $this->middleware('auth_volunteer', ['only' => [
 			'follow', 'unfollow', 'register', 'unregister',
-			'confirm', 'attend', 'unattend'
+			'attend', 'unattend'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
