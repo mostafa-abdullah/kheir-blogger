@@ -15,6 +15,7 @@
             <th>Number of subscribers</th>
             <th>Events held</th>
             <th>Events cancelled</th>
+            <th>Cancellation rate</th>
             <th>Rate</th>
         </tr>
     </thead>
@@ -29,6 +30,7 @@
           <td>{{$organization->numberOfSubscribers}}</td>
           <td>{{$organization->numberOfEvents}}</td>
           <td>{{$organization->numberOfCancelledEvents}}</td>
+          <td>{{$organization->cancellationRate}}</td>
           <td>{{$organization->rate}}</td>
       </tr>
       @endforeach

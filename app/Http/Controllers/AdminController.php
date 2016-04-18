@@ -42,6 +42,7 @@ class AdminController  extends Controller{
             $organization-> rate  = number_format($organization->rate, 1);
         else
             $organization->rate = "Not rated yet!";
+        $organization->cancellationRate = $organization->numberOfEvents - $organization->numberOfCancelledEvents;
       }
       return view('volunteer.adminPanel.view-organizations',compact('organizations'));
     }
