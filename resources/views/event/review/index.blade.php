@@ -20,6 +20,10 @@
             @if (Auth::user())
                 <a href="/event/{{$event->id}}/review/{{$review->id}}/report">report</a>
             @endif
+            @if (Auth::user()->role == 5)
+                <a href="/event/{{$event->id}}/review/{{$review->id}}/destroy">delete</a>
+            @endif
+
         </div>
     @endforeach
     @endif

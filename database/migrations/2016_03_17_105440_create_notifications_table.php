@@ -15,7 +15,7 @@ class CreateNotificationsTable extends Migration
 |  4  => post_in_event
 |  5  => question_answered
 |  6  => confim_event
-|  7  =>
+|  7  => delete reviews
 */
     public function up()
     {

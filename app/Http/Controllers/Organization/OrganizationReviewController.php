@@ -8,7 +8,7 @@ use App\Http\Requests\OrganizationReviewRequest;
 
 use App\Organization;
 use App\OrganizationReview;
-
+use App\Notification;
 use Auth;
 
 class OrganizationReviewController extends Controller
@@ -16,7 +16,7 @@ class OrganizationReviewController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            'create', 'store', 'edit', 'update', 'report'
+            'create', 'store', 'edit', 'update', 'report','destroy'
         ]]);
     }
 
@@ -77,9 +77,17 @@ class OrganizationReviewController extends Controller
     /**
      * Delete an organization review
      */
-    public function destroy($organization_id, $review_id)
+       public function destroy($organization_id, $review_id)
     {
-        //TODO
+        $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
+
+         $volunteer = $review->user();
+        $review->delete(); 
+
+       Notification::notify($volunteer,7, null,
+                "your review has been deleted", url("/"));
+
+       return redirect()->action('OrganizationController@show', [$organization_id]);
     }
 
     public function report($organization_id, $review_id)
@@ -89,4 +97,5 @@ class OrganizationReviewController extends Controller
             Auth::user()->reportedOrganizationReviews()->attach($review);
         return redirect()->action('OrganizationController@show', [$organization_id]);
     }
+   
 }

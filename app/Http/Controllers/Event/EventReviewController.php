@@ -8,7 +8,7 @@ use App\Http\Requests\EventReviewRequest;
 
 use App\EventReview;
 use App\Event;
-
+use App\Notification;
 use Auth;
 
 
@@ -17,7 +17,7 @@ class EventReviewController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            'create', 'store', 'edit', 'update', 'report'
+            'create', 'store', 'edit', 'update', 'report','destroy'
         ]]);
     }
 
@@ -82,9 +82,14 @@ class EventReviewController extends Controller
     /**
      * Delete an event review
      */
-    public function destroy($event_id, $review_id)
+     public function destroy($event_id, $review_id)
     {
-        //TODO
+        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
+        $volunteer = $review->user();
+        $review->delete();
+        Notification::notify($volunteer,7, null,
+                 "your review has been deleted", url("/"));
+       return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
     public function report($event_id, $review_id)
@@ -94,4 +99,6 @@ class EventReviewController extends Controller
             Auth::user()->reportedEventReviews()->attach($review);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
+
+   
 }

@@ -12,6 +12,9 @@
                     <a href="/organization/{{$review->organization_id}}/review/{{$review->id}}/report">
                         report
                     </a>
+                     <a href="/organization/{{$review->organization_id}}/review/{{$review->id}}/destroy">
+                        delete
+                    </a>
                 </small>
             </h4>
             <div class="container">
