@@ -3,12 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class EventReview extends Model
 {
+
+    use SoftDeletes;
+
     protected $fillable = ['review', 'rate'];
 
     protected $table = 'event_reviews';
+     
+    protected $dates = ['deleted_at'];
 
     public function user()
     {
