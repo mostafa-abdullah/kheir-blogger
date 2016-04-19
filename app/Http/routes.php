@@ -232,9 +232,10 @@ Route::group(['middleware' => ['web']], function () {
 | Admin Routes
 |-----------------------
 */
-    /**
-     * Admin Assign  Validator.
-     */
+/**
+ * Admin Assign  Validator.
+ */
+
     Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
 
 

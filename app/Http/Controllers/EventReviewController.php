@@ -94,10 +94,15 @@ class EventReviewController extends Controller
         return redirect()->action('EventController@show', [$event_id]);
     }
 
+    /**
+     * validator can view reports on events.
+     */
     public function validatorViewReports (){
-
+            /* check if the loogedd in user is a validator */
             if(Auth::user()->role == 5){
+                /*get all Event review reports */
                 $event_reviews_reports = EventReviewReport::all();
+                /*for each report get its event and review to pass them to the view */
                 foreach($event_reviews_reports as $event_reviews_report) {
                     $event_review = EventReview::findOrFail($event_reviews_report->review_id);
                     $event_id = $event_review->event_id;
@@ -114,6 +119,7 @@ class EventReviewController extends Controller
          * validator assign report to be viewed
          */
         public function reportViewed($id){
+            /* if view button is clicked change the viewed attribute of the report to 1 which means it is viewed */
             $report = EventReviewReport::findOrFail($id);
             $report->viewed = 1 ;
             $report->save();
