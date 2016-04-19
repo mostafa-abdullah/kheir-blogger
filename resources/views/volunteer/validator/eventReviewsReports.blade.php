@@ -19,7 +19,7 @@
                            @if($event_review_report->viewed == 0)
                              <div>
                 <div class="col-sm-2">
-                        {!! Form::open(array('method' => 'GET','action' => array('VolunteerController@show',
+                        {!! Form::open(array('method' => 'GET','action' => array('Volunteer\VolunteerController@show',
                         $event_review_report->user_id))) !!}
 
                         {!! Form::submit(App\User::find($event_review_report->user_id)->first_name.App\User::find($event_review_report->user_id)->last_name,
@@ -29,7 +29,7 @@
                         </div>
                 <div class="col-sm-1">
 
-                        {!! Form::open(array('method' => 'GET','action' => array('EventReviewController@show',
+                        {!! Form::open(array('method' => 'GET','action' => array('Event\EventReviewController@show',
                         $event_review_report->event_id,$event_review_report->review_id))) !!}
 
                         {!! Form::submit(App\Event::find($event_review_report->event_id)->name , array('class' => 'btn btn-link' )) !!}
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-sm-2">
 
-                {!! Form::open(array('action' => array('EventReviewController@reportViewed',$event_review_report->id))) !!}
+                {!! Form::open(array('action' => array('Event\EventReviewController@reportViewed',$event_review_report->id))) !!}
 
                 {{-- check if this report is viewed  --}}
                 @if($event_review_report->viewed == 0)
@@ -62,7 +62,7 @@
                         @if($event_review_report->viewed == 1)
                             <div class="container">
                             <div class="col-sm-2">
-                                {!! Form::open(array('method' => 'GET','action' => array('VolunteerController@show',
+                                {!! Form::open(array('method' => 'GET','action' => array('Volunteer\VolunteerController@show',
                                 $event_review_report->user_id))) !!}
 
                                 {!! Form::submit(App\User::find($event_review_report->user_id)->first_name.'  '.
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-sm-1">
 
-                                {!! Form::open(array('method' => 'GET','action' => array('EventReviewController@show',
+                                {!! Form::open(array('method' => 'GET','action' => array('Event\EventReviewController@show',
                                 $event_review_report->event_id,$event_review_report->review_id))) !!}
 
     {!! Form::submit(App\Event::find($event_review_report->event_id)->name, array('class' => 'btn btn-link' )) !!}

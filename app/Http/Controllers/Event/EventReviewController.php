@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
+
+use App\Http\Controllers\Controller;
 
 use App\EventReviewReport;
 use App\Http\Requests\EventReviewRequest;
@@ -44,9 +46,9 @@ class EventReviewController extends Controller
     {
         $event = Event::findorfail($id);
         if(!$event->attendees()->find(Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
-        if($event->reviews()->where('user_id', Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
+            return redirect()->action('Event\EventController@show', [$id]);
+        if($event->reviews()->where('user_id', Auth::user()->id)->first())
+            return redirect()->action('Event\EventController@show', [$id]);
         return view ('event.review.create', compact('event'));
     }
 
@@ -59,7 +61,7 @@ class EventReviewController extends Controller
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
-          return redirect()->action('EventController@show', [$id]);
+          return redirect()->action('Event\EventController@show', [$id]);
     }
 
     /**
@@ -91,7 +93,7 @@ class EventReviewController extends Controller
         $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
         if(!$review->reportingUsers()->find(Auth::user()->id))
             Auth::user()->reportedEventReviews()->attach($review);
-        return redirect()->action('EventController@show', [$event_id]);
+        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
     /**
@@ -115,11 +117,11 @@ class EventReviewController extends Controller
 
             }
     }
-        /**
-         * validator assign report to be viewed
-         */
+    /**
+     * validator assign report to be viewed
+     */
         public function reportViewed($id){
-            /* if view button is clicked change the viewed attribute of the report to 1 which means it is viewed */
+    /* if view button is clicked change the viewed attribute of the report to 1 which means it is viewed */
             $report = EventReviewReport::findOrFail($id);
             $report->viewed = 1 ;
             $report->save();

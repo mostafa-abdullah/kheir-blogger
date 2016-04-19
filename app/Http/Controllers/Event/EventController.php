@@ -1,16 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\GalleryCaptionRequest;
+use App\Http\Requests\GalleryRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 
 use App\Organization;
 use App\Notification;
 use App\Event;
+use App\Photo;
 
 use Carbon\Carbon;
 use Auth;
+use Input;
+use Validator;
+use Session;
 
 class EventController extends Controller
 {
@@ -19,7 +26,7 @@ class EventController extends Controller
 	{
         $this->middleware('auth_volunteer', ['only' => [
 			'follow', 'unfollow', 'register', 'unregister',
-			'confirm', 'unconfirm'
+			'confirm', 'attend', 'unattend'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -39,9 +46,8 @@ class EventController extends Controller
 	public function index($organization_id)
 	{
 		$organization = Organization::findOrFail($organization_id);
-		$organization_name = $organization->name;
-		$events = $organization->events;
-		return view('event.index', compact('organization_name', 'events'));
+		$events = $organization->events()->latest()->get();
+		return view('event.index', compact('organization', 'events'));
 	}
 
 	/**
@@ -51,14 +57,18 @@ class EventController extends Controller
 	public function show($id)
 	{
         $event = Event::findOrFail($id);
-        $posts = $event->posts;
-        $questions = $event->questions()->answered()->get();
-        $reviews = $event->reviews;
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
+		$volunteerState = 0;
+		if(Auth::user())
+		{
+			$record = Auth::user()->events()->find($id);
+			if($record)
+				$volunteerState = $record->pivot->type;
+		}
 		return view('event.show',
-			compact('event', 'posts', 'questions', 'reviews', 'creator'));
+			compact('event', 'creator', 'volunteerState'));
 	}
 
 	/**
@@ -76,10 +86,10 @@ class EventController extends Controller
 	{
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
-		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($organization->subscribers, $event,
+		$notification_description = $organization->name." created a new event: ".$request->name;
+		Notification::notify($organization->subscribers, 1, $event,
 							$notification_description, url("/event", $event->id));
-		return redirect()->action('EventController@show', [$event->id]);
+		return redirect()->action('Event\EventController@show', [$event->id]);
 	}
 
 	/**
@@ -90,7 +100,7 @@ class EventController extends Controller
 		$event = Event::findOrFail($id);
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
 			return view('event.edit', compact('event'));
-		return redirect()->action('EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	/**
@@ -106,7 +116,7 @@ class EventController extends Controller
 			Notification::notify($event->volunteers, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
-		return redirect()->action('EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	/**
@@ -133,13 +143,13 @@ class EventController extends Controller
 	public function follow($id)
 	{
 		Auth::user()->followEvent($id);
-		return redirect()->action('EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unfollow($id)
 	{
 		Auth::user()->unfollowEvent($id);
-		return redirect()->action('EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function register($id)
@@ -147,20 +157,13 @@ class EventController extends Controller
 		$event = Event::findOrFail($id);
 		if($event->timing > carbon::now())
 			Auth::user()->registerEvent($id);
-		return redirect()->action('EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unregister($id)
 	{
 		Auth::user()->unregisterEvent($id);
-		return redirect()->action('EventController@show', [$id]);
-	}
-
-	public function confirm($id)
-	{
-		$event = Auth::registeredEvents()->findOrFail($id);
-		if($event->timing < carbon::now())
-			return view('event.confirm', compact('id'));
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function attend($id)
@@ -168,7 +171,7 @@ class EventController extends Controller
 		$event = Event::findOrFail($id);
 		if($event->timing < carbon::now())
 			Auth::user()->attendEvent($id);
-		return redirect()->action('EventController@show',[$id]);
+		return redirect()->action('Event\EventController@show',[$id]);
 	}
 
 	public function unattend($id)
@@ -176,6 +179,6 @@ class EventController extends Controller
 		$event = Event::findOrFail($id);
 		if($event->timing < carbon::now())
 			Auth::user()->unattendEvent($id);
-		return redirect()->action('EventController@show',[$id]);
+		return redirect()->action('Event\EventController@show',[$id]);
 	}
 }

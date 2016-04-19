@@ -6,7 +6,7 @@
     <hr>
 
     {!! Form::model($challenge , ['method' => 'PATCH' ,
-                                  'action' => ['ChallengeController@update']]) !!}
+                                  'action' => ['Volunteer\ChallengeController@update']]) !!}
 
     <div class = "form-group">
         {!! Form::label('events' , 'Edit the number of events') !!}

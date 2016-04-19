@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Requests\EventPostRequest;
 
 use App\Event;
 use App\EventPost;
+use App\Notification;
 
 class EventPostController extends Controller
 {
@@ -58,10 +61,10 @@ class EventPostController extends Controller
         {
             $event = Event::find($event_id);
             $description = "Event ".($event->name)." has a new post";
-            $link = url("/event", $id);
+            $link = "/event".$event_id;
             Notification::notify($event->volunteers, 4, $event, $description, $link);
         }
-        return redirect()->action('EventController@show', [$event_id]);
+        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
     /**
