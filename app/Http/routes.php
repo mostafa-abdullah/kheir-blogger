@@ -251,10 +251,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('event/{id}/add_caption','EventController@add_caption');
     Route::post('event/{id}/saveGallery','EventController@saveGallery');
 
-    Route::get('test','EventController@test');
-    Route::post('test1','EventController@test1');
-    Route::post('test2','EventController@test2');
-
     /*
     |-----------------------
     | Admin Routes

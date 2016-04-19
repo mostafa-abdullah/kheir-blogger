@@ -123,16 +123,19 @@
                     @if($photos->count()==0)
                         <h3 class="alert-info">This Event has no gallery</h3>
                     @else
-                        @foreach($photos as $photo)
-                            <img src="{{asset($photo->path)}}" style="" width="250" height="250">
-                            @if($photo->caption)
-                                <h1>{{$photo->caption}}</h1>
-                            @else
-                                <h1>......</h1>
-                            @endif
-                        @endforeach
+                        <div>
+                            <div class="row" style=" max-width:100% ;display:block; height: auto">
+                                @foreach($photos as $photo)
+                                    <div class="col-sm-4" style="margin-bottom:30px">
+                                        <a class="example-image-link"  href="{{$photo->path}}" data-lightbox="roadtrip" data-title="{{$photo->caption}}">
+                                            <img class="example-image" src={{$photo->path}} style="max-width:100%;">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                 </div>
-
+            </div>
         <div class="panel-body">
             {{--  Event Posts --}}
             @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
@@ -142,9 +145,10 @@
             @include('event.review.index', ['reviews' => $event->reviews])
             {{--  Event Gallery --}}
             @include('event.gallery.index')
-            {{--   TODO: Kojak  --}}
         </div>
-    </div>
+
+            </div>
+        </div>
 @stop
 
 @section('scripts')
@@ -179,4 +183,5 @@
             });
         });
     </script>
+    <script src="js/lightbox.js"></script>
 @endsection

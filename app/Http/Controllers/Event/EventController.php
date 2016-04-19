@@ -71,7 +71,7 @@ class EventController extends Controller
 			if($record)
 				$volunteerState = $record->pivot->type;
 		}
-		return view('event.show', compact('event', 'creator', 'volunteerState'));
+		return view('event.show', compact('event', 'creator', 'volunteerState','photos'));
 	}
 
 	/**
@@ -140,58 +140,6 @@ class EventController extends Controller
     /**
      * Event Gallery.
      */
-
-	public function test()
-	{
-		return view('event.gallery.upload');
-	}
-
-	public function test1(Request $request)
-	{
-		$input = $request->all();
-		$files = $input['images'];
-		$paths = array();
-		$counter=0;
-
-		foreach ($files as $file) {
-			$rules = array('file' => 'required|image');
-			$validator = Validator::make(array('file' => $file), $rules);
-
-			if ($validator->passes()) {
-				$path = 'app/storage/db/gallery/' .$counter;
-				$filename = md5($file->getClientOriginalName(), false);
-				$upload_success = $file->move($path, $filename);
-				if ($upload_success) {
-					array_push($paths, $path . '/' . $filename);
-				} else {
-					return redirect()->action('EventController@test');
-				}
-			} else {
-				return redirect()->action('EventController@test');
-			}
-			$counter++;
-		}
-		return view('event.gallery.add_caption', compact('paths'));
-	}
-
-	public function test2(Request $request)
-	{
-		$input = $request->all();
-		$captions = $input['captions'];
-		$paths = $input['paths'];
-		$counter = 0;
-		$photos = array();
-		foreach (array_combine($paths, $captions) as $path => $caption) {
-			//$photo = $event->create_photo(Request::create($caption));
-			$photo = new Photo();
-			$photo->path = $path;
-			$photo->caption = $caption;
-			//$photo->save();
-			$counter++;
-			array_push($photos,$photo);
-		}
-		return view('event.gallery.show',compact('photos'));
-	}
 
 	public function add_photos($id)
 	{
