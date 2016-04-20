@@ -18,7 +18,7 @@
                  <form action="{{ url('event/'.$event->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
-                      <button type="submit" class="btn btn-danger btn-event">Cancel</button>
+                      <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Cancel</button>
                  </form>
                  @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
                 @endif

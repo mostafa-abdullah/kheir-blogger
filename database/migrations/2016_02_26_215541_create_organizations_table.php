@@ -24,6 +24,7 @@ class CreateOrganizationsTable extends Migration
             $table->double('rate', 15, 8)->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
