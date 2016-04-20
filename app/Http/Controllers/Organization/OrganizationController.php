@@ -31,6 +31,10 @@ class OrganizationController extends Controller
         $this->middleware('auth_organization', ['only' => [
             'edit', 'update', 'viewRecommendations'
         ]]);
+
+        $this->middleware('auth_admin', ['only' => [
+            'destroy',
+        ]]);
     }
 
     /**
@@ -156,15 +160,10 @@ class OrganizationController extends Controller
         return redirect('/');
     }
 
-    public function delete($organization_id)
+    public function destroy($id)
     {
-
-        if(Auth::user() &&  Auth::user()->role == 8 ){
-            $organization = Organization:: find($organization_id);
-            $organization->delete();
-        }
-
+        $organization = Organization::find($id);
+        $organization->delete();
         return redirect('/');
-
     }
 }

@@ -151,7 +151,7 @@ Route::group(['middleware' => ['web']], function () {
      * Organization CRUD.
      */
     Route::resource('organization', 'Organization\OrganizationController', ['only' => [
-        'show', 'edit', 'update',
+        'show', 'edit', 'update', 'destroy'
     ]]);
 
     Route::get('organization/delete/{id}' , 'Organization\OrganizationController@delete');

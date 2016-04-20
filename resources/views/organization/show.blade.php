@@ -42,7 +42,11 @@
         @endif
 
         @if(Auth::user() && Auth::user()->role == 8)
-            <a onclick="return confirm('Are you sure?');" href="{{ url('/organization/delete/'.$organization->id) }}">Delete organization</a>
+            <form action="{{ url('/organization/'.$organization->id) }}" method="POST">
+                 {!! csrf_field() !!}
+                 {!! method_field('DELETE') !!}
+                 <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Delete organization</button>
+            </form>
         @endif
 
         <p>Slogan: {{$organization->slogan}}</p>
