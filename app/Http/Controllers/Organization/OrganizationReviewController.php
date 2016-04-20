@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Organization;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\OrganizationReviewRequest;
+use App\Http\Services\OrganizationReviewService;
 
 use App\Organization;
 use App\OrganizationReview;
@@ -13,8 +14,10 @@ use Auth;
 
 class OrganizationReviewController extends Controller
 {
+  private $organizationReviewService;
     public function __construct()
     {
+      $this->organizationReviewService = new OrganizationReviewService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
@@ -51,10 +54,7 @@ class OrganizationReviewController extends Controller
      */
     public function store(OrganizationReviewRequest $request, $id)
     {
-        $review = new OrganizationReview($request->all());
-        $review->user_id = Auth::user()->id;
-        $organization = Organization::findorfail($id);
-        $organization->reviews()->save($review);
+        $this->organizationReviewService->store($request, $id);
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -84,9 +84,7 @@ class OrganizationReviewController extends Controller
 
     public function report($organization_id, $review_id)
     {
-        $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
-        if(!$review->reportingUsers()->find(Auth::user()->id))
-            Auth::user()->reportedOrganizationReviews()->attach($review);
+        $this->organizationReviewService->report($organization_id,$review_id);
         return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 }

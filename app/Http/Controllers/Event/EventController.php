@@ -7,7 +7,7 @@ use App\Http\Requests\GalleryCaptionRequest;
 use App\Http\Requests\GalleryRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
-
+use App\Http\Services\EventService;
 use App\Organization;
 use App\Notification;
 use App\Event;
@@ -21,12 +21,14 @@ use Session;
 
 class EventController extends Controller
 {
+	private $eventService;
 
 	public function __construct()
 	{
+		$this->eventService = new EventService();
         $this->middleware('auth_volunteer', ['only' => [
 			'follow', 'unfollow', 'register', 'unregister',
-			'confirm', 'attend', 'unattend'
+			'attend', 'unattend'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -67,8 +69,7 @@ class EventController extends Controller
 			if($record)
 				$volunteerState = $record->pivot->type;
 		}
-		return view('event.show',
-			compact('event', 'creator', 'volunteerState'));
+		return view('event.show', compact('event', 'creator', 'volunteerState'));
 	}
 
 	/**
@@ -142,43 +143,37 @@ class EventController extends Controller
 */
 	public function follow($id)
 	{
-		Auth::user()->followEvent($id);
+		$this->eventService->follow($id);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unfollow($id)
 	{
-		Auth::user()->unfollowEvent($id);
+		$this->eventService->unfollow($id);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function register($id)
 	{
-		$event = Event::findOrFail($id);
-		if($event->timing > carbon::now())
-			Auth::user()->registerEvent($id);
+		$this->eventService->register($id);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unregister($id)
 	{
-		Auth::user()->unregisterEvent($id);
+		$this->eventService->unregister($id);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function attend($id)
 	{
-		$event = Event::findOrFail($id);
-		if($event->timing < carbon::now())
-			Auth::user()->attendEvent($id);
+		$this->eventService->attend($id);
 		return redirect()->action('Event\EventController@show',[$id]);
 	}
 
 	public function unattend($id)
 	{
-		$event = Event::findOrFail($id);
-		if($event->timing < carbon::now())
-			Auth::user()->unattendEvent($id);
+		$this->eventService->unattend($id);
 		return redirect()->action('Event\EventController@show',[$id]);
 	}
 }

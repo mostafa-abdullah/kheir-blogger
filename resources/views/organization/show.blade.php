@@ -41,6 +41,14 @@
             @include('organization.partials.button', ['action' => 'edit', 'buttonText' => 'Edit Profile'])
         @endif
 
+        @if(Auth::user() && Auth::user()->role == 8)
+            <form action="{{ url('/organization/'.$organization->id) }}" method="POST">
+                 {!! csrf_field() !!}
+                 {!! method_field('DELETE') !!}
+                 <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Delete organization</button>
+            </form>
+        @endif
+
         <p>Slogan: {{$organization->slogan}}</p>
         <p>Bio: {{$organization->bio}}</p>
         <p>Location: {{$organization->location}}</p>

@@ -18,7 +18,7 @@
                  <form action="{{ url('event/'.$event->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
-                      <button type="submit" class="btn btn-danger btn-event">Cancel</button>
+                      <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Cancel</button>
                  </form>
                  @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
                 @endif
@@ -83,13 +83,14 @@
             {{--  Event Reviews --}}
             @include('event.review.index', ['reviews' => $event->reviews])
             {{--  Event Gallery --}}
-            @include('event.gallery.index')
-            {{--   TODO: Kojak  --}}
+            @include('event.gallery.index', ['photos' => $event->photos()->orderBy('created_at', 'desc')->get()])
         </div>
     </div>
+
 @stop
 
 @section('scripts')
+    <script src="{{asset('js/lightbox.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#posts-tab").click(function(){
