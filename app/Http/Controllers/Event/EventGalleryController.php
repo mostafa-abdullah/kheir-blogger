@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
+use App\Photo;
 use App\Event;
 use Validator;
 
@@ -69,13 +70,14 @@ class EventGalleryController extends Controller
             $input = $request->all();
             $captions = $input['captions'];
             $names = $input['names'];
-            $counter = 0;
+
             foreach (array_combine($names, $captions) as $name => $caption)
             {
-                $photo = $event->createPhoto(Request::create($caption));
+                $photo = new Photo;
                 $photo->name = $name;
+                $photo->caption = $caption;
+                $photo->event_id = $id;
                 $photo->save();
-                $counter++;
             }
         }
         return redirect()->action('Event\EventController@show', [$id]);
