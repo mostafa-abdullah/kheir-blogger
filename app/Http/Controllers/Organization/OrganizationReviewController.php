@@ -55,7 +55,7 @@ class OrganizationReviewController extends Controller
         $review->user_id = Auth::user()->id;
         $organization = Organization::findorfail($id);
         $organization->reviews()->save($review);
-        return redirect()->action('OrganizationController@show', [$id]);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -87,6 +87,6 @@ class OrganizationReviewController extends Controller
         $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
         if(!$review->reportingUsers()->find(Auth::user()->id))
             Auth::user()->reportedOrganizationReviews()->attach($review);
-        return redirect()->action('OrganizationController@show', [$organization_id]);
+        return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 }
