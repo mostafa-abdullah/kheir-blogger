@@ -83,13 +83,14 @@
             {{--  Event Reviews --}}
             @include('event.review.index', ['reviews' => $event->reviews])
             {{--  Event Gallery --}}
-            @include('event.gallery.index')
-            {{--   TODO: Kojak  --}}
+            @include('event.gallery.index', ['photos' => $event->photos()->orderBy('created_at', 'desc')->get()])
         </div>
     </div>
+
 @stop
 
 @section('scripts')
+    <script src="{{asset('js/lightbox.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#posts-tab").click(function(){
