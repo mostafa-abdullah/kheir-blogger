@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
+use App\Photo;
 use App\Event;
 use Validator;
 
@@ -34,18 +35,19 @@ class EventGalleryController extends Controller
         if(auth()->guard('organization')->user()->id == $event->organization()->id) {
             $input = $request->all();
             $files = $input['images'];
-            $paths = array();
+            $names = array();
+            $path = 'app/storage/db/gallery/' . $event->id . '/';
 
             foreach ($files as $file) {
                 $rules = array('file' => 'required|image');
                 $validator = Validator::make(array('file' => $file), $rules);
 
                 if ($validator->passes()) {
-                    $path = 'app/storage/db/gallery/' . $event->id;
+
                     $filename = md5($file->getClientOriginalName(), false);
                     $upload_success = $file->move($path, $filename);
                     if ($upload_success) {
-                        array_push($paths, $path . '/' . $filename);
+                        array_push($names, $filename);
                     } else {
                         // return redirect()->action('EventController@test');
                     }
@@ -55,7 +57,7 @@ class EventGalleryController extends Controller
             }
 
 
-            return view('event.gallery.caption', compact('paths','event'));
+            return view('event.gallery.caption', compact('names','event', 'path'));
         }
         return redirect('/');
     }
@@ -63,20 +65,22 @@ class EventGalleryController extends Controller
     public function store(Request $request, $id)
     {
         $event = Event::findorfail($id);
-        if (auth()->guard('organization')->user()->id == $event->organization()->id) {
+        if (auth()->guard('organization')->user()->id == $event->organization()->id)
+        {
             $input = $request->all();
             $captions = $input['captions'];
-            $paths = $input['paths'];
-            $counter = 0;
-            foreach (array_combine($paths, $captions) as $path => $caption) {
-                $photo = $event->create_photo(Request::create($caption));
-                $photo->path = $path;
+            $names = $input['names'];
+
+            foreach (array_combine($names, $captions) as $name => $caption)
+            {
+                $photo = new Photo;
+                $photo->name = $name;
+                $photo->caption = $caption;
+                $photo->event_id = $id;
                 $photo->save();
-                $counter++;
             }
-            return 'Gallery view';      //TODO: redirect to Gallery view
         }
-        return redirect('/');
+        return redirect()->action('Event\EventController@show', [$id]);
 
     }
 }

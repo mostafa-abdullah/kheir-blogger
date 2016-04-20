@@ -67,8 +67,7 @@ class EventController extends Controller
 			if($record)
 				$volunteerState = $record->pivot->type;
 		}
-		return view('event.show',
-			compact('event', 'creator', 'volunteerState'));
+		return view('event.show', compact('event', 'creator', 'volunteerState'));
 	}
 
 	/**

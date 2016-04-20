@@ -317,7 +317,7 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-    * Organization API resource.
+    * Event API resource.
     */
     Route::resource('api/event','API\EventAPIController', ['only' => [
         'index', 'show',
