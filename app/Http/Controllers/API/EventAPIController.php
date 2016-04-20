@@ -22,7 +22,7 @@ class EventAPIController extends Controller
       ]]);
 
       $this->middleware('auth_organization', ['only' => [
-          'create', 'store', 'edit', 'update', 'destroy',
+    	'store', 'update', 'destroy',
       ]]);
   }
 

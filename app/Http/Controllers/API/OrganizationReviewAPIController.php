@@ -16,7 +16,7 @@ class OrganizationReviewAPIController extends Controller
   {
       $this->organizationReviewService = new OrganizationReviewService();
       $this->middleware('auth_volunteer', ['only' => [
-          'create', 'store', 'edit', 'update', 'report'
+          'store', 'update', 'report'
       ]]);
   }
 

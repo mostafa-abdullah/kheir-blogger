@@ -19,16 +19,6 @@ class EventReviewService
 {
 
     /*
-    * Report event review.
-    */
-    public function report($event_id, $review_id)
-    {
-      $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
-      if(!$review->reportingUsers()->find(Auth::user()->id))
-          Auth::user()->reportedEventReviews()->attach($review);
-    }
-
-    /*
     * Store Event Review.
     */
     public function store(EventReviewRequest $request, $id)
@@ -37,5 +27,15 @@ class EventReviewService
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
+    }
+
+    /*
+    * Report event review.
+    */
+    public function report($event_id, $review_id)
+    {
+      $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
+      if(!$review->reportingUsers()->find(Auth::user()->id))
+          Auth::user()->reportedEventReviews()->attach($review);
     }
 }

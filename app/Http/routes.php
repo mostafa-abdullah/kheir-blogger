@@ -320,25 +320,35 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-    * Event Review route
-    */
-    Route::get('api/event/{id}/review/{r_id}/report' , 'API\EventReviewAPIController@report');
-    Route::post('api/review/event' , 'API\EventReviewAPIController@store');
+     *	Event Following.
+     */
+     Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
+     Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
+
 
     /**
-    * Event API resource.
-    */
-    Route::resource('api/event','API\EventAPIController', ['only' => [
-        'index', 'show'
-    ]]);
+     *  Event Registeration.
+     */
+     Route::get('api/event/register/{id}' , 'API\EventAPIController@register');
+     Route::get('api/event/unregister/{id}' , 'API\EventAPIController@unregister');
 
-    Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
-    Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
+    /**
+     *  Event Attendance Confirmation.
+     */
+     Route::get('api/event/attend/{id}' , 'API\EventAPIController@attend');
+     Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
 
-    Route::get('api/event/register/{id}' , 'API\EventAPIController@register');
-    Route::get('api/event/unregister/{id}' , 'API\EventAPIController@unregister');
 
-    Route::get('api/event/attend/{id}' , 'API\EventAPIController@attend');
-    Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
+    /**
+     * Event Reviewing.
+     */
+     Route::get('api/event/{id}/review/{r_id}/report' , 'API\EventReviewAPIController@report');
+     Route::post('api/review/event' , 'API\EventReviewAPIController@store');
 
+    /**
+     * Event API resource.
+     */
+     Route::resource('api/event','API\EventAPIController', ['only' => [
+         'index', 'show'
+     ]]);
 });

@@ -19,13 +19,8 @@ class EventReviewAPIController extends Controller
   {
       $this->eventReviewService = new EventReviewService();
       $this->middleware('auth_volunteer', ['only' => [
-          'create', 'store', 'edit', 'update', 'report'
+          'store', 'update', 'report'
       ]]);
-  }
-
-  public function report($event_id, $review_id)
-  {
-      $this->eventReviewService->report($event_id,$review_id);
   }
 
   public function store(EventReviewRequest $request, $id)
@@ -33,4 +28,9 @@ class EventReviewAPIController extends Controller
       $this->eventReviewService->store($request,$id);
   }
 
+
+  public function report($event_id, $review_id)
+  {
+      $this->eventReviewService->report($event_id,$review_id);
+  }
 }

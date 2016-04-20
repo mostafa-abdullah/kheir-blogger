@@ -17,28 +17,6 @@ use Validator;
 
 class EventService
 {
-    /**
-    * Update volunteer profile.
-    */
-    public function update(VolunteerRequest $request, $id)
-    {
-    	 $volunteer = User::findorfail($id);
-        $volunteer->update($request->all());
-    }
-
-    /**
-     * Send feedback to the admin.
-     */
-    public function storeFeedback(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'subject' => 'required|max:60',
-            'message' => 'required',
-        ]);
-        $feedback = new Feedback($request->all());
-        $feedback->user_id = Auth::user()->id;
-        $feedback->save();
-    }
 
   /*
   |==========================================================================
@@ -77,10 +55,8 @@ class EventService
 
     public function unattend($id)
     {
-      $event = Event::findOrFail($id);
-  		if($event->timing < carbon::now())
-  			Auth::user()->unattendEvent($id);
+        $event = Event::findOrFail($id);
+  	    if($event->timing < carbon::now())
+  		    Auth::user()->unattendEvent($id);
     }
-
-
 }
