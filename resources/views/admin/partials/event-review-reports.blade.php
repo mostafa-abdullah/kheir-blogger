@@ -1,30 +1,40 @@
-@foreach($event_reviews_reports as $event_review_report)
-    @if($event_review_report->viewed == $view_state)
-        <div>
-            <div class="col-sm-2">
-                <a href="{{url('volunteer',$event_review_report->volunteer->id)}}">
-                    {{$event_review_report->volunteer->first_name}}
-                    {{$event_review_report->volunteer->last_name}}
-                </a>
-            </div>
+<div class="row">
+    <div class="col-sm-2">Reviewer</div>
+    <div class="col-sm-2">Event</div>
+    <div class="col-sm-2">Review</div>
+    <div class="col-sm-2">Action</div>
+</div>
 
-            <div class="col-sm-1">
-                <a href="{{url('event',$event_review_report->event->id)}}">
-                    {{$event_review_report->event->name}}
-                </a>
-            </div>
-
-            <div class="col-sm-2">
-                {!! Form::open(array('action' => array('AdminController@toggleEventReviewReportViewed',
-                        $event_review_report->id))) !!}
-                    @if(!$event_review_report->viewed)
-                        {!! Form::submit('mark viewed' , array('class' => 'vol-act btn btn-default' )) !!}
-                    @else
-                        {!! Form::submit('mark unviewed' , array('class' => 'vol-act btn btn-default' )) !!}
-                    @endif
-                {!! Form::close() !!}
-
-            </div>
+@foreach($reported_event_reviews as $reported_event_review)
+    <div class="row">
+        <div class="col-sm-2">
+            <a href="{{url('volunteer',$reported_event_review->volunteer->id)}}">
+                {{$reported_event_review->volunteer->first_name}}
+                {{$reported_event_review->volunteer->last_name}}
+            </a>
         </div>
-    @endif
+
+        <div class="col-sm-2">
+            <a href="{{url('event',$reported_event_review->event->id)}}">
+                {{$reported_event_review->event->name}}
+            </a>
+        </div>
+
+        <div class="col-sm-2">
+            <a href="{{url('event/'.$reported_event_review->event->id.'/review/'.$reported_event_review->id)}}">
+                View review
+            </a>
+        </div>
+
+        <div class="col-sm-2">
+            {!! Form::open(array('action' => array('AdminController@toggleEventReviewReportViewed',
+                    $reported_event_review->id))) !!}
+                @if(!$reported_event_review->viewed)
+                    {!! Form::submit('mark viewed' , array('class' => 'vol-act btn btn-default' )) !!}
+                @else
+                    {!! Form::submit('mark unviewed' , array('class' => 'vol-act btn btn-default' )) !!}
+                @endif
+            {!! Form::close() !!}
+        </div>
+    </div>
 @endforeach

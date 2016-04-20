@@ -10,7 +10,6 @@ use App\Event;
 use App\Challenge;
 use App\Feedback;
 use App\EventReview;
-use App\EventReviewReport;
 use Carbon\Carbon;
 use Auth;
 
@@ -55,18 +54,14 @@ class AdminController  extends Controller{
      */
     public function viewEventReviewReports()
     {
-        $event_reviews_reports = EventReviewReport::all();
-        /*for each report get its event and review to pass them to the view */
-        foreach($event_reviews_reports as $event_reviews_report)
+        $reported_event_reviews = EventReview::has('reportingUsers')->get();
+
+        foreach($reported_event_reviews as $reported_event_review)
         {
-            $event_review = EventReview::find($event_reviews_report->review_id);
-            if($event_review)
-            {
-                $event_reviews_report->event = Event::find($event_review->event_id);
-                $event_reviews_report->volunteer = User::find($event_review->user_id);
-            }
+            $reported_event_review->event = Event::find($reported_event_review->event_id);
+            $reported_event_review->volunteer = User::find($reported_event_review->user_id);
         }
-        return view('admin.event-review-reports',compact('event_reviews_reports'));
+        return view('admin.event-review-reports', compact('reported_event_reviews'));
     }
 
     /**
@@ -74,7 +69,7 @@ class AdminController  extends Controller{
      */
     public function toggleEventReviewReportViewed($id)
     {
-        $report = EventReviewReport::findOrFail($id);
+        $report = EventReview::findOrFail($id);
         $report->viewed = 1 ^ $report->viewed;
         $report->save();
         return redirect()->action('AdminController@viewEventReviewReports');

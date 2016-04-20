@@ -11,11 +11,13 @@
     <br>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="unViewed">
-            @include('admin.partials.event-review-reports', ['view_state' => 0])
+            @include('admin.partials.event-review-reports',
+                    ['event_reviews_reports' => $reported_event_reviews->where('viewed', '=', '0')])
         </div>
 
         <div role="tabpanel" class="tab-pane" id="Viewed">
-            @include('admin.partials.event-review-reports', ['view_state' => 1])
+            @include('admin.partials.event-review-reports',
+                    ['event_reviews_reports' => $reported_event_reviews->where('s', '=', '1')])
         </div>
     </div>
 </div>

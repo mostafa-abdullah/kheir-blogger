@@ -23,6 +23,6 @@ class EventReview extends Model
     public function reportingUsers()
     {
         return $this->belongsToMany('App\User', 'event_review_reports', 'review_id', 'user_id')
-                    ->withTimestamps();
+                    ->withTimestamps()->withPivot('viewed');;
     }
 }
