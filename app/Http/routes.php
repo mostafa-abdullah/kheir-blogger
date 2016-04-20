@@ -268,20 +268,15 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');
 
-/*
-|-----------------------
-| validator Routes
-|-----------------------
-*/
     /**
-     * valiadator view all reports
+     * Valiadator view event review reports
      */
-    Route::get('review/reports','Event\EventReviewController@validatorViewReports');
+    Route::get('review/reports/event','AdminController@viewEventReviewReports');
 
     /**
-     * validator make report to be viewed
+     * Validator mark event review report "viewed"
      */
-    Route::post('review/report/{id}/viewed','Event\EventReviewController@reportViewed');
+    Route::post('review/reports/event/{id}','AdminController@toggleEventReviewReportViewed');
 
 
 

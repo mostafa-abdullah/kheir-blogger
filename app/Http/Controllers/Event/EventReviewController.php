@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
 
-use App\EventReviewReport;
 use App\Http\Requests\EventReviewRequest;
 
 use App\EventReview;
@@ -19,6 +18,10 @@ class EventReviewController extends Controller
     {
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
+        ]]);
+
+        $this->middleware('auth_validator', ['only' => [
+            'viewReports'
         ]]);
     }
 
@@ -95,40 +98,4 @@ class EventReviewController extends Controller
             Auth::user()->reportedEventReviews()->attach($review);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
-
-    /**
-     * validator can view reports on events.
-     */
-    public function validatorViewReports (){
-            /* check if the loogedd in user is a validator */
-            if(Auth::user()->role == 5){
-                /*get all Event review reports */
-                $event_reviews_reports = EventReviewReport::all();
-                /*for each report get its event and review to pass them to the view */
-                foreach($event_reviews_reports as $event_reviews_report) {
-                    $event_review = EventReview::findOrFail($event_reviews_report->review_id);
-                    $event_id = $event_review->event_id;
-                    $user_id = $event_review->user_id ;
-                    $event_reviews_report->event_id = $event_id ;
-                    $event_reviews_report->user_id = $user_id;
-                }
-
-                return view('volunteer.validator.eventReviewsReports',compact('event_reviews_reports'));
-
-            }
-    }
-    /**
-     * validator assign report to be viewed
-     */
-        public function reportViewed($id){
-    /* if view button is clicked change the viewed attribute of the report to 1 which means it is viewed */
-            $report = EventReviewReport::findOrFail($id);
-            $report->viewed = 1 ;
-            $report->save();
-            return redirect()->action('EventReviewController@validatorViewReports');
-
-        }
-
-
-
 }
