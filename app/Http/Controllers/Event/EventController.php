@@ -114,7 +114,7 @@ class EventController extends Controller
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
-			Notification::notify($event->volunteers, $event,
+			Notification::notify($event->volunteers, 2, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
 		return redirect()->action('Event\EventController@show', [$id]);
@@ -129,7 +129,7 @@ class EventController extends Controller
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
 			$event->delete();
-			Notification::notify($event->volunteers, null,
+			Notification::notify($event->volunteers, 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
 		return redirect('/');
