@@ -92,9 +92,9 @@ class Event extends Model
         return $this->hasMany('App\Photo');
     }
 
-    public function create_photo($request)
+    public function createPhoto($request)
     {
-        $photo =new Photo($request->all());
+        $photo = new Photo($request->all());
         $this->photos()->save($photo);
         return $photo;
     }

@@ -90,6 +90,7 @@
 @stop
 
 @section('scripts')
+    <script src="{{asset('js/lightbox.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#posts-tab").click(function(){

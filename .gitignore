@@ -10,14 +10,4 @@ Homestead.json
 
 *.png
 
-public/db/gallery/3
-
-public/db/gallery/7
-
-public/db/gallery/2
-
-public/db/gallery/0
-
-public/db/gallery/1
-
-public/db/gallery/6
+public/db/gallery/*
