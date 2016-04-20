@@ -57,10 +57,6 @@ class EventController extends Controller
 	public function show($id)
 	{
         $event = Event::findOrFail($id);
-        $posts = $event->posts;
-        $questions = $event->questions()->answered()->get();
-        $reviews = $event->reviews;
-		$photos=$event->photos()->orderBy('created_at', 'desc')->get();
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;
@@ -71,7 +67,7 @@ class EventController extends Controller
 			if($record)
 				$volunteerState = $record->pivot->type;
 		}
-		return view('event.show', compact('event', 'creator', 'volunteerState','photos'));
+		return view('event.show', compact('event', 'creator', 'volunteerState'));
 	}
 
 	/**
@@ -137,76 +133,6 @@ class EventController extends Controller
 		return redirect('/');
 	}
 
-    /**
-     * Event Gallery.
-     */
-
-	public function add_photos($id)
-	{
-		$event = Event::findOrFail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id){
-			return view('event.gallery.upload',compact('event'));
-		}
-		return redirect('/');
-	}
-
-    public function save_photos(Request $request,$id)
-    {
-		$event = Event::findOrFail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id) {
-			$input = $request->all();
-			$files = $input['images'];
-			$paths = array();
-
-			foreach ($files as $file) {
-				$rules = array('file' => 'required|image');
-				$validator = Validator::make(array('file' => $file), $rules);
-
-				if ($validator->passes()) {
-					$path = 'app/storage/db/gallery/' . $event->id;
-					$filename = md5($file->getClientOriginalName(), false);
-					$upload_success = $file->move($path, $filename);
-					if ($upload_success) {
-						array_push($paths, $path . '/' . $filename);
-					} else {
-						return redirect()->action('EventController@test');
-					}
-				} else {
-					return redirect()->action('EventController@test');
-				}
-			}
-
-
-			return view('event.gallery.add_caption', compact('paths','event'));
-		}
-		return redirect('/');
-    }
-
-    public function saveGallery(Request $request,$id)
-	{
-		$event = Event::findorfail($id);
-		if (auth()->guard('organization')->user()->id == $event->organization()->id) {
-			$input = $request->all();
-			$captions = $input['captions'];
-			$paths = $input['paths'];
-			$counter = 0;
-			foreach (array_combine($paths, $captions) as $path => $caption) {
-				$photo = $event->create_photo(Request::create($caption));
-				$photo->path = $path;
-				$photo->save();
-				$counter++;
-			}
-			return redirect()->action('EventController@show', [$id]);
-		}
-		return redirect('/');
-
-	}
-    /*
-    |==========================================================================
-    | Volunteers' Interaction with Event
-    |==========================================================================
-    |
-    */
 /*
 |==========================================================================
 | Volunteers' Interaction with Event

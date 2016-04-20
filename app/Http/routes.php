@@ -247,15 +247,6 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Event CRUD.
      */
-    Route::get('event/{id}/add_photos','EventController@add_photos');
-    Route::post('event/{id}/add_caption','EventController@add_caption');
-    Route::post('event/{id}/saveGallery','EventController@saveGallery');
-
-    /*
-    |-----------------------
-    | Admin Routes
-    |-----------------------
-    */
     Route::resource('event','Event\EventController', ['except' => 'index']);
 
 /*

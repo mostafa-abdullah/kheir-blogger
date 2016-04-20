@@ -75,67 +75,6 @@
           <li role="presentation" id="gallery-tab"><a href="#">Gallery</a></li>
        </ul>
 
-        <div class="container panel-body">
-            <div class="tab-body" id="posts">
-                @if($posts->count()==0)
-                 <h3 class="alert-info">This Event has no posts</h3>
-                @else
-                 @foreach($posts as $post)
-                     <ul>
-                         <li>{{$post->description}}</li>
-                     </ul>
-                 @endforeach
-                @endif
-            </div>
-
-            <div class="tab-body" id="questions" hidden>
-                @if($questions->count()==0)
-                    <h3 class="alert-info">This Event has no answered Questions</h3>
-                @else
-                @foreach($questions as $question)
-                    <ul>
-                        <li>{{$question->question_body .'?'}}</li>
-                        <h6>by {{\App\User::findOrFail($question->user_id)->name}}</h6>
-                         <h4>{{$question->answer}}</h4>
-                    </ul>
-                @endforeach
-                @endif
-            </div>
-
-            <div class="tab-body" id="reviews" hidden>
-                @if($reviews->count()==0)
-                    <h3 class="alert-info">This Event has no Reviews</h3>
-                @else
-                @foreach($reviews as $review)
-                    <div class="jumbotron">
-
-                        <h3>
-                            {{$review->review}}
-                        </h3>
-                            <h5>By {{\App\User::findOrFail($review->user_id)->name}}</h5>
-                    </div>
-                @endforeach
-                @endif
-            </div>
-
-            <div class="container panel-body">
-                <div class="tab-body" id="gallery">
-                    @if($photos->count()==0)
-                        <h3 class="alert-info">This Event has no gallery</h3>
-                    @else
-                        <div>
-                            <div class="row" style=" max-width:100% ;display:block; height: auto">
-                                @foreach($photos as $photo)
-                                    <div class="col-sm-4" style="margin-bottom:30px">
-                                        <a class="example-image-link"  href="{{$photo->path}}" data-lightbox="roadtrip" data-title="{{$photo->caption}}">
-                                            <img class="example-image" src={{$photo->path}} style="max-width:100%;">
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                </div>
-            </div>
         <div class="panel-body">
             {{--  Event Posts --}}
             @include('event.post.index', ['posts' => $event->posts()->latest()->get()])
@@ -144,11 +83,10 @@
             {{--  Event Reviews --}}
             @include('event.review.index', ['reviews' => $event->reviews])
             {{--  Event Gallery --}}
-            @include('event.gallery.index')
+            @include('event.gallery.index', ['photos' => $event->photos()->orderBy('created_at', 'desc')->get()])
         </div>
+    </div>
 
-            </div>
-        </div>
 @stop
 
 @section('scripts')
@@ -183,5 +121,4 @@
             });
         });
     </script>
-    <script src="js/lightbox.js"></script>
 @endsection
