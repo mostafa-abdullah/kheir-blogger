@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
 
@@ -31,24 +31,36 @@ class OrganizationController extends Controller
         $this->middleware('auth_organization', ['only' => [
             'edit', 'update', 'viewRecommendations'
         ]]);
+
+        $this->middleware('auth_admin', ['only' => [
+            'destroy',
+        ]]);
     }
 
     /**
     * Show organization profile.
+    * State->auth
+    * 	0 => Guest
+    * 	1 => Auth is organization
+    * 	2 => Auth is volunteer and subscribed to this organization
+    * 	3 => Auth is volunteer and not subscribed to this organization
     */
     public function show($id)
     {
         $organization = Organization::findOrFail($id);
         $state = 0;
+        $blocked = 0;
         if(auth()->guard('organization')->check())
             $state = 1;
         else if (Auth::user())
-                if(Auth::user()->subscribedOrganizations()->find($id))
-                    $state = 2;
-                else
-                    $state = 3;
-        $events=$organization->events();
-        return view('organization.show',compact('organization','state','events'));
+        {
+            $blocked = Auth::user()->blockedOrganizations()->find($id);
+            if(Auth::user()->subscribedOrganizations()->find($id))
+                $state = 2;
+            else
+                $state = 3;
+        }
+        return view('organization.show',compact('organization', 'state', 'blocked'));
     }
 
     /**
@@ -71,7 +83,7 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
-        return redirect()->action('OrganizationController@show', [$id]);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -80,7 +92,7 @@ class OrganizationController extends Controller
     public function subscribe($id)
     {
         Auth::user()->subscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -89,7 +101,7 @@ class OrganizationController extends Controller
     public function unsubscribe($id)
     {
         Auth::user()->unsubscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -110,7 +122,7 @@ class OrganizationController extends Controller
         $recommendation->user_id = Auth::user()->id;
         $organization = Organization::findorfail($id);
         $organization->recommendations()->save($recommendation);
-        return redirect()->action('OrganizationController@show', [$id]);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -145,6 +157,13 @@ class OrganizationController extends Controller
     {
         $organization = Organization::find($organization_id);
         $organization->blockingVolunteers()->detach(Auth::user());
+        return redirect('/');
+    }
+
+    public function destroy($id)
+    {
+        $organization = Organization::find($id);
+        $organization->delete();
         return redirect('/');
     }
 }

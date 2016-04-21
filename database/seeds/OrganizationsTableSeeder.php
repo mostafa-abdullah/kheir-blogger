@@ -12,21 +12,24 @@ class OrganizationsTableSeeder extends Seeder
     public function run()
     {
         DB::table('organizations')->insert([
-            'name' => 'Bdaya',
-            'email' => 'bdaya@gmail.com',
-            'password' => bcrypt('123456'),
+            'id'       => '1',
+            'name'     => 'Bdaya',
+            'email'    => 'bdaya@gmail.com',
+            'password' =>  bcrypt('123456'),
         ]);
 
         DB::table('organizations')->insert([
-            'name' => 'Nawwar',
-            'email' => 'nawwar@gmail.com',
-            'password' => bcrypt('123456'),
+            'id'       => '2',
+            'name'     => 'Nawwar',
+            'email'    => 'nawwar@gmail.com',
+            'password' =>  bcrypt('123456'),
         ]);
 
         DB::table('organizations')->insert([
-            'name' => 'AYB',
-            'email' => 'ayb@gmail.com',
-            'password' => bcrypt('123456'),
+            'id'       => '3',
+            'name'     => 'AYB',
+            'email'    => 'ayb@gmail.com',
+            'password' =>  bcrypt('123456'),
         ]);
     }
 }

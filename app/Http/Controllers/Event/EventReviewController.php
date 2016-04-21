@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Event;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Requests\EventReviewRequest;
+use App\Http\Services\EventReviewService;
 
 use App\EventReview;
 use App\Event;
@@ -12,8 +15,11 @@ use Auth;
 
 class EventReviewController extends Controller
 {
+    private $eventReviewService;
+
     public function __construct()
     {
+        $this->eventReviewService = new EventReviewService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
@@ -43,9 +49,9 @@ class EventReviewController extends Controller
     {
         $event = Event::findorfail($id);
         if(!$event->attendees()->find(Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
-        if($event->reviews()->where('user_id', Auth::user()->id))
-            return redirect()->action('EventController@show', [$id]);
+            return redirect()->action('Event\EventController@show', [$id]);
+        if($event->reviews()->where('user_id', Auth::user()->id)->first())
+            return redirect()->action('Event\EventController@show', [$id]);
         return view ('event.review.create', compact('event'));
     }
 
@@ -54,11 +60,8 @@ class EventReviewController extends Controller
      */
     public function store(EventReviewRequest $request, $id)
     {
-          $review = new EventReview($request->all());
-          $review->user_id = Auth::user()->id;
-          $event = Event::findorfail($id);
-          $event->reviews()->save($review);
-          return redirect()->action('EventController@show', [$id]);
+          $this->eventReviewService->store($request,$id);
+          return redirect()->action('Event\EventController@show', [$id]);
     }
 
     /**
@@ -87,9 +90,7 @@ class EventReviewController extends Controller
 
     public function report($event_id, $review_id)
     {
-        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
-        if(!$review->reportingUsers()->find(Auth::user()->id))
-            Auth::user()->reportedEventReviews()->attach($review);
-        return redirect()->action('EventController@show', [$event_id]);
+        $this->eventReviewService->report($event_id,$review_id);
+        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 }

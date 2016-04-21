@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Volunteer;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -69,7 +71,10 @@ class ChallengeController extends Controller
         $this->validate($request , ['events' => 'required|numeric|min:1']);
         $challenge = Auth::user()->currentYearChallenge();
         if($challenge)
-            $challenge->update($request->all());
+        {
+            $input['events'] = $request->get('events');
+            $challenge->update($input);
+        }
         return redirect('/');
     }
 

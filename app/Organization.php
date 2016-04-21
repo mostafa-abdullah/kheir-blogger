@@ -5,15 +5,19 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Authenticatable implements CanResetPassword
 {
 
     use CanResetPasswordTrait;
+    use SoftDeletes;
 
     protected $fillable = [
         'name', 'email', 'password','bio','slogan','phone','location'
     ];
+
+    protected $hidden = ['password', 'remember_token'];
 
     public function subscribers()
     {

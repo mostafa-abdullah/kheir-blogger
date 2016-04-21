@@ -2,7 +2,7 @@
 
 @section('content')
 
-  {!! Form::model($organization, array( 'method' => 'PATCH','action' =>array('OrganizationController@update',$organization->id))) !!}
+  {!! Form::model($organization, array( 'method' => 'PATCH','action' =>array('Organization\OrganizationController@update',$organization->id))) !!}
 
     <div class="form-group">
       {!!Form::label('name', 'Name');!!}

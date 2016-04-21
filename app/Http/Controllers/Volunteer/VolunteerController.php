@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Volunteer;
 
-use App\Organization;
+use App\Http\Controllers\Controller;
+use App\Http\Services\VolunteerService;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
-use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use App\User;
-use App\Event;
-use App\Challenge;
-use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
@@ -17,10 +15,13 @@ use Auth;
 
 class VolunteerController extends Controller
 {
-    public function __construct(){
+    private $volunteerService;
 
+    public function __construct()
+    {
+        $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
-            'showNotifications', 'unreadNotification',
+            'showNotifications', 'unreadNotification', 'showDashboard',
             'createFeedback', 'storeFeedback', 'edit', 'update'
         ]]);
     }
@@ -53,9 +54,8 @@ class VolunteerController extends Controller
     */
     public function update(VolunteerRequest $request, $id)
     {
-        $volunteer = User::findorfail($id);
-        $volunteer->update($request->all());
-        return redirect()->action('VolunteerController@show', [$id]);
+        $this->volunteerService->update($request, $id);
+        return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
     /**
@@ -63,13 +63,14 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-        $notifications = Auth::user()->notifications()->unread()->get();
-        foreach($notifications as $notification)
+        $oldNotifications = Auth::user()->notifications()->read()->get();
+        $newNotifications = Auth::user()->notifications()->unread()->get();
+        foreach($newNotifications as $notification)
         {
             $notification->pivot->read = 1;
             $notification->push();
         }
-        return view('volunteer.notification.show', compact('notifications'));
+        return view('volunteer.notification.show', compact('newNotifications', 'oldNotifications'));
     }
 
     /**
@@ -95,16 +96,10 @@ class VolunteerController extends Controller
      */
     public function storeFeedback(Request $request)
     {
-        $this->validate($request, [
-            'subject' => 'required|max:60',
-            'message' => 'required',
-        ]);
-        $feedback = new Feedback($request->all());
-        $feedback->user_id = Auth::user()->id;
-        $feedback->save();
-        \Session::flash('flash_message','feedback successfully sent!');
+        $this->volunteerService->storeFeedback($request);
         return redirect('/');
     }
+
     /**
      * Show all my events
      */
@@ -120,39 +115,31 @@ class VolunteerController extends Controller
         return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
     }
     /**
-     * [showDashboard  prepare the events and posts from database]
-     * @return [view]           [thr view of the page]
+     * Shows the logged-in volunteer's dashboard
+     * @return [view]           [the dashboard view]
      */
     public function showDashboard()
     {
-        if(Auth::user()){
-          $numPerPage = 2;
-          $page = (Input::get('page')) ? Input::get('page') : 1;
-          $id = Auth::user()->id;
-          $events = Auth::user()->interestingEvents($id)->get();
-          $posts  = Auth::user()->interestingPosts($id)->get();
-          $data = array_merge($posts,$events);
-          usort($data, array($this, "cmp"));
-          $total = count($data);
-          $supdata=   new Paginator($data, $total, $numPerPage, $page, array("path" => '/dashboard'));
-          return view('volunteer.dashboard' , compact('supdata'));
-        }else
-          return redirect('/login');
-
-
+        $offset  = 2;
+        $id = Auth::user()->id;
+        $events = Auth::user()->FilterInterestingEvents($id)->get();
+        $posts  = Auth::user()->interestingPosts($id)->get();
+        $data = array_merge($posts, $events);
+        usort($data, array($this, "compare"));
+        $size = count($data);
+        return view('volunteer.dashboard' , compact('size','offset','data'));
     }
+
     /**
-     * [cmp comparing method for the sort]
+     * Comparator used for sorting events and posts
      * @param  [type] $record1 [first record in data array]
      * @param  [type] $record2 [second record in data array]
      * @return [type]          [signal]
      */
-    public function cmp($record1, $record2)
-     {
-         if ($record1->updated_at == $record2->updated_at) {
+    public function compare($record1, $record2)
+    {
+         if ($record1->updated_at == $record2->updated_at)
              return 0;
-         }
          return ($record1->updated_at > $record2->updated_at) ? -1 : 1;
-     }
-
+    }
 }
