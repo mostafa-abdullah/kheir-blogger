@@ -75,7 +75,7 @@ class AdminController  extends Controller{
           // calculate the cancellation rate of this organization.
           $organization->cancellationRate = $organization->numberOfEvents - $organization->numberOfCancelledEvents;
         }
-        return view('volunteer.admin.view-organizations',compact('organizations'));
+        return view('admin.view-organizations',compact('organizations'));
 
     }
 
