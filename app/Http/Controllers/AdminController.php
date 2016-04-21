@@ -55,11 +55,12 @@ class AdminController  extends Controller{
     public function viewEventReviewReports()
     {
         $reported_event_reviews = EventReview::has('reportingUsers')->get();
-
         foreach($reported_event_reviews as $reported_event_review)
         {
             $reported_event_review->event = Event::find($reported_event_review->event_id);
             $reported_event_review->volunteer = User::find($reported_event_review->user_id);
+            $reported_event_review->viewed = count($reported_event_review->reportingUsers()->wherePivot('viewed', '1')->get());
+            $reported_event_review->reporters = count($reported_event_review->reportingUsers()->get());
         }
         return view('admin.event-review-reports', compact('reported_event_reviews'));
     }
@@ -67,11 +68,14 @@ class AdminController  extends Controller{
     /**
      * validator mark report to be viewed
      */
-    public function toggleEventReviewReportViewed($id)
+    public function setEventReviewReportViewed($id, $viewed)
     {
-        $report = EventReview::findOrFail($id);
-        $report->viewed = 1 ^ $report->viewed;
-        $report->save();
+        $reports = EventReview::find($id)->reportingUsers()->wherePivot('viewed', (1^$viewed))->get();
+        foreach($reports as $report)
+        {
+            $report->pivot->viewed = $viewed;
+            $report->pivot->push();
+        }
         return redirect()->action('AdminController@viewEventReviewReports');
     }
 }

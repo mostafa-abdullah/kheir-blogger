@@ -276,7 +276,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Validator mark event review report "viewed"
      */
-    Route::post('review/reports/event/{id}','AdminController@toggleEventReviewReportViewed');
+    Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
 
 
 
