@@ -50,13 +50,13 @@ class AdminController  extends Controller{
     }
 
     /**
-     * admin can view organizations.
+     * Validator can view organizations.
      */
-    public function adminViewOrganizations(){
-      // only access to admin.
-      if(Auth::User()->role == 8) {
+    public function viewOrganizations()
+    {
         $organizations = Organization::all();
-        foreach ($organizations as $organization) {
+        foreach ($organizations as $organization)
+        {
           // get the number of subscribers for this organization.
           $organization->numberOfSubscribers = $organization->subscribers()->count();
 
@@ -75,11 +75,9 @@ class AdminController  extends Controller{
           // calculate the cancellation rate of this organization.
           $organization->cancellationRate = $organization->numberOfEvents - $organization->numberOfCancelledEvents;
         }
-        return view('volunteer.adminPanel.view-organizations',compact('organizations'));
-      }
-      else {
-        return redirect('/');
-      }
+        return view('volunteer.admin.view-organizations',compact('organizations'));
+
+    }
 
       /**
        * Validator can view reports on event reviews.
