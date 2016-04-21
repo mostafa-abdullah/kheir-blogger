@@ -16,8 +16,10 @@ class OrganizationReviewController extends Controller
     public function __construct()
     {
         $this->middleware('auth_volunteer', ['only' => [
-            'create', 'store', 'edit', 'update', 'report','destroy'
+            'create', 'store', 'edit', 'update', 'report'
         ]]);
+
+        $this->middleware('auth_validator', ['only' => ['destroy']]);
     }
 
     /**
@@ -77,17 +79,17 @@ class OrganizationReviewController extends Controller
     /**
      * Delete an organization review
      */
-       public function destroy($organization_id, $review_id)
+    public function destroy($organization_id, $review_id)
     {
-        $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
+        $organization = Organization::findOrFail($organization_id);
+        $review = $organization->reviews()->findOrFail($review_id);
+        $volunteer = $review->user()->get();
+        $review->delete();
 
-         $volunteer = $review->user();
-        $review->delete(); 
+        Notification::notify($volunteer,7, null,
+                    "your review on organization: ". $organization->name." has been deleted", "/organization/".$organization_id);
 
-       Notification::notify($volunteer,7, null,
-                "your review has been deleted", url("/"));
-
-       return redirect()->action('OrganizationController@show', [$organization_id]);
+        return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 
     public function report($organization_id, $review_id)
@@ -97,5 +99,5 @@ class OrganizationReviewController extends Controller
             Auth::user()->reportedOrganizationReviews()->attach($review);
         return redirect()->action('OrganizationController@show', [$organization_id]);
     }
-   
+
 }

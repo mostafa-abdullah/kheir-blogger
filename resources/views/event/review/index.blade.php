@@ -20,8 +20,12 @@
             @if (Auth::user())
                 <a href="/event/{{$event->id}}/review/{{$review->id}}/report">report</a>
             @endif
-            @if (Auth::user()->role == 5)
-                <a href="/event/{{$event->id}}/review/{{$review->id}}/destroy">delete</a>
+            @if (Auth::user()->role >= 5)
+                <form action="{{ url('event/'.$event->id.'/review/'.$review->id) }}" method="POST">
+                     {!! csrf_field() !!}
+                     {!! method_field('DELETE') !!}
+                     <button type="submit" class="btn btn-danger btn-event">Delete</button>
+                </form>
             @endif
 
         </div>

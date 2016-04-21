@@ -11,7 +11,8 @@ class OrganizationReviewsTableSeeder extends Seeder
      */
     public function run()
     {
-           DB::table('organization_reviews')->insert([
+        DB::table('organization_reviews')->delete();
+        DB::table('organization_reviews')->insert([
             'id'       => '1',
             'user_id'     => '2',
             'organization_id'    => '1',
@@ -19,5 +20,5 @@ class OrganizationReviewsTableSeeder extends Seeder
             'rate' => '5',
         ]);
     }
-    
+
 }

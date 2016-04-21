@@ -134,7 +134,6 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('organization/{id}/reviews' , 'Organization\OrganizationReviewController@index');
     Route::get('organization/{id}/review/{r_id}/report', 'Organization\OrganizationReviewController@report');
-     Route::get('organization/{id}/review/{r_id}/destroy', 'Organization\OrganizationReviewController@destroy');
     Route::resource('organization/{id}/review', 'Organization\OrganizationReviewController');
 
     /**
@@ -243,7 +242,6 @@ Route::group(['middleware' => ['web']], function () {
      * Event Reviewing.
      */
     Route::get('event/{id}/review/{r_id}/report', 'Event\EventReviewController@report');
-    Route::get('event/{id}/review/{r_id}/destroy', 'Event\EventReviewController@destroy');
     Route::resource('event/{id}/review','Event\EventReviewController');
 
     /**
