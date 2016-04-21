@@ -270,6 +270,18 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');
 
+    /**
+     * Valiadator view event review reports
+     */
+    Route::get('review/reports/event','AdminController@viewEventReviewReports');
+
+    /**
+     * Validator mark event review report "viewed"
+     */
+    Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
+
+
+
 /*
 |==========================================================================
 | API Routes
@@ -314,6 +326,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
     ]]);
+
 
     /*
     |--------------------------
