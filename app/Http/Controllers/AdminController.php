@@ -66,11 +66,11 @@ class AdminController  extends Controller{
           //get the number of cancelled events by this organization.
           $organization->numberOfCancelledEvents = $organization->events()->withTrashed()->count();
 
-          //get the rate of this organization.
-          if($organization->rate)
-              $organization-> rate  = number_format($organization->rate, 1);
+          //get the rating of this organization.
+          if($organization->rating)
+              $organization->rating = number_format($organization->rating, 1);
           else
-              $organization->rate = "-";
+              $organization->rating = "-";
 
           // calculate the cancellation rate of this organization.
           $organization->cancellationRate = $organization->numberOfEvents - $organization->numberOfCancelledEvents;

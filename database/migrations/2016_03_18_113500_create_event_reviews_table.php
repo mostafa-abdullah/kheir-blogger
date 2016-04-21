@@ -19,7 +19,7 @@ class CreateEventReviewsTable extends Migration
 
 
             $table->text('review');
-            $table->integer('rate');
+            $table->integer('rating');
             $table->timestamps();
         });
 
@@ -28,7 +28,7 @@ class CreateEventReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE events
-                        SET rate = (SELECT AVG(rate) FROM event_reviews WHERE id = NEW.event_id)
+                        SET rating = (SELECT AVG(rating) FROM event_reviews WHERE id = NEW.event_id)
                         WHERE id = NEW.event_id;
                     END
         ");
@@ -38,7 +38,7 @@ class CreateEventReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                            SET rate = (SELECT AVG(rate) FROM event_reviews WHERE id = OLD.event_id)
+                            SET rating = (SELECT AVG(rating) FROM event_reviews WHERE id = OLD.event_id)
                         WHERE id = OLD.event_id;
                     END
         ");

@@ -17,7 +17,7 @@ class CreateOrganizationReviewsTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
             $table->text('review');
-            $table->integer('rate');
+            $table->integer('rating');
 
             $table->timestamps();
         });
@@ -27,7 +27,7 @@ class CreateOrganizationReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                        SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = NEW.organization_id)
+                        SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE id = NEW.organization_id)
                         WHERE id = NEW.organization_id;
                     END
         ");
@@ -37,7 +37,7 @@ class CreateOrganizationReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                            SET rate = (SELECT AVG(rate) FROM organization_reviews WHERE id = OLD.organization_id)
+                            SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE id = OLD.organization_id)
                         WHERE id = OLD.organization_id;
                     END
         ");
