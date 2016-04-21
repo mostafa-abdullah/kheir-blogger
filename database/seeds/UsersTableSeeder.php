@@ -11,6 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->delete();
         DB::table('users')->insert([
             'id'         => '1',
             'first_name' => 'ahmad',
@@ -34,6 +35,15 @@ class UsersTableSeeder extends Seeder
             'last_name'  => 'salah',
             'email'      => 'esraa@gmail.com',
             'password'   =>  bcrypt('123456'),
+        ]);
+
+        DB::table('users')->insert([
+            'id'         => '4',
+            'first_name' => 'Baher',
+            'last_name'  => 'Abdo',
+            'email'      => 'bebo@gmail.com',
+            'password'   =>  bcrypt('123456'),
+            'role'       => '5',
         ]);
     }
 }
