@@ -263,12 +263,30 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Admin assign validator.
      */
-    Route::get('volunteer/{id}/validate','AdminController@assignValidator');
+    Route::post('volunteer/{id}/validate','AdminController@assignValidator');
+
+
+    /**
+     * admin view organizations.
+     */
+    Route::get('organizations', 'AdminController@viewOrganizations');
 
     /**
      * Validator ban volunteer.
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');
+
+    /**
+     * Valiadator view event review reports
+     */
+    Route::get('review/reports/event','AdminController@viewEventReviewReports');
+
+    /**
+     * Validator mark event review report "viewed"
+     */
+    Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
+
+
 
 /*
 |==========================================================================
@@ -314,6 +332,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
     ]]);
+
 
     /*
     |--------------------------

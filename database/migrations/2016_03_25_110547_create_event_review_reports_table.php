@@ -19,6 +19,7 @@ class CreateEventReviewReportsTable extends Migration
 
             $table->integer('review_id')->unsigned()->index();
             $table->foreign('review_id')->references('id')->on('event_reviews')->onDelete('cascade');
+            $table->integer('viewed')->default(0);
 
             $table->timestamps();
         });
