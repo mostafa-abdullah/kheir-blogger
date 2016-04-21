@@ -18,7 +18,7 @@ class CreatePhotosTable extends Migration
             $table->foreign('event_id')->references('id')
                 ->on('events')->onDelete('cascade');
 
-            $table->string('path');
+            $table->string('name');
             $table->text('caption')->nullable();
             $table->timestamps();
         });

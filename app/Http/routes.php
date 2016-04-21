@@ -151,8 +151,10 @@ Route::group(['middleware' => ['web']], function () {
      * Organization CRUD.
      */
     Route::resource('organization', 'Organization\OrganizationController', ['only' => [
-        'show', 'edit', 'update',
+        'show', 'edit', 'update', 'destroy'
     ]]);
+
+    Route::get('organization/delete/{id}' , 'Organization\OrganizationController@delete');
 
     /*
     |-----------------------
@@ -274,6 +276,18 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');
 
+    /**
+     * Valiadator view event review reports
+     */
+    Route::get('review/reports/event','AdminController@viewEventReviewReports');
+
+    /**
+     * Validator mark event review report "viewed"
+     */
+    Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
+
+
+
 /*
 |==========================================================================
 | API Routes
@@ -298,9 +312,12 @@ Route::group(['middleware' => ['web']], function () {
     /**
     * Organization API resource.
     */
+    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
+
     Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
         'index', 'show',
     ]]);
+    Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
 
     /*
     |-----------------------
@@ -320,6 +337,7 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'update',
     ]]);
 
+
     /*
     |--------------------------
     | Events API Routes
@@ -327,10 +345,35 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-    * Organization API resource.
-    */
-    Route::resource('api/event','API\EventAPIController', ['only' => [
-        'index', 'show',
-    ]]);
+     *	Event Following.
+     */
+     Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
+     Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
 
+
+    /**
+     *  Event Registeration.
+     */
+     Route::get('api/event/register/{id}' , 'API\EventAPIController@register');
+     Route::get('api/event/unregister/{id}' , 'API\EventAPIController@unregister');
+
+    /**
+     *  Event Attendance Confirmation.
+     */
+     Route::get('api/event/attend/{id}' , 'API\EventAPIController@attend');
+     Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
+
+
+    /**
+     * Event Reviewing.
+     */
+     Route::get('api/event/{id}/review/{r_id}/report' , 'API\EventReviewAPIController@report');
+     Route::post('api/review/event' , 'API\EventReviewAPIController@store');
+
+    /**
+     * Event API resource.
+     */
+     Route::resource('api/event','API\EventAPIController', ['only' => [
+         'index', 'show'
+     ]]);
 });
