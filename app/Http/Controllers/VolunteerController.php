@@ -114,8 +114,10 @@ class VolunteerController extends Controller
         $followedAndRegisteredEvents = $user->events();
         $subscribedOrganizationEvents = $user->interestingEvents($user->id)->get();
         $allEvents = array_merge($followedAndRegisteredEvents,$subscribedOrganizationEvents);
+        usort($followedAndRegisteredEvents, array($this, "cmp"));
+        usort($subscribedOrganizationEvents, array($this, "cmp"));
         usort($allEvents, array($this, "cmp"));
-        return view('dashboard.events',compact('allEvents'));
+        return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
     }
     /**
      * [showDashboard  prepare the events and posts from database]
