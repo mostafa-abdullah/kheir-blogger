@@ -19,10 +19,6 @@ class EventReviewController extends Controller
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
-
-        $this->middleware('auth_validator', ['only' => [
-            'viewReports'
-        ]]);
     }
 
     /**

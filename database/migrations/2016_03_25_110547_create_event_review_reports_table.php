@@ -19,10 +19,7 @@ class CreateEventReviewReportsTable extends Migration
 
             $table->integer('review_id')->unsigned()->index();
             $table->foreign('review_id')->references('id')->on('event_reviews')->onDelete('cascade');
-            /*
-             * if a validator view a report its value will be 1 otherwise it will be 0
-             */
-            $table->integer('viewed')->defualt(0);
+            $table->integer('viewed')->default(0);
 
             $table->timestamps();
         });
