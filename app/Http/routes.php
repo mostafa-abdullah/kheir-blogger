@@ -251,27 +251,27 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','Event\EventController', ['except' => 'index']);
 
-<<<<<<< HEAD
-    /*
-     *  Routes related to Search engine
-     */
-    Route::get("search","SearchController@load");
-    Route::get('/',function(){
-       //var_dump(new Elasticsearch\ClientBuilder);
-//        $client =  Elasticsearch\ClientBuilder::create()->build();
-//        var_dump($client);
-        $source_client = Elasticsearch\ClientBuilder::create()->build();
-//        dd($source_client);
-        \App\Organization::createIndex($shards = null, $replicas = null);
-//        \App\Organization::addAllToIndex();
-//        $organizations = \App\Organization::search('organization1');
-//        dd($organizations);
 
-//        dd($source_client);
+//     /*
+//      *  Routes related to Search engine
+//      */
+//     Route::get("search","SearchController@load");
+//     Route::get('/',function(){
+//        //var_dump(new Elasticsearch\ClientBuilder);
+// //        $client =  Elasticsearch\ClientBuilder::create()->build();
+// //        var_dump($client);
+//         $source_client = Elasticsearch\ClientBuilder::create()->build();
+// //        dd($source_client);
+//         \App\Organization::createIndex($shards = null, $replicas = null);
+// //        \App\Organization::addAllToIndex();
+// //        $organizations = \App\Organization::search('organization1');
+// //        dd($organizations);
+
+// //        dd($source_client);
 
 
-    });
-=======
+//     });
+
 /*
 |==========================================================================
 | Control Routes
@@ -284,11 +284,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Admin assign validator.
      */
-<<<<<<< HEAD
-    Route::post('volunteer/{id}/validate','AdminController@adminAssignValidator');
->>>>>>> b6a2aadc9c19b1e9334ead7527587e3a8d34a229
-});
-=======
+
     Route::post('volunteer/{id}/validate','AdminController@assignValidator');
 
 
@@ -312,7 +308,6 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
 
->>>>>>> 30923a088a30d8add374c03cc7be139a44349281
 
 
 /*
