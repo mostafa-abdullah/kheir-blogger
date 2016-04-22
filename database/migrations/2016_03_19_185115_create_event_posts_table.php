@@ -23,6 +23,7 @@ class CreateEventPostsTable extends Migration
 
         $table->string('title');
         $table->text('description');
+        $table->softDeletes();
 
         $table->timestamps();
       });
