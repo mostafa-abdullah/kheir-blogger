@@ -6,7 +6,7 @@
     <hr>
 
     @foreach($events as $event)
-        <p>{!! $event->name !!}</p>
+        <p>{{ $event->name }}</p>
     @endforeach
 
 @stop

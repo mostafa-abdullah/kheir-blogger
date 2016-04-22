@@ -4,78 +4,98 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
-use App\Http\Requests\PostRequest;
+
+use App\Organization;
+use App\Notification;
+use App\Event;
 
 use Carbon\Carbon;
-use App\Event;
-use App\Organization;
-use App\Question;
-use App\Notification;
-use App\Post;
-
 use Auth;
 
 class EventController extends Controller
 {
-	public function __construct(){
 
+	public function __construct()
+	{
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
-            'askQuestion', 'storeQuestion',
-
+			'follow', 'unfollow', 'register', 'unregister',
+			'confirm', 'unconfirm'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
-            'create', 'store', 'edit', 'update',
-			'answerQuestion', 'viewUnansweredQuestions',
-			'createPost', 'storePost','destroy'
-        ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
+            'create', 'store', 'edit', 'update', 'destroy',
         ]]);
     }
 
 /*
 |==========================================================================
-| General Event Functions
+| Event CRUD Functions
 |==========================================================================
 |
 */
-
-	public function show($id){
-		// TODO: show the event's page (Hossam Ahmad)
-        // hint: to display question use the scope methods in the Question model
-		return Event::find($id);
+	/**
+	 * Show all events of a certain organization.
+	 */
+	public function index($organization_id)
+	{
+		$organization = Organization::findOrFail($organization_id);
+		$organization_name = $organization->name;
+		$events = $organization->events;
+		return view('event.index', compact('organization_name', 'events'));
 	}
 
-	public function create(){
+	/**
+	 * Show Event's page.
+	 */
 
+	public function show($id)
+	{
+        $event = Event::findOrFail($id);
+        $posts = $event->posts;
+        $questions = $event->questions()->answered()->get();
+        $reviews = $event->reviews;
+		$creator = null;
+		if(Auth::guard('organization')->id() == $event->organization_id)
+			$creator = true;
+		return view('event.show',
+			compact('event', 'posts', 'questions', 'reviews', 'creator'));
+	}
+
+	/**
+	 * Create a new event.
+	 */
+	public function create()
+	{
 		return view('event.create');
 	}
 
-	public function store(EventRequest $request){
-
+	/**
+	 * Store the created event in the database.
+	 */
+	public function store(EventRequest $request)
+	{
 		$organization = auth()->guard('organization')->user();
 		$event = $organization->createEvent($request);
-		$subscribers = $organization->subscribers()->get();
 		$notification_description = $organization->name." created a new event ".$request->name;
-		Notification::notify($subscribers, $event, $notification_description, url("/event", $event->id));
+		Notification::notify($organization->subscribers, $event,
+							$notification_description, url("/event", $event->id));
 		return redirect()->action('EventController@show', [$event->id]);
 	}
 
+	/**
+	 * Edit the information of a certain event.
+	 */
 	public function edit($id)
 	{
 		$event = Event::findOrFail($id);
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
-		{
 			return view('event.edit', compact('event'));
-		}
 		return redirect()->action('EventController@show', [$id]);
 	}
 
+	/**
+	 * Update the information of an edited event.
+	 */
 	public function update(EventRequest $request, $id)
 	{
 		$event = Event::findorfail($id);
@@ -83,157 +103,79 @@ class EventController extends Controller
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
-			Notification::notify($event->registrants(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
-        	Notification::notify($event->followers(), $event, "Event ".($event->name)." has been updated",url("/event",$id));
+			Notification::notify($event->volunteers, $event,
+								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
 		return redirect()->action('EventController@show', [$id]);
 	}
 
+	/**
+	 * Cancel an event.
+	 */
+	public function destroy($id)
+	{
+		$event = Event::findOrFail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+			$event->delete();
+			Notification::notify($event->volunteers, null,
+								"Event ".($event->name)."has been cancelled", url("/"));
+		}
+		return redirect('/');
+	}
+
 /*
 |==========================================================================
-| Volunteers Interaction with Event
+| Volunteers' Interaction with Event
 |==========================================================================
 |
 */
 	public function follow($id)
 	{
-		$user = Auth::user();
-		$user->followEvent($id);
+		Auth::user()->followEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function unfollow($id)
 	{
-		$user = Auth::user();
-		$user->unfollowEvent($id);
+		Auth::user()->unfollowEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function register($id)
 	{
-		$user = Auth::user();
-		$user->registerEvent($id);
+		$event = Event::findOrFail($id);
+		if($event->timing > carbon::now())
+			Auth::user()->registerEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
 	public function unregister($id)
 	{
-		$user = Auth::user();
-		$user->unregisterEvent($id);
+		Auth::user()->unregisterEvent($id);
 		return redirect()->action('EventController@show', [$id]);
 	}
 
-/*
-|==========================================================================
-| Event Questions
-|==========================================================================
-|
-*/
-	public function askQuestion($id)
+	public function confirm($id)
 	{
-		return view('event.question.ask', compact('id'));
+		$event = Auth::registeredEvents()->findOrFail($id);
+		if($event->timing < carbon::now())
+			return view('event.confirm', compact('id'));
 	}
 
-    public function storeQuestion(Request $request, $id)
-    {
-		$this->validate($request, [ 'question' => 'required' ]);
-
-        $question = new Question($request->all());
-        $question->user_id = Auth::user()->id;
-		Event::findOrFail($id)->questions()->save($question);
-
-        return redirect()->action('EventController@show', [$id]);
-    }
-
-    public function answerQuestion(Request $request, $id, $q_id)
-    {
-	 	$this->validate($request, [ 'answer' => 'required' ]);
-
-        $question = Question::findOrFail($q_id);
-		$event = $question->event();
-
-        if($event->organization()->id != auth()->guard('organization')->user()->id){
-			return redirect()->action('EventController@show', [$id])
-							 ->withErrors(['Permission' => 'You do not have Permission to answer this question']);
-        }
-
-		$question->answer = $request->get('answer');
-		$question->answered_at = Carbon::now();
-		$question->save();
-		Notification::notify(array($question->user()), $event, "Your question has been answered", url("/event/".$question->event_id."question/".$question->id));
-
-		return redirect()->action('EventController@viewUnansweredQuestions', [$id]);
-    }
-
-	public function showQuestion($event_id, $question_id)
+	public function attend($id)
 	{
-		$question = Question::findOrFail($question_id);
-		if($question->event_id != $event_id)
-			abort(404);
-		if(!$question->answer)
-			return redirect()->action('EventController@show', [$event_id]);
-		return view('event.question.show', compact('question'));
+		$event = Event::findOrFail($id);
+		if($event->timing < carbon::now())
+			Auth::user()->attendEvent($id);
+		return redirect()->action('EventController@show',[$id]);
 	}
 
-    public function viewUnansweredQuestions($id)
-    {
-        $event = Event::findorfail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization_id)
-		{
-        	$questions = $event->questions()->Unanswered()->get();
-        	return view("event.question.answer", compact('questions'));
-        }
-		return redirect()->action('EventController@show', [$id])
-						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
-    }
-
-/*
-|==========================================================================
-| Event Posts
-|==========================================================================
-|
-*/
-	/*
-	* Return view for creating Post.
-	*
-	*/
-    public function createPost($event_id)
-    {
-		$event = Event::findOrFail($event_id);
-		$organization_id = auth()->guard('organization')->user()->id;
-		if($event->organization()->id == $organization_id)
-			return view('event.post.create')->with('event_id', $event_id);
-		return redirect()->action('EventController@show', [$event_id]);
-    }
-
-    /*
-	* Add a new Post to the Event and Notify Users.
-	*
-	*/
-    public function storePost(PostRequest $request, $event_id)
-    {
-    	$organization_id = auth()->guard('organization')->user()->id;
-    	$eventPost = new Post($request->all());
-    	$eventPost->event_id = $event_id;
-    	$eventPost->organization_id = $organization_id;
-    	$eventPost->save();
-        if($request->sendnotifications == 1)
-		{
-            $event = Event::find($event_id);
-			Notification::notify($event->registrants(), $event, "Event ".($event->name)." has new posts",url("/event",$id));
-        	Notification::notify($event->followers(), $event, "Event ".($event->name)." has new posts",url("/event",$id));
-        }
-        return redirect()->action('EventController@show', [$event_id]);
-    }
-    public function destroy($id){
-    	$event = Event::findOrFail($id);
- 
-    	if(auth()->guard('organization')->user()->id == $event->organization()->id)
-		{
-    	
-        $event->delete();
-          Notification::notify($event->registrants(), $event, "Event ".($event->name)."has been deleted ",url("home"));
-
-           }
-    }
+	public function unattend($id)
+	{
+		$event = Event::findOrFail($id);
+		if($event->timing < carbon::now())
+			Auth::user()->unattendEvent($id);
+		return redirect()->action('EventController@show',[$id]);
+	}
 }

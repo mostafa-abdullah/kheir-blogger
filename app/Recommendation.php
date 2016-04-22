@@ -8,13 +8,13 @@ class Recommendation extends Model
 {
     protected $fillable = ['recommendation'];
 
-    public function user(){
-
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 
-    public function organization(){
-        
+    public function organization()
+    {
         return $this->belongsTo('App\Organization');
     }
 }

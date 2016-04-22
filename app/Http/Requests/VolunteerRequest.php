@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class PostRequest extends Request
+class VolunteerRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,9 @@ class PostRequest extends Request
      */
     public function authorize()
     {
-        return auth()->guard('organization')->check();
+        $id = $this->route()->getParameter('volunteer');
+
+        return $id == auth()->user()->id;
     }
 
     /**
@@ -23,9 +25,11 @@ class PostRequest extends Request
      */
     public function rules()
     {
+        $id = $this->route()->getParameter('volunteer');
         return [
-            'title' => 'required',
-            'description' => 'required'
+            "first_name"   => "required|max:255",
+            "last_name"   => "required|max:255",
+            "email"  => "unique:users,email,".$id,
         ];
     }
 }

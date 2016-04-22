@@ -206,7 +206,11 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
+<<<<<<< HEAD
        // 'Elasticsearch' => Cviebrock\LaravelElasticsearch\Facade::class,
+=======
+        'Input'     => Illuminate\Support\Facades\Input::class,
+>>>>>>> b6a2aadc9c19b1e9334ead7527587e3a8d34a229
     ],
 
 ];

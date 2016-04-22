@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Organization;
 use Illuminate\Http\Request;
-use App\Http\Requests;
+use App\Http\Requests\VolunteerRequest;
 
 use App\User;
 use App\Event;
 use App\Challenge;
+use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
@@ -16,131 +17,59 @@ use Auth;
 
 class VolunteerController extends Controller
 {
-
     public function __construct(){
 
         $this->middleware('auth_volunteer', ['only' => [
-            // Add all functions that are allowed for volunteers only
-            'subscribe', 'unsubscribe', 'createChallenge', 'storeChallenge',
-            'editChallenge', 'updateChallenge',
-            'showNotifications', 'unreadNotification', 'reportOrganizationReview',
-            'reportEventReview'
-        ]]);
-
-        $this->middleware('auth_organization', ['only' => [
-            // Add all functions that are allowed for organizations only
-        ]]);
-
-        $this->middleware('auth_both', ['only' => [
-            // Add all functions that are allowed for volunteers/organizations only
-
+            'showNotifications', 'unreadNotification',
+            'createFeedback', 'storeFeedback', 'edit', 'update'
         ]]);
     }
 
     /**
-     * subscribes the authenticated user for the organization with
-     * the passed id
-     */
-    public function subscribe($id){
-        Auth::user()->subscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
-    }
-
-    /**
-     * Unsubscribes the authenticated user for the organization with
-     * the passed id
-     */
-    public function unsubscribe($id){
-        Auth::user()->unsubscribe($id);
-        return redirect()->action('OrganizationController@show', [$id]);
-    }
-
-    /**
-     * Shows volunteer's profile
+     * Show volunteer profile.
      */
     public static function show($id)
     {
         $volunteer = User::findOrFail($id);
-        return view('volunteer.show', compact('volunteer'));
+        $can_update = Auth::user()->id == $id;
+        return view('volunteer.show', compact('volunteer', 'can_update'));
     }
 
     /**
-     *  Volunteer set a challenge to himself
-     */
-    public function createChallenge()
+    * Edit volunteer profile.
+    */
+    public function edit($id)
     {
-        if(Auth::user()->currentYearChallenge())
-            return redirect('volunteer/challenge/edit');
-        return view('volunteer.challenge.create');
+        if(Auth::user()->id == $id)
+        {
+            $volunteer = User::findorfail($id);
+            return view('volunteer.edit' , compact('volunteer'));
+        }
+        return redirect('/');
     }
 
     /**
-     *  Store the challenge in the database
-     */
-    public function storeChallenge(Request $request)
+    * Update volunteer profile.
+    */
+    public function update(VolunteerRequest $request, $id)
     {
-        $this->validate($request , ['events' => 'required|numeric|min:1']);
-        $challenge = new Challenge($request->all());
-        $challenge->year = Carbon::now()->year;
-        Auth::user()->challenges()->save($challenge);
-        return redirect('home');
+        $volunteer = User::findorfail($id);
+        $volunteer->update($request->all());
+        return redirect()->action('VolunteerController@show', [$id]);
     }
 
     /**
-     *  Volunteer can edit challenge
+     * Show all new notifications for the authenticated user.
      */
-    public function editChallenge()
+    public function showNotifications()
     {
-        $challenge = Auth::user()->currentYearChallenge();
-        if($challenge)
-            return view('volunteer.challenge.edit' , compact('challenge'));
-        return redirect('volunteer/challenge/create');
-    }
-
-    /**
-     *  Volunteer can update challenge
-     */
-    public function updateChallenge(Request $request)
-    {
-        $this->validate($request , ['events' => 'required|numeric|min:1']);
-        $challenge = Auth::user()->currentYearChallenge();
-        if($challenge)
-            $challenge->update($request->all());
-        return redirect('home');
-    }
-
-    /**
-     * Volunteer can view all his challenges
-     */
-    public function viewChallenges()
-    {
-       $currentChallenge = Auth::user()->currentYearChallenge();
-       $previousChallenges = Auth::user()->previousYearsChallenges()->latest('year')->get();
-        return view('volunteer.challenge.viewChallenges' , compact('currentChallenge' , 'previousChallenges'));
-    }
-
-
-    /**
-     * Volunteer can view all events he/she attended this year
-     */
-    public function viewAttendedEvents()
-    {
-        $events = Auth::user()->currentYearAttendedEvents()->get();
-        return view('volunteer.challenge.attendedEvents' , compact('events'));
-    }
-    
-    /**
-     * show all notifications for the authenticated user.
-     */
-	public function showNotifications()
-    {
-		$notifications = Auth::user()->notifications()->unread()->get();
+        $notifications = Auth::user()->notifications()->unread()->get();
         foreach($notifications as $notification)
         {
             $notification->pivot->read = 1;
             $notification->push();
         }
-    	return view('notifications.show', compact('notifications'));
+        return view('volunteer.notification.show', compact('notifications'));
     }
 
     /**
@@ -154,55 +83,26 @@ class VolunteerController extends Controller
     }
 
     /**
-      *  User blocks an organization
-      */
-    public function blockAnOrganization ($organization_id){
-        $organization = Organization::find($organization_id);
-        Auth::user()->blockOrganisation()->attach($organization);
-
-    }
-
-
-    /*
-     * Report an organization's review
-     * @param Request $request
+     * Feedback Page.
      */
-    public function reportOrganizationReview(Request $request)
+    public function createFeedback()
     {
-        $reviews = Auth::user()->reportedOrganizationReviews->toArray();
-        $found = 0;
-        foreach($reviews as $review)
-        {
-            if ($review['id'] == $request['r_id'])
-                $found = 1;
-        }
-
-        if ($found == 0)
-            Auth::user()->reportedOrganizationReviews()->attach($request['r_id']);
-        else {
-            // show a message to the user that he is trying to report a review he already reported before.
-        }
+      return view('feedback');
     }
 
     /**
-     * Report an event's review
-     * @param Request $request
+     * Send feedback to the admin.
      */
-    public function reportEventReview(Request $request)
+    public function storeFeedback(Request $request)
     {
-        $reviews = Auth::user()->reportedEventReviews->toArray();
-        $found = 0;
-        foreach($reviews as $review)
-        {
-            if ($review['id'] == $request['r_id'])
-                $found = 1;
-        }
-
-        if ($found == 0)
-            Auth::user()->reportedEventReviews()->attach($request['r_id']);
-        else {
-            // show a message to the user that he is trying to report a review he already reported before.
-        }
+        $this->validate($request, [
+            'subject' => 'required|max:60',
+            'message' => 'required',
+        ]);
+        $feedback = new Feedback($request->all());
+        $feedback->user_id = Auth::user()->id;
+        $feedback->save();
+        \Session::flash('flash_message','feedback successfully sent!');
+        return redirect('/');
     }
-
 }
