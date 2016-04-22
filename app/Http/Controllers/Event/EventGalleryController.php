@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Contracts\Filesystem;
 
 use App\Photo;
 use App\Event;
 use Validator;
+
 
 class EventGalleryController extends Controller
 {
@@ -49,10 +51,10 @@ class EventGalleryController extends Controller
                     if ($upload_success) {
                         array_push($names, $filename);
                     } else {
-                        // return redirect()->action('EventController@test');
+                         return redirect()->action('Event\EventGalleryController@add');
                     }
                 } else {
-                    // return redirect()->action('EventController@test');
+                     return redirect()->action('Event\EventGalleryController@add');
                 }
             }
 
