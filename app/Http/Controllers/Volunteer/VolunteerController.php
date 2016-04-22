@@ -101,6 +101,20 @@ class VolunteerController extends Controller
     }
 
     /**
+     * Show all my events
+     */
+    public function showAllEvents()
+    {
+        $user = Auth::user();
+        $followedAndRegisteredEvents = $user->events()->get()->toArray();
+        $subscribedOrganizationEvents = $user->interestingEvents($user->id)->get();
+        $allEvents = array_merge($followedAndRegisteredEvents,$subscribedOrganizationEvents);
+        usort($followedAndRegisteredEvents, array($this, "cmp"));
+        usort($subscribedOrganizationEvents, array($this, "cmp"));
+        usort($allEvents, array($this, "cmp"));
+        return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
+    }
+    /**
      * Shows the logged-in volunteer's dashboard
      * @return [view]           [the dashboard view]
      */
