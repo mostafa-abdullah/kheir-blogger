@@ -106,7 +106,7 @@ class VolunteerController extends Controller
     public function showAllEvents()
     {
         $user = Auth::user();
-        $followedAndRegisteredEvents = $user->events();
+        $followedAndRegisteredEvents = $user->events()->get()->toArray();
         $subscribedOrganizationEvents = $user->interestingEvents($user->id)->get();
         $allEvents = array_merge($followedAndRegisteredEvents,$subscribedOrganizationEvents);
         usort($followedAndRegisteredEvents, array($this, "cmp"));

@@ -200,12 +200,12 @@ Route::group(['middleware' => ['web']], function () {
      /**
      * Volunteer view his events.
      */
-    Route::get('dashboard/events','VolunteerController@showAllEvents');
+    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
 
     /**
      * Volunteer dashboard.
      */
-     Route::get('dashboard', 'VolunteerController@showDashboard');
+     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
 
     /*
     |-----------------------
