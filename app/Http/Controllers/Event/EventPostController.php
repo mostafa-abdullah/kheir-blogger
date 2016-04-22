@@ -15,7 +15,7 @@ class EventPostController extends Controller
     public function __construct()
     {
         $this->middleware('auth_organization', ['only' => [
-            'create', 'store', 'edit', 'update'
+            'create', 'store', 'edit', 'update','destroy'
         ]]);
     }
 
@@ -86,8 +86,11 @@ class EventPostController extends Controller
     /**
      * Delete an event post
      */
-    public function destroy()
+    public function destroy($event_id)
     {
-        //TODO
+        $event = Event::findOrFail($event_id);
+        if($event->organization()->id == auth()->guard('organization')->id())
+            $event->delete();
+        return redirect()->action('EventController@show', [$event_id]);
     }
 }

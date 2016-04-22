@@ -1,6 +1,11 @@
 <div class="tab-body" id="posts">
     @if($creator)
         @include('event.partials.button', ['buttonText' => 'Add Post', 'action' => 'post/create'])
+        <form action="{{ url('event/'.$event->id.'/destroy') }}" method="POST">
+             {!! csrf_field() !!}
+             {!! method_field('DELETE') !!}
+             <button type="submit" class="btn btn-danger btn-event">Delete Post</button>
+        </form>
     @endif
     @if($posts->count()==0)
      <h3 class="alert-info">This Event has no posts</h3>
