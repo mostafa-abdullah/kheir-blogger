@@ -12,6 +12,13 @@
                     <a href="/organization/{{$review->organization_id}}/review/{{$review->id}}/report">
                         report
                     </a>
+                    @if (Auth::user()->role >= 5)
+                        <form action="{{ url('organization/'.$review->organization_id.'/review/'.$review->id) }}" method="POST">
+                             {!! csrf_field() !!}
+                             {!! method_field('DELETE') !!}
+                             <button type="submit" class="btn btn-danger btn-event">Delete</button>
+                        </form>
+                    @endif
                 </small>
             </h4>
             <div class="container">

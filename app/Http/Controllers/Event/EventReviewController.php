@@ -5,20 +5,26 @@ namespace App\Http\Controllers\Event;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\EventReviewRequest;
+use App\Http\Services\EventReviewService;
 
 use App\EventReview;
 use App\Event;
-
+use App\Notification;
 use Auth;
 
 
 class EventReviewController extends Controller
 {
+    private $eventReviewService;
+
     public function __construct()
     {
+        $this->eventReviewService = new EventReviewService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store', 'edit', 'update', 'report'
         ]]);
+
+        $this->middleware('auth_validator', ['only' => 'destroy']);
     }
 
     /**
@@ -56,10 +62,7 @@ class EventReviewController extends Controller
      */
     public function store(EventReviewRequest $request, $id)
     {
-          $review = new EventReview($request->all());
-          $review->user_id = Auth::user()->id;
-          $event = Event::findorfail($id);
-          $event->reviews()->save($review);
+          $this->eventReviewService->store($request,$id);
           return redirect()->action('Event\EventController@show', [$id]);
     }
 
@@ -84,14 +87,21 @@ class EventReviewController extends Controller
      */
     public function destroy($event_id, $review_id)
     {
-        //TODO
+        $event = Event::findOrFail($event_id);
+        $review = $event->reviews()->findOrFail($review_id);
+        $volunteer = $review->user()->get();
+        $review->delete();
+        Notification::notify($volunteer, 7, null,
+                 "your review on event: ". $event->name." has been deleted",
+                 "/event/".$event_id);
+       return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
     public function report($event_id, $review_id)
     {
-        $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
-        if(!$review->reportingUsers()->find(Auth::user()->id))
-            Auth::user()->reportedEventReviews()->attach($review);
+        $this->eventReviewService->report($event_id,$review_id);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
+
+
 }

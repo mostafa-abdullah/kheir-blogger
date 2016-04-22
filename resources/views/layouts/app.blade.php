@@ -1,7 +1,3 @@
-<?php
-// use Illuminate\Support\Facades\Auth;
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +13,8 @@
 
     <!-- Styles -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- dataTables style -->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <style>
@@ -109,6 +107,9 @@
     <script src="{{asset('js/jquery-1.11.3.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- dataTables JS -->
+    <script src="{{asset('js/view-organizations.js')}}"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
     @yield('scripts')
 </body>
 </html>
