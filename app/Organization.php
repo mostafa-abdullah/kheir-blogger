@@ -22,16 +22,23 @@ class Organization extends Authenticatable
 =======
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Authenticatable implements CanResetPassword
 {
 
     use CanResetPasswordTrait;
+<<<<<<< HEAD
 >>>>>>> b6a2aadc9c19b1e9334ead7527587e3a8d34a229
+=======
+    use SoftDeletes;
+>>>>>>> 30923a088a30d8add374c03cc7be139a44349281
 
     protected $fillable = [
         'name', 'email', 'password','bio','slogan','phone','location'
     ];
+
+    protected $hidden = ['password', 'remember_token'];
 
     public function subscribers()
     {

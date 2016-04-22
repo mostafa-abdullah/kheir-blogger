@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h1>Write a review on {{ $organization->name }}</h1>
-    {!! Form::open(array('action' => array('OrganizationReviewController@store',$organization->id))) !!}
+    {!! Form::open(array('action' => array('Organization\OrganizationReviewController@store',$organization->id))) !!}
     <div class = "form-group">
         {!! Form::label('review','Review'); !!}
         {!! Form::textarea('review',null,['class'=> 'form-control']); !!}

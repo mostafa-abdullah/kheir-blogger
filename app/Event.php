@@ -16,6 +16,7 @@ class Event extends Model
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 
 class Event extends Model
@@ -99,6 +100,6 @@ class Event extends Model
 
     public function photos()
     {
-        return $this->hasMany('App/Photo');
+        return $this->hasMany('App\Photo');
     }
 }

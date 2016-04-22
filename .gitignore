@@ -5,3 +5,9 @@ Homestead.yaml
 Homestead.json
 .env
 /.idea
+
+*.jpg
+
+*.png
+
+public/storage/db/gallery/*

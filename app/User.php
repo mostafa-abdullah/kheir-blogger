@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use DB;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -42,6 +43,12 @@ class User extends Authenticatable
     public function recommendations()
     {
         return $this->hasMany('App\Recommendation');
+    }
+
+    public function blockedOrganizations()
+    {
+        return $this->belongsToMany('App\Organization','volunteers_block_organizations')
+                    ->withTimestamps();
     }
 
     public function organizationReviews()
@@ -111,8 +118,8 @@ class User extends Authenticatable
 
     public function attendEvent($event_id)
     {
-        $event = $this->registeredEvents()->find($event_id);
-        if($event)
+        $event = $this->events()->find($event_id);
+        if($event->pivot->type == 2 || $event->pivot->type == 4)
         {
             $record = $event->pivot;
             $record->type = 3;
@@ -171,5 +178,43 @@ class User extends Authenticatable
     public function previousYearsChallenges()
     {
         return $this->challenges()->previousYears();
+    }
+
+
+/*
+|======================================
+| Volunteer Dashboard
+|======================================
+*/
+
+    /**
+    * Events of subscribed organizations
+    */
+    public function interestingEvents($user_id)
+    {
+        return DB::table('volunteers_subscribe_organizations')
+              ->join('events', 'volunteers_subscribe_organizations.organization_id', '=', 'events.organization_id')
+              -> where('volunteers_subscribe_organizations.user_id', '=', $user_id)
+              ->select('events.*');
+    }
+
+    /**
+    * Posts of followed/registered/attended events.
+    */
+    public function interestingPosts($user_id)
+    {
+        return DB::table('volunteers_in_events')
+               ->join('event_posts', 'volunteers_in_events.event_id', '=', 'event_posts.event_id')
+               -> where('volunteers_in_events.user_id', '=', $user_id)
+               ->select('event_posts.*');
+    }
+
+    /**
+    * Remove followed event from interestingEvents
+    */
+    public function FilterInterestingEvents($user_id)
+    {
+        $sub = $this->events->pluck('id')->toArray();
+        return $this->interestingEvents($user_id)->whereNotIn('id', $sub);
     }
 }

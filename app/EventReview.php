@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EventReview extends Model
 {
+
+    use SoftDeletes;
+
     protected $fillable = ['review', 'rate'];
 
     protected $table = 'event_reviews';
@@ -23,6 +27,6 @@ class EventReview extends Model
     public function reportingUsers()
     {
         return $this->belongsToMany('App\User', 'event_review_reports', 'review_id', 'user_id')
-                    ->withTimestamps();
+                    ->withTimestamps()->withPivot('viewed');;
     }
 }

@@ -7,7 +7,7 @@
 @section('content')
 
 
-    {!! Form::open(['action' => ['OrganizationController@storeRecommendation', $id]]) !!}
+    {!! Form::open(['action' => ['Organization\OrganizationController@storeRecommendation', $id]]) !!}
         <div class = "form-group">
             {!! Form::label('recommendation' , 'Recommendation') !!}
             {!! Form::textArea('recommendation' , null , array('class' => 'form-control')) !!}

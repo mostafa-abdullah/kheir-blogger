@@ -2,7 +2,7 @@
 
 @section('content')
 
-  {!! Form::model($volunteer, array( 'method' => 'PATCH','action' => ['VolunteerController@update',$volunteer->id])) !!}
+  {!! Form::model($volunteer, array( 'method' => 'PATCH','action' => ['Volunteer\VolunteerController@update',$volunteer->id])) !!}
 
     <div class="form-group">
       {!!Form::label('first_name', 'First name');!!}

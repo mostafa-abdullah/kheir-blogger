@@ -1,7 +1,3 @@
-<?php
-// use Illuminate\Support\Facades\Auth;
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,11 +13,13 @@
 
     <!-- Styles -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- dataTables style -->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <style>
         body {
-           // font-family: 'Lato';
+            /*font-family: 'Lato';*/
         }
 
         .fa-btn {
@@ -64,10 +62,13 @@
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                {{ Auth::user()->first_name }} <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/volunteer', Auth::user()->id)}}">View profile</a></li>
+                                <li><a href="/notifications">Notifications</a></li>
+                                <li><a href="/feedback">Feedback</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
@@ -79,6 +80,7 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/organization', Auth::guard('organization')->id())}}">View profile</a></li>
                                 <li><a href="{{ url('/logout_organization') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
@@ -105,6 +107,9 @@
     <script src="{{asset('js/jquery-1.11.3.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- dataTables JS -->
+    <script src="{{asset('js/view-organizations.js')}}"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
     @yield('scripts')
 </body>
 </html>
