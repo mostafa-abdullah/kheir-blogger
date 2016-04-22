@@ -8,10 +8,16 @@
      @foreach($posts as $post)
          <ul>
              <li>
+                 <form action="{{ url('event/'.$event->id."/post/".$post->id) }}" method="POST">
+                      {!! csrf_field() !!}
+                      {!! method_field('DELETE') !!}
+                      <button type="submit" class="btn btn-danger btn-event">Delete Post</button>
+                 </form>
                  <h4>{{$post->title}}  <small>{{$post->created_at}}</small></h4>
                  <p>
                      {{$post->description}}
                  </p>
+
              </li>
          </ul>
      @endforeach

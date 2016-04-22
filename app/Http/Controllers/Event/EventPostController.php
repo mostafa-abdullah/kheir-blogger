@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Event\EventController;
 
 use App\Http\Requests\EventPostRequest;
 
 use App\Event;
 use App\EventPost;
 use App\Notification;
+use App\Organization;
 
 class EventPostController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth_organization', ['only' => [
-            'create', 'store', 'edit', 'update'
+            'create', 'store', 'edit', 'update','destroy'
         ]]);
     }
 
@@ -86,8 +88,15 @@ class EventPostController extends Controller
     /**
      * Delete an event post
      */
-    public function destroy()
+    public function destroy($id,$post_id)
     {
-        //TODO
+        $event = Event::findOrFail($id);
+        $post  = EventPost::findOrFail($post_id);
+
+		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+			$post->delete();
+		}
+        return redirect()->action('Event\EventController@show', [$id]);
     }
 }
