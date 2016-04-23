@@ -38,7 +38,34 @@ class searchController extends Controller
                 'fields' => ['name^3', 'description^2','location'],  // setting periorties to fields 
                 ];
              $satisfiedSearchEvents =  $elastic->search($parameters);
-             
+
              return $satisfiedSearchEvents;
+    }
+
+        public function searchForOrganizations($searchCriteria)
+    {
+         /**
+          * the search can match organization's name and/or email and/or location and/or rate and/or phone
+          */
+				$parameters = [
+			    'index' => 'organizations',
+			    'type' => 'organization',
+			    'body' => [
+			          'query'=>[
+                      	   'bool'=>[
+                              'match'=>['name'=>$searchCriteria],
+                              'match'=>['email'=>$searchCriteria],
+                              'match'=>['location'=>$searchCriteria],
+ 							  'match'=>['rate'=>$searchCriteria],
+ 							  'match'=>['phone'=>$searchCriteria]
+                      	   	]
+			         	 ]	
+			   		 ],
+			   	'fuzziness' => 'AUTO',	 //Allowing for misspellings
+                'fields' => ['name^3', 'email^2','location','rate','phone'],  // setting periorties to fields 
+                ];
+             $satisfiedSearchOrganizations=  $elastic->search($parameters);
+             
+             return $satisfiedSearchOrganizations;
     }
 }

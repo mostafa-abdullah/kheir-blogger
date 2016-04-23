@@ -43,11 +43,15 @@ class Organization extends Authenticatable implements CanResetPassword
 
           // requiring Elsaticsearch class and store it into $elastic variable
           $elastic = $this->app->make(App\Elastic\Elastic::class);
+
+          // adding new event eloquent model created to be indexed by Elasticsearch
           $parameters = [
             'index' => 'events',
             'type' => 'event',
             'id' => $event->id,
-            'body' => $event->toArray()   // return new $event eleoquent model created as an array  
+            'body' => [    
+                           
+                  ]   
         ]; 
                
             //Indexing the new create event eloquent models
