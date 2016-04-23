@@ -71,9 +71,14 @@ class OrganizationService
      */
     public function viewRecommendations($id)
     {
-        $organization = Organization::findOrFail($id);
-        $recommendations = $organization->recommendations()
-            ->orderBy('created_at', 'desc')->get();
-        return $recommendations;
+        if(auth()->guard('organization')->id() == $id)
+        {
+            $organization = Organization::findOrFail($id);
+            $recommendations = $organization->recommendations()
+                ->orderBy('created_at', 'desc')->get();
+            return $recommendations;
+
+        }
+        return null;
     }
 }

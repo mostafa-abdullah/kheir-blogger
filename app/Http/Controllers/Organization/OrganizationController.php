@@ -129,11 +129,9 @@ class OrganizationController extends Controller
      */
     public function viewRecommendations($id)
     {
-        if(auth()->guard('organization')->id() == $id)
-        {
-            $recommendations = $this->organizationService->viewRecommendations($id);
+        $recommendations = $this->organizationService->viewRecommendations($id);
+        if($recommendations)
             return view('organization.recommendation.index', compact('recommendations'));
-        }
         return redirect('/');
     }
 
