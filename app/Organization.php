@@ -3,36 +3,18 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-<<<<<<< HEAD
-use Elasticquent\ElasticquentTrait;
-
-class Organization extends Authenticatable
-
-{
-
-    use ElasticquentTrait;
-
-
-    protected $mappingProperties = array(
-        'name' => array(
-            'type' => 'string',
-            'analyzer' => 'standard'
-        )
-    );
-=======
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Elastic\Elastic as elasticsearch;
 
 class Organization extends Authenticatable implements CanResetPassword
 {
 
     use CanResetPasswordTrait;
-<<<<<<< HEAD
->>>>>>> b6a2aadc9c19b1e9334ead7527587e3a8d34a229
-=======
+
     use SoftDeletes;
->>>>>>> 30923a088a30d8add374c03cc7be139a44349281
+
 
     protected $fillable = [
         'name', 'email', 'password','bio','slogan','phone','location'
@@ -52,9 +34,25 @@ class Organization extends Authenticatable implements CanResetPassword
     }
 
     public function createEvent($request)
-    {
+    {     
           $event = new Event($request->all());
           $this->events()->save($event);
+          /**
+           * adding new event to Elasticsearch in order to keep Elasticsearch in sync with our database
+           */
+
+          // requiring Elsaticsearch class and store it into $elastic variable
+          $elastic = $this->app->make(App\Elastic\Elastic::class);
+          $parameters = [
+            'index' => 'events',
+            'type' => 'event',
+            'id' => $event->id,
+            'body' => $event->toArray()   // return new $event eleoquent model created as an array  
+        ]; 
+               
+            //Indexing the new create event eloquent model
+     
+           $elastic.index($parameters);
           return $event;
     }
 
