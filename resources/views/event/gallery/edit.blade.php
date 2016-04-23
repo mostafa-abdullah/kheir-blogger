@@ -10,7 +10,7 @@
             {!! Form::label('caption','Caption:')!!}
             {!! Form::textArea('caption',$photo->caption,array('class' => 'form-control'))!!}
         </div>
-    {!! Form::submit('Add Caption!') !!}
+    {!! Form::submit('Add/Edit Caption!') !!}
     {!! Form::close() !!}
 
     @include('errors')
