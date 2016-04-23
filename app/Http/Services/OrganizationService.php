@@ -12,40 +12,52 @@ use Auth;
 
 class OrganizationService
 {
-
+    /**
+     *  update organization information
+     */
     public function update(OrganizationRequest $request , $id)
     {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
     }
 
-
+    /**
+     *  volunteer subscribe to a certain organization
+     */
     public function subscribe($id)
     {
         Auth::user()->subscribe($id);
     }
 
-
+    /**
+     *  volunteer unsubscribe to a certain organization
+     */
     public function unsubscribe($id)
     {
         Auth::user()->unsubscribe($id);
     }
 
-
+    /**
+     * volunteer block an organization
+     */
     public function block($organization_id)
     {
         $organization = Organization::findOrFail($organization_id);
         $organization->blockingVolunteers()->attach(Auth::user());
     }
 
-
+    /**
+     * volunteer unblock an organization
+     */
     public function unblock($organization_id)
     {
         $organization = Organization::find($organization_id);
         $organization->blockingVolunteers()->detach(Auth::user());
     }
 
-
+    /**
+     *  store a recommendation into the database
+     */
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
         $recommendation = new Recommendation($request->all());
@@ -54,7 +66,9 @@ class OrganizationService
         $organization->recommendations()->save($recommendation);
     }
 
-
+    /**
+     *  view all recommendations sent to the organization
+     */
     public function viewRecommendations($id)
     {
         $organization = Organization::findOrFail($id);

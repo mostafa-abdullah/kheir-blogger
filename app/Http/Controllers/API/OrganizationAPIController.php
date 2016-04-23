@@ -81,25 +81,33 @@ class OrganizationAPIController extends Controller
         $this->organizationService->unsubscribe($id);
     }
 
-
+    /**
+     * volunteer block an organization
+     */
     public function block($organization_id)
     {
         $this->organizationService->block($organization_id);
     }
 
-
+    /**
+     * volunteer unblock an organization
+     */
     public function unblock($organization_id)
     {
         $this->organizationService->unblock($organization_id);
     }
 
-
+    /**
+     *  store a recommendation into the database
+     */
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
         $this->organizationService->storeRecommendation($request, $id);
     }
 
-
+    /**
+     *  view all recommendations sent to the organization
+     */
     public function viewRecommendations($id)
     {
         $recommendations = $this->organizationService->viewRecommendations($id);

@@ -325,7 +325,7 @@ Route::group(['middleware' => ['web']], function () {
     ]]);
 
     Route::post('api/organization/{id}/subscribe', 'API\OrganizationAPIController@subscribe');
-    Route::post('organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
+    Route::post('api/organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
 
     Route::post('api/organization/{id}/block','API\OrganizationAPIController@block');
     Route::post('api/organization/{id}/unblock','API\OrganizationAPIController@unblock');
