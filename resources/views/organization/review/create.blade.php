@@ -7,8 +7,8 @@
         {!! Form::textarea('review',null,['class'=> 'form-control']); !!}
     </div>
     <div class = "form-group">
-        {!! Form::label('rate','Rate'); !!}
-        {!! Form::selectRange('rate', 1, 5); !!}
+        {!! Form::label('rating','Rate'); !!}
+        {!! Form::selectRange('rating', 1, 5); !!}
     </div>
     <div class="form-group">
         {!! Form::submit('Add Review',['class'=>'btn btn btn-default']) !!}

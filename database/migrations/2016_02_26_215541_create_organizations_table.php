@@ -21,7 +21,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('slogan', 50)->nullable();
             $table->string('phone', 11)->nullable();
             $table->string('location', 100)->nullable();
-            $table->double('rate', 15, 8)->nullable();
+            $table->double('rating', 15, 8)->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
