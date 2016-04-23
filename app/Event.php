@@ -3,16 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-<<<<<<< HEAD
-   use Illuminate\Database\Eloquent\SoftDeletes;
-use Elasticquent\ElasticquentTrait;
-class Event extends Model
-{
 
-    use ElasticquentTrait;
-
- use SoftDeletes;
-=======
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Carbon\Carbon;
@@ -23,7 +14,6 @@ class Event extends Model
 {
     use SoftDeletes;
 
->>>>>>> b6a2aadc9c19b1e9334ead7527587e3a8d34a229
     protected $fillable = [
         'name', 'description', 'timing', 'location',
         'required_contact_info', 'needed_membership'

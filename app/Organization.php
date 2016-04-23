@@ -50,7 +50,7 @@ class Organization extends Authenticatable implements CanResetPassword
             'body' => $event->toArray()   // return new $event eleoquent model created as an array  
         ]; 
                
-            //Indexing the new create event eloquent model
+            //Indexing the new create event eloquent models
      
            $elastic.index($parameters);
           return $event;
