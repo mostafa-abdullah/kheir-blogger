@@ -21,6 +21,7 @@ class CreateEventReviewsTable extends Migration
             $table->text('review');
             $table->integer('rating');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         DB::unprepared("

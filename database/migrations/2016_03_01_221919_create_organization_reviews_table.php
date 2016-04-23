@@ -20,6 +20,7 @@ class CreateOrganizationReviewsTable extends Migration
             $table->integer('rating');
 
             $table->timestamps();
+            $table->softDeletes();
         });
 
         DB::unprepared("

@@ -11,6 +11,7 @@ class OrganizationsTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('organizations')->delete();
         DB::table('organizations')->insert([
             'id'       => '1',
             'name'     => 'Bdaya',
