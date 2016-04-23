@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
-
+use App\Http\Services\OrganizationService ;
 use App\Organization;
 use App\Recommendation;
 use App\OrganizationReview;
@@ -20,8 +20,12 @@ use Auth;
 class OrganizationController extends Controller
 {
 
+    private $organizationService;
+
     public function __construct()
     {
+        $this->organizationService = new OrganizationService();
+
         $this->middleware('auth_volunteer', ['only' => [
             'subscribe', 'unsubscribe',
             'recommend', 'storeRecommendation',
@@ -85,8 +89,7 @@ class OrganizationController extends Controller
     */
     public function update(OrganizationRequest $request, $id)
     {
-        $organization = Organization::findorfail($id);
-        $organization->update($request->all());
+        $this->organizationService->update($request , $id);
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -95,7 +98,7 @@ class OrganizationController extends Controller
      */
     public function subscribe($id)
     {
-        Auth::user()->subscribe($id);
+        $this->organizationService->subscribe($id);
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -104,7 +107,7 @@ class OrganizationController extends Controller
      */
     public function unsubscribe($id)
     {
-        Auth::user()->unsubscribe($id);
+        $this->organizationService->unsubscribe($id);
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -121,11 +124,7 @@ class OrganizationController extends Controller
      */
     public function storeRecommendation(RecommendationRequest $request , $id)
     {
-
-        $recommendation = new Recommendation($request->all());
-        $recommendation->user_id = Auth::user()->id;
-        $organization = Organization::findorfail($id);
-        $organization->recommendations()->save($recommendation);
+        $this->organizationService->storeRecommendation($request, $id);
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -134,13 +133,9 @@ class OrganizationController extends Controller
      */
     public function viewRecommendations($id)
     {
-        if(auth()->guard('organization')->id() == $id)
-        {
-            $organization = Organization::findorfail($id);
-            $recommendations = $organization->recommendations()
-                                            ->orderBy('created_at', 'desc')->get();
+        $recommendations = $this->organizationService->viewRecommendations($id);
+        if($recommendations)
             return view('organization.recommendation.index', compact('recommendations'));
-        }
         return redirect('/');
     }
 
@@ -149,8 +144,7 @@ class OrganizationController extends Controller
      */
     public function block($organization_id)
     {
-        $organization = Organization::findOrFail($organization_id);
-        $organization->blockingVolunteers()->attach(Auth::user());
+        $this->organizationService->block($organization_id);
         return redirect('/');
     }
 
@@ -159,8 +153,7 @@ class OrganizationController extends Controller
      */
     public function unblock($organization_id)
     {
-        $organization = Organization::find($organization_id);
-        $organization->blockingVolunteers()->detach(Auth::user());
+        $this->organizationService->unblock($organization_id);
         return redirect('/');
     }
 
