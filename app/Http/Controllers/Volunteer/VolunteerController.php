@@ -63,14 +63,8 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-        $oldNotifications = Auth::user()->notifications()->read()->get();
-        $newNotifications = Auth::user()->notifications()->unread()->get();
-        foreach($newNotifications as $notification)
-        {
-            $notification->pivot->read = 1;
-            $notification->push();
-        }
-        return view('volunteer.notification.show', compact('newNotifications', 'oldNotifications'));
+        $notifications = $this->volunteerService->showNotifications();
+        return view('volunteer.notification.show', $notifications);
     }
 
     /**
@@ -78,9 +72,7 @@ class VolunteerController extends Controller
      */
     public function unreadNotification(Request $request)
     {
-        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
-        $notification->pivot->read = 0;
-        $notification->push();
+        $this->volunteerService->unreadNotification($request);
     }
 
     /**

@@ -196,7 +196,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','Volunteer\VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
-    
+
      /**
      * Volunteer view his events.
      */
@@ -315,21 +315,59 @@ Route::group(['middleware' => ['web']], function () {
     |--------------------------
     */
 
-    /**
-    * Organization API resource.
-    */
-    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
 
-    Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
-        'index', 'show',
-    ]]);
+    /**
+     *  subscriptions API routes
+     */
+    Route::post('api/organization/{id}/subscribe', 'API\OrganizationAPIController@subscribe');
+    Route::post('api/organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
+
+    /**
+     * Recommendations API routes
+     */
+    Route::post('api/organization/{id}/recommend' , 'API\OrganizationAPIController@storeRecommendation');
+    Route::get('api/organization/{id}/recommendations', 'API\OrganizationAPIController@viewRecommendations');
+
+    /**
+     * Organization Review API routes.
+     */
+    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
+
+    /**
+     * blocking API routes
+     */
+    Route::post('api/organization/{id}/block','API\OrganizationAPIController@block');
+    Route::post('api/organization/{id}/unblock','API\OrganizationAPIController@unblock');
+
+    /**
+     *  Organization API resource
+     */
+    Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
+        'index', 'show', 'update',
+    ]]);
+
 
     /*
     |-----------------------
     | Volunteer API Routes
     |-----------------------
     */
+
+    /**
+     *  Challenges Routes.
+     */
+    Route::get('api/volunteer/challenge', 'API\ChallengeAPIController@index');
+    Route::post('api/volunteer/challenge', 'API\ChallengeAPIController@store');
+    Route::patch('api/volunteer/challenge', 'API\ChallengeAPIController@update');
+    Route::get('api/volunteer/challenge/achieved',
+                'API\ChallengeAPIController@viewCurrentYearAttendedEvents');
+
+    /**
+     * Notification Routes.
+     */
+     Route::get('api/notifications', 'API\VolunteerAPIController@showNotifications');
+     Route::post('api/notifications', 'API\VolunteerAPIController@unreadNotification');
 
     /**
      * Feedback to Admin route
@@ -342,7 +380,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
     ]]);
-
 
     /*
     |--------------------------
@@ -369,6 +406,17 @@ Route::group(['middleware' => ['web']], function () {
      Route::get('api/event/attend/{id}' , 'API\EventAPIController@attend');
      Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
 
+     /**
+      * Event Post.
+      */
+     Route::post('api/event/{id}/post','API\EventPostAPIController@store');
+
+     /**
+      * Event Question.
+      */
+     Route::get('api/event/{id}/question/answer', 'API\EventQuestionAPIController@viewUnansweredQuestions');
+     Route::post('api/event/{id}/question/{question}/answer', 'API\EventQuestionAPIController@answer');
+     Route::resource('api/event/{id}/question', 'API\EventQuestionAPIController', ['only' => ['store']]);
 
     /**
      * Event Reviewing.
@@ -379,7 +427,5 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event API resource.
      */
-     Route::resource('api/event','API\EventAPIController', ['only' => [
-         'index', 'show'
-     ]]);
+     Route::resource('api/event','API\EventAPIController');
 });

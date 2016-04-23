@@ -44,7 +44,7 @@
         <h4>On Events:</h4>
         <ul>
             @for ($i = 0; $i < 3 && $i < count($volunteer->eventReviews); $i++)
-                <li>{{ $volunteer->eventReviews[$i]->review }}, {{  $volunteer->eventReviews[$i]->rate}}</li>
+                <li>{{ $volunteer->eventReviews[$i]->review }}, {{  $volunteer->eventReviews[$i]->rating}}</li>
             @endfor
             @if (count($volunteer->eventReviews) > 3)
                     <a href="{{ action('Volunteer\VolunteerController@viewReviews', [$volunteer->id])}}">View More >></a>
@@ -55,7 +55,7 @@
         <h4>On Organizations:</h4>
         <ul>
             @for ($i = 0; $i < 3 && $i < count($volunteer->organizationReviews); $i++)
-                <li>{{ $volunteer->organizationReviews[$i]->review}}, {{$volunteer->organizationReviews[$i]-> rate  }}</li>
+                <li>{{ $volunteer->organizationReviews[$i]->review}}, {{$volunteer->organizationReviews[$i]->rating }}</li>
             @endfor
             @if (count($volunteer->organizationReviews) > 3)
                     <a href="{{ action('VolunteerController@viewReviews', [$volunteer->id])}}">View More >></a>
