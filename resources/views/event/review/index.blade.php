@@ -17,7 +17,7 @@
                 {{$review->review}}
                 <small>{{$volunteer->first_name}} {{$volunteer->last_name}}</small>
             </h3>
-            Rate: {{$review->rate}}
+            Rate: {{$review->rating}}
             @if (Auth::user())
                 <a href="/event/{{$event->id}}/review/{{$review->id}}/report">report</a>
             @endif

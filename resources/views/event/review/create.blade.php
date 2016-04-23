@@ -14,7 +14,7 @@
 
             <div class = "form-group">
                 {!! Form::label('rate','Rate'); !!}
-                {!! Form::selectRange('rate', 1, 5); !!}
+                {!! Form::selectRange('rating', 1, 5); !!}
             </div>
 
 

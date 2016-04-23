@@ -63,7 +63,7 @@
        </div>
        <div class="container panel-body">
              @if($event->rating && $event->timing < Carbon\Carbon::now())
-                 <p>Rating:{{number_format($Event->rating, 1)}}</p>
+                 <p>Rating:{{number_format($event->rating, 1)}}</p>
              @endif
            <h3 class="text-left">Description</h3>
            <p class="text-left container">
