@@ -91,16 +91,15 @@ class EventGalleryController extends Controller
      * delete a photo
      */
 
-    public function destroy($id)
+    public function destroy($id, $photo_id)
     {
-        $photo = Photo::findOrFail($id);
-        $event_id=$photo->event_id;
-        $event = Event::findOrFail($event_id);
+        $event = Event::findOrFail($id);
         if(auth()->guard('organization')->user()->id == $event->organization()->id)
         {
+            $photo = Photo::findOrFail($photo_id);
             File::delete('storage/app/db/gallery/' . $event->id . '/'.$photo->name);
             $photo->delete();
-            return redirect()->action('Event\EventController@show', [$event_id]);
+            return redirect()->action('Event\EventController@show', [$id]);
         }
         return redirect('/');
     }

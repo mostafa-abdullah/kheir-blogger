@@ -20,7 +20,7 @@
                             <img class="example-image" src="{{asset($path.$photo->name)}}" style="max-width:100%;">
                         </a>
                         @if($creator)
-                            <form action="{{ url('event/deletephoto/'.$photo->id) }}" method="POST">
+                            <form action="{{ url('event/'.$event->id.'/deletephoto/'.$photo->id) }}" method="POST">
                                 {!! csrf_field() !!}
                                 {!! method_field('DELETE') !!}
                                 <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Delete photo</button>
