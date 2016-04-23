@@ -60,7 +60,11 @@ class OrganizationController extends Controller
             else
                 $state = 3;
         }
-        return view('organization.show',compact('organization', 'state', 'blocked'));
+
+        $canReview = Auth::user() && Auth::user()->role > 0
+                  && !Auth::user()->organizationReviews()->find($organization->id);
+
+        return view('organization.show',compact('organization', 'state', 'blocked', 'canReview'));
     }
 
     /**

@@ -19,6 +19,10 @@
     <div class="jumbotron">
         <h1>{{$organization->name}}</h1>
 
+        @if($canReview)
+            @include('organization.partials.button', ['action' => 'review/create', 'buttonText' => 'Rate & Review!'])
+        @endif
+
         @if($state==3)
             @include('organization.partials.button', ['action' => 'subscribe', 'buttonText' => 'Subscribe'])
         @elseif($state==2)
