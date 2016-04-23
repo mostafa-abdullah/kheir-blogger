@@ -83,4 +83,22 @@ class EventGalleryController extends Controller
         return redirect()->action('Event\EventController@show', [$id]);
 
     }
+
+    /*
+     *  edit or add caption to a single photo
+     */
+
+    public function edit(Request $request, $id)
+    {
+        $photo = Photo::findotfail($id);
+        $event = Event::findorfail($photo->id);
+        if (auth()->guard('organization')->user()->id == $event->organization()->id)
+        {
+            $input = $request->all();
+            $photo->caption = $input['caption'];
+            return redirect()->action('Event\EventController@show', [$event->id]);
+        }
+        return redirect('/');
+    }
+
 }
