@@ -10,6 +10,7 @@ use App\User;
 use App\Event;
 use App\Challenge;
 use App\Feedback;
+use App\EventReview;
 
 use Carbon\Carbon;
 use Auth;

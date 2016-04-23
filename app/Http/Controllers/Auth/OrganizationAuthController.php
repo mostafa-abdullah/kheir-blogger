@@ -10,7 +10,7 @@ use App\User;
 use App\Organization;
 
 use Auth;
-use Input;
+use Illuminate\Support\Facades\Input;
 
 class OrganizationAuthController extends Controller
 {
