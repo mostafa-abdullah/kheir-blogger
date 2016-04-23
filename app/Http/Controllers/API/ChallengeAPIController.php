@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Volunteer;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\ChallengeService;
@@ -12,7 +12,7 @@ use App\Challenge;
 use Carbon\Carbon;
 use Auth;
 
-class ChallengeController extends Controller
+class ChallengeAPIController extends Controller
 {
     public function __construct()
     {
@@ -22,18 +22,8 @@ class ChallengeController extends Controller
 
     public function index()
     {
-       $challenges = $this->challengeService->index();
-       return view('volunteer.challenge.index' , $challenges);
-    }
-
-    /**
-     *  Set a challenge for the current year.
-     */
-    public function create()
-    {
-        if(Auth::user()->currentYearChallenge()->first())
-            return redirect('volunteer/challenge/edit');
-        return view('volunteer.challenge.create');
+        $challenges = $this->challengeService->index();
+        return response()->json($challenges);
     }
 
     /**
@@ -42,18 +32,6 @@ class ChallengeController extends Controller
     public function store(Request $request)
     {
         $this->challengeService->store($request);
-        return redirect('/');
-    }
-
-    /**
-     *  Edit current year's challenge.
-     */
-    public function edit()
-    {
-        $challenge = Auth::user()->currentYearChallenge()->first();
-        if($challenge)
-            return view('volunteer.challenge.edit' , compact('challenge'));
-        return redirect('volunteer/challenge/create');
     }
 
     /**
@@ -62,7 +40,6 @@ class ChallengeController extends Controller
     public function update(Request $request)
     {
         $this->challengeService->update($request);
-        return redirect('/');
     }
 
     /**
@@ -71,6 +48,6 @@ class ChallengeController extends Controller
     public function viewCurrentYearAttendedEvents()
     {
         $events = $this->challengeService->viewCurrentYearAttendedEvents();
-        return view('volunteer.challenge.achieved' , $events);
+        return response()->json($events);
     }
 }

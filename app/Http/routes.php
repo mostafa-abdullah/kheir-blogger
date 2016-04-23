@@ -332,6 +332,15 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
+     *  Challenges Routes.
+     */
+    Route::get('api/volunteer/challenge', 'API\ChallengeAPIController@index');
+    Route::post('api/volunteer/challenge', 'API\ChallengeAPIController@store');
+    Route::patch('api/volunteer/challenge', 'API\ChallengeAPIController@update');
+    Route::get('api/volunteer/challenge/achieved',
+                'API\ChallengeAPIController@viewCurrentYearAttendedEvents');
+
+    /**
      * Notification Routes.
      */
      Route::get('api/notifications', 'API\VolunteerAPIController@showNotifications');
