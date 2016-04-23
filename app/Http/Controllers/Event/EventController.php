@@ -85,11 +85,7 @@ class EventController extends Controller
 	 */
 	public function store(EventRequest $request)
 	{
-		$organization = auth()->guard('organization')->user();
-		$event = $organization->createEvent($request);
-		$notification_description = $organization->name." created a new event: ".$request->name;
-		Notification::notify($organization->subscribers, 1, $event,
-							$notification_description, "/event", $event->id);
+		$event = $this->eventService->store($request);
 		return redirect()->action('Event\EventController@show', [$event->id]);
 	}
 
@@ -109,14 +105,7 @@ class EventController extends Controller
 	 */
 	public function update(EventRequest $request, $id)
 	{
-		$event = Event::findorfail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
-		{
-			$event = Event::findOrFail($id);
-			$event->update($request->all());
-			Notification::notify($event->volunteers, 2, $event,
-								"Event ".($event->name)." has been updated", url("/event",$id));
-		}
+		$this->eventService->update($request, $id);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
@@ -125,13 +114,7 @@ class EventController extends Controller
 	 */
 	public function destroy($id)
 	{
-		$event = Event::findOrFail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
-		{
-			$event->delete();
-			Notification::notify($event->volunteers, 3, null,
-								"Event ".($event->name)."has been cancelled", url("/"));
-		}
+		$this->eventService->destroy($id);
 		return redirect('/');
 	}
 

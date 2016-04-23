@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
 use App\Http\Services\EventService;
 
-use App\Photo;
+use Illuminate\Http\Request;
+
 use App\Event;
+
 class EventAPIController extends Controller
 {
   private $eventService;
@@ -22,17 +22,23 @@ class EventAPIController extends Controller
       ]]);
 
       $this->middleware('auth_organization', ['only' => [
-    	'store', 'update', 'destroy',
+    	   'store', 'update', 'destroy',
       ]]);
   }
 
+/*
+|==========================================================================
+| Event CRUD Functions
+|==========================================================================
+|
+*/
     /**
      *  get json list of all organizations
      */
     public function index()
     {
         $events = Event::all();
-        return $events;
+        return response()->json($events);
     }
 
 
@@ -46,15 +52,39 @@ class EventAPIController extends Controller
         $event->reviews = $event->reviews()->get();
         $event->questions = $event->questions()->get();
         $event->photos = $event->photos()->get();
-        return $event;
+        return response()->json($event);
     }
 
-    /*
-    |==========================================================================
-    | Volunteers' Interaction with Event
-    |==========================================================================
-    |
-    */
+    /**
+     * Store the created event in the database.
+     */
+    public function store(EventRequest $request)
+    {
+        $this->eventService->store($request);
+    }
+
+  	/**
+  	 * Update the information of an edited event.
+  	 */
+  	public function update(EventRequest $request, $id)
+  	{
+  		  $this->eventService->update($request, $id);
+  	}
+
+  	/**
+  	 * Cancel an event.
+  	 */
+  	public function destroy($id)
+  	{
+  		  $this->eventService->destroy($id);
+  	}
+
+/*
+|==========================================================================
+| Volunteers' Interaction with Event
+|==========================================================================
+|
+*/
     public function follow($id)
     {
         $this->eventService->follow($id);

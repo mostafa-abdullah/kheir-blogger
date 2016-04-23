@@ -393,7 +393,5 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event API resource.
      */
-     Route::resource('api/event','API\EventAPIController', ['only' => [
-         'index', 'show'
-     ]]);
+     Route::resource('api/event','API\EventAPIController');
 });
