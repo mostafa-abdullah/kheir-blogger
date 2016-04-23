@@ -315,26 +315,38 @@ Route::group(['middleware' => ['web']], function () {
     |--------------------------
     */
 
-    /**
-    * Organization API resource.
-    */
-    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
 
+    /**
+     *  subscriptions API routes
+     */
+    Route::post('api/organization/{id}/subscribe', 'API\OrganizationAPIController@subscribe');
+    Route::post('api/organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
+
+    /**
+     * Recommendations API routes
+     */
+    Route::post('api/organization/{id}/recommend' , 'API\OrganizationAPIController@storeRecommendation');
+    Route::get('api/organization/{id}/recommendations', 'API\OrganizationAPIController@viewRecommendations');
+
+    /**
+     * Organization Review API routes.
+     */
+    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
+    Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
+
+    /**
+     * blocking API routes
+     */
+    Route::post('api/organization/{id}/block','API\OrganizationAPIController@block');
+    Route::post('api/organization/{id}/unblock','API\OrganizationAPIController@unblock');
+
+    /**
+     *  Organization API resource
+     */
     Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
         'index', 'show', 'update',
     ]]);
 
-    Route::post('api/organization/{id}/subscribe', 'API\OrganizationAPIController@subscribe');
-    Route::post('api/organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
-
-    Route::post('api/organization/{id}/block','API\OrganizationAPIController@block');
-    Route::post('api/organization/{id}/unblock','API\OrganizationAPIController@unblock');
-
-    Route::post('api/organization/{id}/recommend' , 'API\OrganizationAPIController@storeRecommendation');
-
-    Route::get('api/organization/{id}/recommendations', 'API\OrganizationAPIController@viewRecommendations');
-
-    Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
 
     /*
     |-----------------------
