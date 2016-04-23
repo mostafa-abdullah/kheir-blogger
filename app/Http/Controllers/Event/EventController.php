@@ -55,7 +55,6 @@ class EventController extends Controller
 	/**
 	 * Show Event's page.
 	 */
-
 	public function show($id)
 	{
         $event = Event::findOrFail($id);

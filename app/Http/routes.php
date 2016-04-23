@@ -384,6 +384,11 @@ Route::group(['middleware' => ['web']], function () {
      Route::get('api/event/unattend/{id}' , 'API\EventAPIController@unattend');
 
      /**
+      * Event Post.
+      */
+     Route::post('api/event/{id}/post','API\EventPostAPIController@store');
+
+     /**
       * Event Question.
       */
      Route::get('api/event/{id}/question/answer', 'API\EventQuestionAPIController@viewUnansweredQuestions');

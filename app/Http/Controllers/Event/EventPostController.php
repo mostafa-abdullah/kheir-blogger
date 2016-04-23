@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Event\EventController;
+use App\Http\Services\EventPostService;
 
 use App\Http\Requests\EventPostRequest;
 
@@ -14,8 +15,11 @@ use App\Organization;
 
 class EventPostController extends Controller
 {
+    private $eventPostService;
+
     public function __construct()
     {
+        $this->eventPostService = new EventPostService();
         $this->middleware('auth_organization', ['only' => [
             'create', 'store', 'edit', 'update','destroy'
         ]]);
@@ -54,18 +58,7 @@ class EventPostController extends Controller
     */
     public function store(EventPostRequest $request, $event_id)
     {
-        $organization_id = auth()->guard('organization')->user()->id;
-        $eventPost = new EventPost($request->all());
-        $eventPost->event_id = $event_id;
-        $eventPost->organization_id = $organization_id;
-        $eventPost->save();
-        if($request->sendnotifications == 1)
-        {
-            $event = Event::find($event_id);
-            $description = "Event ".($event->name)." has a new post";
-            $link = "/event".$event_id;
-            Notification::notify($event->volunteers, 4, $event, $description, $link);
-        }
+        $this->eventPostService->store($request, $event_id);
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
