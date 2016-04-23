@@ -63,11 +63,8 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-
-        $notifications    = $this->volunteerService->showNotifications();
-        $oldNotifications = $notifications['oldNotifications'];
-        $newNotifications = $notifications['newNotifications'];
-        return view('volunteer.notification.show', compact('newNotifications', 'oldNotifications'));
+        $notifications = $this->volunteerService->showNotifications();
+        return view('volunteer.notification.show', $notifications);
     }
 
     /**

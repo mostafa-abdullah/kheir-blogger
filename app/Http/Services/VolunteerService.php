@@ -38,10 +38,7 @@ class VolunteerService
             $notification->pivot->read = 1;
             $notification->push();
         }
-        return [
-            'oldNotifications' => $oldNotifications,
-            'newNotifications' => $newNotifications
-        ];
+        return compact('oldNotifications', 'newNotifications');
     }
 
     /**
