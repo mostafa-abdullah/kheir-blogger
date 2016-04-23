@@ -22,7 +22,7 @@ class OrganizationReviewRequest extends Request
     public function rules()
     {
         return [
-            'rate'   => 'required|numeric|min:1|max:5',
+            'rating'   => 'required|numeric|min:1|max:5',
             'review' => 'required'
         ];
     }

@@ -63,14 +63,8 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-        $oldNotifications = Auth::user()->notifications()->read()->get();
-        $newNotifications = Auth::user()->notifications()->unread()->get();
-        foreach($newNotifications as $notification)
-        {
-            $notification->pivot->read = 1;
-            $notification->push();
-        }
-        return view('volunteer.notification.show', compact('newNotifications', 'oldNotifications'));
+        $notifications = $this->volunteerService->showNotifications();
+        return view('volunteer.notification.show', $notifications);
     }
 
     /**
@@ -78,9 +72,7 @@ class VolunteerController extends Controller
      */
     public function unreadNotification(Request $request)
     {
-        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
-        $notification->pivot->read = 0;
-        $notification->push();
+        $this->volunteerService->unreadNotification($request);
     }
 
     /**
@@ -100,6 +92,20 @@ class VolunteerController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Show all my events
+     */
+    public function showAllEvents()
+    {
+        $user = Auth::user();
+        $followedAndRegisteredEvents = $user->events()->get()->toArray();
+        $subscribedOrganizationEvents = $user->interestingEvents($user->id)->get();
+        $allEvents = array_merge($followedAndRegisteredEvents,$subscribedOrganizationEvents);
+        usort($followedAndRegisteredEvents, array($this, "cmp"));
+        usort($subscribedOrganizationEvents, array($this, "cmp"));
+        usort($allEvents, array($this, "cmp"));
+        return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
+    }
     /**
      * Shows the logged-in volunteer's dashboard
      * @return [view]           [the dashboard view]
