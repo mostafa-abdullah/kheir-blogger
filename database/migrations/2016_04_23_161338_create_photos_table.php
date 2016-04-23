@@ -21,7 +21,6 @@ class CreatePhotosTable extends Migration
             $table->string('name');
             $table->text('caption')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

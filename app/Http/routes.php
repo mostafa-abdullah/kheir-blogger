@@ -249,7 +249,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('event/{id}/gallery/upload','Event\EventGalleryController@add');
     Route::post('event/{id}/gallery/upload','Event\EventGalleryController@upload');
     Route::post('event/{id}/gallery','Event\EventGalleryController@store');
-    Route::post('event/deletephoto/{id}','Event\EventGalleryController@destroy');
+    Route::delete('event/deletephoto/{id}','Event\EventGalleryController@destroy');
 
     /**
      * Event Reviewing.
