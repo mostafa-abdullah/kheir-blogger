@@ -98,10 +98,10 @@ class EventGalleryController extends Controller
         $event = Event::findOrFail($event_id);
         if(auth()->guard('organization')->user()->id == $event->organization()->id)
         {
-            //Storage::delete($photo->name);
             File::delete('storage/app/db/gallery/' . $event->id . '/'.$photo->name);
             $photo->delete();
             return redirect()->action('Event\EventController@show', [$event_id]);
         }
+        return redirect('/');
     }
 }
