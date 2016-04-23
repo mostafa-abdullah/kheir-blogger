@@ -9,7 +9,7 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "^5.2",
         "doctrine/dbal": "^2.5",
-        "elasticsearch/elasticsearch": "~2.0",
+        "elasticsearch/elasticsearch": "^2.1",
         "elasticquent/elasticquent": "dev-master"
     },
     "require-dev": {

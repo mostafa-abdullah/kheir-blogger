@@ -252,25 +252,27 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('event','Event\EventController', ['except' => 'index']);
 
 
-//     /*
-//      *  Routes related to Search engine
-//      */
-//     Route::get("search","SearchController@load");
-//     Route::get('/',function(){
-//        //var_dump(new Elasticsearch\ClientBuilder);
-// //        $client =  Elasticsearch\ClientBuilder::create()->build();
-// //        var_dump($client);
-//         $source_client = Elasticsearch\ClientBuilder::create()->build();
-// //        dd($source_client);
-//         \App\Organization::createIndex($shards = null, $replicas = null);
-// //        \App\Organization::addAllToIndex();
-// //        $organizations = \App\Organization::search('organization1');
-// //        dd($organizations);
+    /*
+     *  Routes related to Search engine
+     */
+   // Route::get("","SearchController@load");
+    Route::get('/search',function(){
+       //var_dump(new Elasticsearch\ClientBuilder);
+//        $client =  Elasticsearch\ClientBuilder::create()->build();
+//        var_dump($client);
+ //       $source_client = Elasticsearch\ClientBuilder::create()->build();
+//        dd($source_client);
+ //       \App\Organization::createIndex($shards = null, $replicas = null);
+//        \App\Organization::addAllToIndex();
+//        $organizations = \App\Organization::search('organization1');
+//        dd($organizations);
 
-// //        dd($source_client);
-
-
-//     });
+//        dd($source_client);
+          $elastic = '\App\Elastic\Elastic';
+            $newInstance = new $elastic;
+            dd(newInstance);
+        // dd($elastic);
+    });
 
 /*
 |==========================================================================
