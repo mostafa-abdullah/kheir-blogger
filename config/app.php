@@ -156,7 +156,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ElasticSearchServiceProvider::class,
+     
 
        // Cviebrock\LaravelElasticsearch\ServiceProvider::class,
 
