@@ -62,13 +62,9 @@
             </h1>
        </div>
        <div class="container panel-body">
-         <p>Rating:
-             @if($Event->rating && $event->timing < Carbon\Carbon::now())
-                 {{number_format($Event->rating, 1)}}
-             @else
-                 No rating yet!
+             @if($event->rating && $event->timing < Carbon\Carbon::now())
+                 <p>Rating:{{number_format($Event->rating, 1)}}</p>
              @endif
-         </p>
            <h3 class="text-left">Description</h3>
            <p class="text-left container">
                {{$event->description}}
