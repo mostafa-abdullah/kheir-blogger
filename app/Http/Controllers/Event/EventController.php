@@ -89,7 +89,7 @@ class EventController extends Controller
 		$event = $organization->createEvent($request);
 		$notification_description = $organization->name." created a new event: ".$request->name;
 		Notification::notify($organization->subscribers, 1, $event,
-							$notification_description, url("/event", $event->id));
+							$notification_description, "/event", $event->id);
 		return redirect()->action('Event\EventController@show', [$event->id]);
 	}
 

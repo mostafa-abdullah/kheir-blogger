@@ -196,7 +196,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','Volunteer\VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
-    
+
      /**
      * Volunteer view his events.
      */
@@ -332,6 +332,21 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
+     *  Challenges Routes.
+     */
+    Route::get('api/volunteer/challenge', 'API\ChallengeAPIController@index');
+    Route::post('api/volunteer/challenge', 'API\ChallengeAPIController@store');
+    Route::patch('api/volunteer/challenge', 'API\ChallengeAPIController@update');
+    Route::get('api/volunteer/challenge/achieved',
+                'API\ChallengeAPIController@viewCurrentYearAttendedEvents');
+
+    /**
+     * Notification Routes.
+     */
+     Route::get('api/notifications', 'API\VolunteerAPIController@showNotifications');
+     Route::post('api/notifications', 'API\VolunteerAPIController@unreadNotification');
+
+    /**
      * Feedback to Admin route
      */
     Route::post('api/feedback' , 'API\VolunteerAPIController@storeFeedback');
@@ -342,7 +357,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
     ]]);
-
 
     /*
     |--------------------------
