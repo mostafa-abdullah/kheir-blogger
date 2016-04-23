@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAvailableLocations extends Migration
+class CreateLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateAvailableLocations extends Migration
      */
     public function up()
     {
-        Schema::create('available_locations', function(Blueprint $table){
+        Schema::create('locations', function(Blueprint $table){
 
             $table->increments('id');
             $table->text('location');
@@ -29,6 +29,8 @@ class CreateAvailableLocations extends Migration
      */
     public function down()
     {
-        Schema::drop('available_locations');
+        Schema::drop('locations');
     }
+
+
 }
