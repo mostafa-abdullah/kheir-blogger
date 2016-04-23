@@ -268,9 +268,10 @@ Route::group(['middleware' => ['web']], function () {
 //        dd($organizations);
 
 //        dd($source_client);
-          $elastic = '\App\Elastic\Elastic';
-            $newInstance = new $elastic;
-            dd(newInstance);
+           $elastic = $this->app->make(App\Elastic\Elastic::class);
+          // $elastic = '\App\Elastic\Elastic';
+          //   $newInstance = new $elastic;
+            dd($elastic);
         // dd($elastic);
     });
 
