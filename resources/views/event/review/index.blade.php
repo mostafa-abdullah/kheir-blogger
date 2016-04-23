@@ -1,5 +1,6 @@
 <?php
-    $canReview = Auth::user() && Auth::user()->role > 0 && Auth::user()->attendedEvents()->find($event->id);
+    $canReview = Auth::user() && Auth::user()->role > 0
+              && Auth::user()->attendedEvents()->find($event->id);
 ?>
 
 <div class="tab-body" id="reviews" hidden>

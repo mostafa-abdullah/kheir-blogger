@@ -3,9 +3,10 @@
 namespace App\Http\Services;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\VolunteerRequest;
+use App\Http\Requests\OrganizationReviewRequest;
 
 use App\Organization;
+use App\OrganizationReview;
 
 use Auth;
 

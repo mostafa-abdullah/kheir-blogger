@@ -23,7 +23,7 @@
             </h4>
             <div class="container">
                 <div style="">Rating
-                    <span style="font-size: 25px">{{$review->rate}}</span>/10
+                    <span style="font-size: 25px">{{$review->rating}}</span>/10
                 </div>
                     <div style="margin-top: 20px">
                         {{$review->review}}

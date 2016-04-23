@@ -46,6 +46,22 @@ class VolunteerAPIController extends Controller
     }
 
     /**
+     * Show all new notifications for the authenticated user.
+     */
+    public function showNotifications()
+    {
+        return response()->json($this->volunteerService->showNotifications());
+    }
+
+    /**
+     * Mark this notification as unread.
+     */
+    public function unreadNotification(Request $request)
+    {
+        $this->volunteerService->unreadNotification();
+    }
+
+    /**
      * Send feedback to the admin.
      */
     public function storeFeedback(Request $request)

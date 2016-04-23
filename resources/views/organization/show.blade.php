@@ -19,6 +19,10 @@
     <div class="jumbotron">
         <h1>{{$organization->name}}</h1>
 
+        @if($canReview)
+            @include('organization.partials.button', ['action' => 'review/create', 'buttonText' => 'Rate & Review!'])
+        @endif
+
         @if($state==3)
             @include('organization.partials.button', ['action' => 'subscribe', 'buttonText' => 'Subscribe'])
         @elseif($state==2)
@@ -53,11 +57,11 @@
         <p>Bio: {{$organization->bio}}</p>
         <p>Location: {{$organization->location}}</p>
         <p>Phone: {{$organization->phone}}</p>
-        <p>Rate:
-            @if($organization->rate)
-                {{number_format($organization->rate, 1)}}
+        <p>Rating:
+            @if($organization->rating)
+                {{number_format($organization->rating, 1)}}
             @else
-                No rate yet!
+                No rating yet!
             @endif
         </p>
         <p>Subscribers: {{count($organization->subscribers)}}</p>
@@ -78,7 +82,7 @@
         <h4>Reviews</h4>
         <ul>
             @for($i = 0; $i < 3 && $i < count($organization->reviews); $i++)
-                <li>{{$organization->reviews[$i]->review}}, {{$organization->reviews[$i]->rate}}</li>
+                <li>{{$organization->reviews[$i]->review}}, {{$organization->reviews[$i]->rating}}</li>
             @endfor
             @if(count($organization->reviews))
                     <a href="/organization/{{$organization->id}}/reviews">View All >></a>
