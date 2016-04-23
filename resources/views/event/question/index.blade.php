@@ -15,8 +15,9 @@
         <?php $volunteer = \App\User::find($question->id); ?>
         <ul>
             <li>
+                <h2>{{$question->question}}</h2>
                 <h3>
-                    {{$question->question_body .'?'}}
+                    {{$question->question_body}}
                     <small>By {{ $volunteer->first_name }} {{ $volunteer->last_name}}</small>
                 </h3>
                 <h4>{{$question->answer}}</h4>
