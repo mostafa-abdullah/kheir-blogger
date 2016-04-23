@@ -4,9 +4,9 @@ use Elasticsearch\Client;
 class Elastic
 {
     protected $client;
-    public function __construct()
+    public function __construct(Client $client)
     {
-       // $this->client = $client;
+        $this->client = $client;
     }
 
     /**
