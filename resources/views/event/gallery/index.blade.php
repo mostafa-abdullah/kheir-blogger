@@ -25,6 +25,11 @@
                                 {!! method_field('DELETE') !!}
                                 <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Delete photo</button>
                             </form>
+                            <form action="{{ url('event/'.$event->id.'/editcaption/'.$photo->id) }}" method="POST">
+                                {!! csrf_field() !!}
+                                {!! method_field('POST') !!}
+                                <button type="submit" class="btn btn-danger btn-event">Edit/add caption</button>
+                            </form>
                         @endif
                     </div>
                 @endforeach
