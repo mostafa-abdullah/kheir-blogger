@@ -29,4 +29,17 @@ class EventPostService
             Notification::notify($event->volunteers, 4, $event, $description, $link);
         }
     }
+
+    /**
+	 * Update the information of an edited event post.
+	 */
+	public function update(EventPostRequest $request, $id,$post_id)
+	{
+		$event = Event::findorfail($id);
+		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		{
+			$post= EventPost::findOrFail($post_id);
+			$post->update($request->all());
+		}
+	}
 }

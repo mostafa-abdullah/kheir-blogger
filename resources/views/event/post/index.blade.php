@@ -8,6 +8,7 @@
      @foreach($event->posts as $post)
          <ul>
              <li>
+                 @include('event.partials.button', ['buttonText' => 'Edit Post', 'action' => "post/".$post->id."/edit/"])
                  <form action="{{ url('event/'.$event->id."/post/".$post->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
