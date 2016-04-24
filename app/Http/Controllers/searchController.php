@@ -126,7 +126,7 @@ class searchController extends Controller
   	   print_r($results['satisfiedSearchEvents']['hits']['total']);
 	   print_r("<br><br>");
 	   print_r($results['satisfiedSearchOrganizations']['hits']['total']);
-	 // return $result;
+	 //	 return $result;
 	}
 
 

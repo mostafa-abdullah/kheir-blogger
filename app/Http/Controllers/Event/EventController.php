@@ -18,7 +18,8 @@ use Auth;
 use Input;
 use Validator;
 use Session;
-
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 class EventController extends Controller
 {
 	private $eventService;
@@ -113,6 +114,18 @@ class EventController extends Controller
 	public function update(EventRequest $request, $id)
 	{
 		$this->eventService->update($request, $id);
+
+		$client = new Elasticsearch(elasticClientBuilder::create()->build());
+		/**
+		 * updating the updated event in Elasticsearch server
+		 */
+		$params = [
+		    'index' => 'events',
+		    'type' => 'event',
+		    'id' => $id
+		];
+
+		$response = $client->update($params);
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
@@ -122,6 +135,19 @@ class EventController extends Controller
 	public function destroy($id)
 	{
 		$this->eventService->destroy($id);
+
+		$client = new Elasticsearch(elasticClientBuilder::create()->build());
+		/**
+		 * Deleting destroyed event from Elasticsearch server
+		 */
+		$params = [
+		    'index' => 'events',
+		    'type' => 'event',
+		    'id' => $id
+		];
+
+		$response = $client->delete($params);
+		
 		return redirect('/');
 	}
 

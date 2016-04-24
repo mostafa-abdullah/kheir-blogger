@@ -34,7 +34,7 @@ class Elastic
      * update a single item
      */
    
-   public function updated(array $parameters)
+   public function update(array $parameters)
     {
         $this->elasticsearch->index($parameters);
     }
