@@ -20,8 +20,6 @@
 
             <div class="form-group">
                 {!! Form::submit('Add Review',['class'=>'btn btn-default']) !!}
-
-
             </div>
 
             {!! Form::close() !!}

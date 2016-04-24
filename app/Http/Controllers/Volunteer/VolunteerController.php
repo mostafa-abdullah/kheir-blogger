@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Volunteer;
 use App\Http\Controllers\Controller;
 use App\Http\Services\VolunteerService;
 
+use App\Location;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
 use App\User;
 
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\Input;
 
 
 class VolunteerController extends Controller
@@ -44,7 +46,14 @@ class VolunteerController extends Controller
         if(Auth::user()->id == $id)
         {
             $volunteer = User::findorfail($id);
-            return view('volunteer.edit' , compact('volunteer'));
+            $sentLocations = Location::all();
+            $checkedLocations = Auth::user()->locations()->get()->toArray();
+            $locationsIDS = [];
+            foreach($checkedLocations as $userLocation){
+                array_push($locationsIDS,$userLocation['id']);
+
+            }
+            return view('volunteer.edit' , compact('volunteer','sentLocations','locationsIDS'));
         }
         return redirect('/');
     }
@@ -58,7 +67,45 @@ class VolunteerController extends Controller
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
-    /**
+    /*
+     * sending all locations to the drop down list
+     */
+    public function assign_locations(Request $request){
+
+        $input = $request->all();
+        if(Input::has('locations'))
+        $checkedLocations = $input['locations'];
+        else
+            $checkedLocations = [];
+
+        $userLocations = Auth::user()->locations()->get()->toArray();
+
+        $locationsIDS = [];
+
+        foreach($userLocations as $userLocation){
+            array_push($locationsIDS,$userLocation['id']);
+        }
+
+        foreach($locationsIDS as $recievedLocation){
+
+            if(!in_array($recievedLocation,$checkedLocations)){
+                $newLocation = Auth::user()->locations()->findOrFail($recievedLocation);
+                $newLocation['pivot']->delete();
+            }
+
+
+        }
+
+        foreach($checkedLocations as $recievedLocation){
+            if(!in_array($recievedLocation,$locationsIDS)) {
+                $newLocation = Location::findOrFail($recievedLocation);
+                Auth::user()->locations()->save($newLocation);
+            }
+        }
+        return redirect('/');
+    }
+
+    /*1*
      * Show all new notifications for the authenticated user.
      */
     public function showNotifications()

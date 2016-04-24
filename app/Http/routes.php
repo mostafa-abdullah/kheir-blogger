@@ -196,7 +196,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','Volunteer\VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
-    
+    /**
+     * volunteer assign locations
+     */
+     Route::post('assign/locations','Volunteer\VolunteerController@assign_locations');
      /**
      * Volunteer view his events.
      */
