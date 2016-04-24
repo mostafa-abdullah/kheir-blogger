@@ -251,7 +251,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('event/{id}/gallery','Event\EventGalleryController@store');
     Route::delete('event/{id}/deletephoto/{photo_id}','Event\EventGalleryController@destroy');
     Route::get('event/{id}/photo/{photo_id}/edit','Event\EventGalleryController@edit');
-    Route::post('event/{id}/photo/{photo_id}/update','Event\EventGalleryController@update');
+    Route::patch('event/{id}/photo/{photo_id}','Event\EventGalleryController@update');
 
 
     /**

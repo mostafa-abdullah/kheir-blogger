@@ -6,7 +6,7 @@
         @else
             <h1>Add a caption to your image</h1>
         @endif
-        {!! Form::model($photo, array( 'method' => 'POST','action' =>array('Event\EventGalleryController@update',$event->id,$photo->id))) !!}
+        {!! Form::model($photo, array( 'method' => 'PATCH','action' =>array('Event\EventGalleryController@update',$event->id,$photo->id))) !!}
         <img src="{{asset($path.$photo->name)}}" style="" width="250" height="250">
         <div class="form-group">
             {!! Form::label('caption','Caption:')!!}
