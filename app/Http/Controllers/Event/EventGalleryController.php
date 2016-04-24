@@ -91,7 +91,7 @@ class EventGalleryController extends Controller
      *  edit or add caption to a single photo
      */
 
-    public function editview($id, $photo_id)
+    public function edit($id, $photo_id)
     {
         $event = Event::findorfail($id);
         if (auth()->guard('organization')->user()->id == $event->organization()->id)
@@ -103,7 +103,11 @@ class EventGalleryController extends Controller
         return redirect('/');
     }
 
-    public function savecaption(Request $request, $id, $photo_id)
+    /*
+     * updates the photo with the modified or new caption
+     */
+
+    public function update(Request $request, $id, $photo_id)
     {
         $event = Event::findorfail($id);
         if (auth()->guard('organization')->user()->id == $event->organization()->id)
