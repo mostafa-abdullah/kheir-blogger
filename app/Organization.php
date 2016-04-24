@@ -63,7 +63,7 @@ class Organization extends Authenticatable implements CanResetPassword
            */
                
               $newEvent = $client->index($parameters);
-             
+               return $event;
               //dd($docs);
           }
             catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e) {

@@ -47,7 +47,7 @@ class searchController extends Controller
                       	   
                               'multi_match' => [
                               	'query' => $searchCriteria,
-                              	'fields' => ['name^3', 'description^2','location'],  // setting periorties to fields 
+                              	'fields' => ['name^3', 'description^2','location'],   
 
                               	'fuzzy' => [
 	                              	'fuzziness' => 2,
@@ -116,9 +116,17 @@ class searchController extends Controller
 
 	public function searchAll(Request $request){
 	  $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
-	  $satisfiedSearchEvents = $this->satisfiedSearchEvents($request);
-	  $result = array_merge($satisfiedSearchEvents, $satisfiedSearchOrganizations);
-	  return $result;
+	  $satisfiedSearchEvents = $this->searchForEvents($request);
+	
+	   $results = array(
+	   					"satisfiedSearchOrganizations" => $satisfiedSearchOrganizations,
+	   					"satisfiedSearchEvents"=>$satisfiedSearchEvents
+	   				);
+
+  	   print_r($results['satisfiedSearchEvents']['hits']['total']);
+	   print_r("<br><br>");
+	   print_r($results['satisfiedSearchOrganizations']['hits']['total']);
+	 // return $result;
 	}
 
 

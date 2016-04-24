@@ -3,7 +3,7 @@
 
 @section('content')
 
-{!! Form::open(['action' => ['searchController@searchForEvents']]) !!}
+{!! Form::open(['action' => ['searchController@searchAll']]) !!}
 
 <div class = "form-group">
     {!! Form::label('txtSearch' , 'Search for something') !!}
