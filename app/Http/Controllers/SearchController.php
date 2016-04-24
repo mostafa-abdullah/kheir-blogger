@@ -10,120 +10,85 @@ use Elasticsearch\ClientBuilder as elasticClientBuilder;
 use App\Http\Requests;
 use App\Event;
 
+use Validator;
+
 class searchController extends Controller
 {
     public function searchPage()
     {
-        return view('search');
+        return view('search.query');
     }
 
     public function searchAll(Request $request)
     {
-      $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
-      $satisfiedSearchEvents = $this->searchForEvents($request);
-
-       $results = array(
-                        "satisfiedSearchOrganizations" => $satisfiedSearchOrganizations,
-                        "satisfiedSearchEvents"=>$satisfiedSearchEvents
-                    );
-
-       print_r($results['satisfiedSearchEvents']['hits']['total']);
-       print_r("<br><br>");
-       print_r($results['satisfiedSearchOrganizations']['hits']['total']);
-     //	 return $result;
+        // $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
+        $satisfiedSearchEvents = $this->searchForEvents($request);
+        return compact('satisfiedSearchOrganizations', 'satisfiedSearchEvents');
     }
 
     /**
-     *  get json list of all events that have a substring in its name or description equal to searched criteria
+     *  Get a list of all events that have a substring in its name or description
+     *  equal to searched criteria
      */
     public function searchForEvents(Request $request)
     {
-         /**
-          * intializing a new instanse of elastic.php class
-          */
+        $validator = Validator::make($request->all(), ['searchText' => 'required']);
 
     	$client = new Elasticsearch(elasticClientBuilder::create()->build());
+        $searchCriteria = $request->searchText;
 
-         /**
-          * getting searched criteria from the request
-          */
+		$parameters = [
+            'index' => 'events',
+            'type' => 'event',
+	        'body'  => [
+	            'query' =>[
+                    'multi_match' => [
+                        'query' => $searchCriteria,
+                      	'fields' => ['name^3', 'description^2','location'],
+                      	'fuzzy' => [
+                          	'fuzziness' => 2,
+                          	'prefix_length' => 0,
+        					"max_expansions" => 100
+                      	 ]
+                    ]
+	         	]
+	   		]
+        ];
 
-           $searchCriteria = $request->txtSearch;
-
-        /**
-         * the search can match event's name and/or description and/or location
-         */
-				$parameters = [
-			    'index' => 'events',
-			    'type' => 'event',
-			    'body' => [
-			          'query'=>[
-
-                              'multi_match' => [
-                              	'query' => $searchCriteria,
-                              	'fields' => ['name^3', 'description^2','location'],
-
-                              	'fuzzy' => [
-	                              	'fuzziness' => 2,
-	                              	'prefix_length' => 0,
-	            					"max_expansions" => 100
-                              	]
-
-                              ],
-
-
-
-
-			         	 ]
-			   		 ]
-                ];
-         /**
-          * calling search function of elastic.php class and returning the value
-          */
-             $satisfiedSearchEvents =  $client->search($parameters);
-             //dd($satisfiedSearchEvents);
-             return $satisfiedSearchEvents;
+        $satisfiedSearchEvents = $client->search($parameters);
+        return $satisfiedSearchEvents;
     }
 
+    /**
+     *  Get a list of all organizations that have a substring in its name
+     *  email, slogan, location, phone equal to searched criteria
+     */
     public function searchForOrganizations(Request $request)
     {
-       	/**
-         * getting searched criteria from the request
-         */
-        $searchCriteria = $request->txtSearch;
+        $validator = Validator::make($request->all(), ['searchText' => 'required']);
 
-         /**
-          * intializing a new instanse of elastic.php class
-          */
-         $client = new Elasticsearch(elasticClientBuilder::create()->build());
+        $searchCriteria = $request->searchText;
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
 
-         /**
-          * the search can match organization's name and/or email and/or location and/or rate and/or phone
-          */    $parameters = [
-			    'index' => 'organizations',
-			    'type' => 'organization',
-			    'body' => [
-			          'query'=>[
-
-                              'multi_match' => [
-                              	'query' => $searchCriteria,
-                              	'fields' => ['name^3', 'email^2','location','rate','phone'],
-                              	'fuzzy' => [
-	                              	'fuzziness' => 2,
-	                              	'prefix_length' => 0,
-	            					"max_expansions" => 100
-                              	]
-
-                              ]
-			         	 ]
-			   		 ]
-                ];
-
-		 /**
-          * calling search function of elastic.php class and returning the value
-          */
-             $satisfiedSearchOrganizations=  $client->search($parameters);
-
-             return $satisfiedSearchOrganizations;
+        $parameters = [
+		    'index' => 'organizations',
+			'type' => 'organization',
+			'body' => [
+			    'query'=>[
+                    'multi_match' => [
+                      	'query' => $searchCriteria,
+                      	'fields' => ['name^3', 'email^2', 'slogan',
+                                    'location', 'phone'],
+                      	'fuzzy' => [
+	                        'fuzziness' => 2,
+	                        'prefix_length' => 0,
+	            			'max_expansions' => 100
+                        ]
+                    ]
+			    ]
+		    ]
+        ];
+        $satisfiedSearchOrganizations = $client->search($parameters);
+        return $satisfiedSearchOrganizations;
     }
 }

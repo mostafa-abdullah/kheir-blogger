@@ -85,7 +85,6 @@ class OrganizationAuthController extends Controller
                         'email'    => $organization->email,
                         'slogan'   => $organization->slogan,
                         'location' => $organization->location,
-                        'rating'   => $organization->rating,
                         'phone'    => $organization->phone
                      ]
         ];

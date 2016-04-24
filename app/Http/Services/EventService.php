@@ -16,7 +16,6 @@ use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 use Carbon\Carbon;
 use Auth;
-use Validator;
 
 class EventService
 {
@@ -31,7 +30,7 @@ class EventService
 		$notification_description = $organization->name." created a new event: ".$request->name;
 		Notification::notify($organization->subscribers, 1, $event,
 							$notification_description, "/event", $event->id);
-		addToElastic($event);
+		$this->addToElastic($event);
 		return $event;
 	}
 
@@ -48,7 +47,7 @@ class EventService
 			Notification::notify($event->volunteers, 2, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
-		updateElastic($event->id);
+		$this->updateElastic($event->id);
 	}
 
 	/**
@@ -63,7 +62,7 @@ class EventService
 			Notification::notify($event->volunteers, 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
-		deleteFromElastic($event_id)
+		$this->deleteFromElastic($event_id);
 	}
 
 
@@ -115,7 +114,6 @@ class EventService
 	 */
 	public function addToElastic($event)
 	{
-
 	 	$client = new Elasticsearch(elasticClientBuilder::create()->build());
 
 		$parameters = [

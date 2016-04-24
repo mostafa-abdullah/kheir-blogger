@@ -22,7 +22,7 @@ class OrganizationService
     {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
-        updateElastic($organization->id);
+        $this->updateElastic($organization->id);
     }
 
     /**
