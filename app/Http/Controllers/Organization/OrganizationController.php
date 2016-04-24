@@ -15,7 +15,8 @@ use App\OrganizationReview;
 
 use Hash;
 use Auth;
-
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 class OrganizationController extends Controller
 {
@@ -161,6 +162,17 @@ class OrganizationController extends Controller
     {
         $organization = Organization::find($id);
         $organization->delete();
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
+        /**
+         * Deleting destroyed event from Elasticsearch server
+         */
+        $params = [
+            'index' => 'organizations',
+            'type' => 'organization',
+            'id' => $id
+        ];
+
+        $response = $client->delete($params);
         return redirect('/');
     }
 }
