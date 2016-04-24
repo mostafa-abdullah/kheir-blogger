@@ -10,7 +10,6 @@ class EventPost extends Model
     use SoftDeletes;
 
     protected $fillable = ['title','description'];
-    protected $dates = ['deleted_at'];
     protected $table = 'event_posts';
 
     public function event()

@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\EventQuestionService;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
 use App\Event;
-use App\Question;
-use App\Notification;
-
-use Carbon\Carbon;
-use Auth;
 
 class EventQuestionController extends Controller
 {
+    private $eventQuestionService;
+
     public function __construct()
     {
+        $this->eventQuestionService = new EventQuestionService();
         $this->middleware('auth_volunteer', ['only' => [
             'create', 'store',
         ]]);
@@ -48,12 +47,7 @@ class EventQuestionController extends Controller
 
     public function store(Request $request, $id)
     {
-        $this->validate($request, ['question' => 'required']);
-
-        $question = new Question($request->all());
-        $question->user_id = Auth::user()->id;
-        Event::findOrFail($id)->questions()->save($question);
-
+        $result = $this->eventQuestionService->store($request, $id);
         return redirect()->action('Event\EventController@show', [$id]);
     }
 
@@ -74,34 +68,15 @@ class EventQuestionController extends Controller
 
     public function answer(Request $request, $event_id, $question_id)
     {
-	 	$this->validate($request, ['answer' => 'required']);
-
-        $question = Question::findOrFail($question_id);
-		$event = $question->event()->first();
-
-        if($event->organization()->id != auth()->guard('organization')->user()->id)
-			return redirect()->action('Event\EventController@show', [$event_id])
-							 ->withErrors(['Permission' => 'You do not have Permission to answer this question']);
-
-		$question->answer = $request['answer'];
-		$question->answered_at = Carbon::now();
-		$question->save();
-
-        $description = "Your question has been answered";
-        $link = url("/event/".$question->event_id."question/".$question->id);
-		Notification::notify(array($question->user()->first()), 5, $event, $description, $link);
-
+	 	$result = $this->eventQuestionService->answer($request, $event_id, $question_id);
 		return redirect()->action('Event\EventQuestionController@viewUnansweredQuestions', [$event_id]);
     }
 
     public function viewUnansweredQuestions($event_id)
     {
-        $event = Event::findorfail($event_id);
-		if(auth()->guard('organization')->user()->id == $event->organization_id)
-		{
-        	$questions = $event->questions()->Unanswered()->get();
-        	return view("event.question.answer", compact('questions', 'event'));
-        }
+        $result = $this->eventQuestionService->viewUnansweredQuestions($event_id);
+		if($result)
+        	return view("event.question.answer", $result);
 		return redirect()->action('Event\EventController@show', [$event_id])
 						 ->withErrors(['Permission' => 'You do not have Permission to answer these questions']);
     }

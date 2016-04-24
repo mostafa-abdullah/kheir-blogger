@@ -10,7 +10,7 @@ class EventReview extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['review', 'rate'];
+    protected $fillable = ['review', 'rating'];
 
     protected $table = 'event_reviews';
 

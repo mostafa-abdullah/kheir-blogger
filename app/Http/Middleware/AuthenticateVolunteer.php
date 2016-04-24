@@ -18,7 +18,7 @@ class AuthenticateVolunteer
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::user()) {
+        if (!Auth::user() || !Auth::user()->role) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
