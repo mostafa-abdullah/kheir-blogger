@@ -6,7 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Elastic\Elastic as elasticsearch;
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 class Organization extends Authenticatable implements CanResetPassword
 {
@@ -36,28 +38,36 @@ class Organization extends Authenticatable implements CanResetPassword
     public function createEvent($request)
     {     
           $event = new Event($request->all());
-          $this->events()->save($event);
+         $this->events()->save($event);
+
           /**
            * adding new event to Elasticsearch in order to keep Elasticsearch in sync with our database
            */
+            $client = new Elasticsearch(elasticClientBuilder::create()->build());
 
-          // requiring Elsaticsearch class and store it into $elastic variable
-          $elastic = $this->app->make(App\Elastic\Elastic::class);
-
-          // adding new event eloquent model created to be indexed by Elasticsearch
           $parameters = [
             'index' => 'events',
             'type' => 'event',
             'id' => $event->id,
             'body' => [    
-                           
+                              'name'=>$event->name,
+                              'description'=>$event->description,
+                              'location'=>$event->location    
                   ]   
         ]; 
                
-            //Indexing the new create event eloquent models
-     
-           $elastic.index($parameters);
-          return $event;
+        try {
+               
+              $docs = $client->index($parameters);
+             
+              dd($docs);
+          }
+            catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e) {
+                echo "error";
+              $last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+              $last['response']['error'] = [];
+              dd($last);
+            }
     }
 
     public function recommendations()

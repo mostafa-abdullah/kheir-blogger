@@ -3,7 +3,7 @@
 
 @section('content')
 
-{!! Form::open(['action' => ['HomeController@storeFeedback']]) !!}
+{!! Form::open(['action' => ['searchController@searchForEvents']]) !!}
 
 <div class = "form-group">
     {!! Form::label('txtSearch' , 'Search for something') !!}
@@ -14,7 +14,7 @@
 <div class = "form-group">
     {!! Form::submit('Search' , array('class' => 'btn btn-default' )) !!}
 </div>
-
+<!-- -->
 {!! Form::close() !!}
 
 @include('errors')

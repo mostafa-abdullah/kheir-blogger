@@ -5,8 +5,9 @@ class Elastic
 {
     protected $client;
     public function __construct(Client $client)
-    {
+    {   
         $this->client = $client;
+
     }
 
     /**
@@ -15,7 +16,10 @@ class Elastic
 
     public function index(array $parameters)
     {
-        return $this->client->index($parameters);
+        echo "in index function";
+       $result =  $this->client->index($parameters);
+        
+       return $result;
     }
 
     /**

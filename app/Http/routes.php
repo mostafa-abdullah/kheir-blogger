@@ -256,24 +256,47 @@ Route::group(['middleware' => ['web']], function () {
      *  Routes related to Search engine
      */
    // Route::get("","SearchController@load");
-    Route::get('/search',function(){
-       //var_dump(new Elasticsearch\ClientBuilder);
-//        $client =  Elasticsearch\ClientBuilder::create()->build();
-//        var_dump($client);
- //       $source_client = Elasticsearch\ClientBuilder::create()->build();
-//        dd($source_client);
- //       \App\Organization::createIndex($shards = null, $replicas = null);
-//        \App\Organization::addAllToIndex();
-//        $organizations = \App\Organization::search('organization1');
-//        dd($organizations);
+//     Route::get('/search',function(){
+//        //var_dump(new Elasticsearch\ClientBuilder);
+// //        $client =  Elasticsearch\ClientBuilder::create()->build();
+// //        var_dump($client);
+//  //       $source_client = Elasticsearch\ClientBuilder::create()->build();
+// //        dd($source_client);
+//  //       \App\Organization::createIndex($shards = null, $replicas = null);
+// //        \App\Organization::addAllToIndex();
+// //        $organizations = \App\Organization::search('organization1');
+// //        dd($organizations);
+              
+// //        dd($source_client);
+//           // $elastic = $this->app->make(App\Elastic\Elastic::class);
+//           // $elastic = '\App\Elastic\Elastic';
+//           //   $newInstance = new $elastic;
+//           //  dd($elastic);
+//         // dd($elastic);
+//          // $client = Elasticsearch\ClientBuilder::create()->build();
+//          // $params = [
+//          //        'index' => 'my_index',
+//          //        'type' => 'my_type',
+//          //        'id' => 'my_id',
+//          //        'body' => ['testField' => 'abc']
+//          //    ];
 
-//        dd($source_client);
-           $elastic = $this->app->make(App\Elastic\Elastic::class);
-          // $elastic = '\App\Elastic\Elastic';
-          //   $newInstance = new $elastic;
-            dd($elastic);
-        // dd($elastic);
-    });
+//          //    $response1 = $client->index($params);
+//          //    print_r($response1);
+
+//          //    $params = [
+//          //        'index' => 'my_index',
+//          //        'type' => 'my_type',
+//          //        'id' => 'my_id'
+//          //    ];
+
+//          //    $response2 = $client->get($params);
+//          //    print_r($response2);
+//     });
+
+    Route::get('searching' , 'searchController@loadSearchPage');
+    Route::post('searching' , 'searchController@searchForEvents');
+
 
 /*
 |==========================================================================

@@ -6,65 +6,105 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Event;
-
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 class searchController extends Controller
 {
    
       // requiring Elsaticsearch class and store it into $elastic variable
-    protected $elastic = $this->app->make(App\Elastic\Elastic::class);
+    // protected  $client = elasticClientBuilder::create()->build();
+     
+    public function loadSearchPage(){
+
+    return view('Search');
+    }
 
     /**
      *  get json list of all events that have a substring in its name or description equal to searched criteria 
      */
-    public function searchForEvents($searchCriteria)
-    {
+    public function searchForEvents(Request $request)
+    {   
          /**
-          * the search can match event's name and/or description and/or location
+          * intializing a new instanse of elastic.php class
           */
+
+    	$client = new Elasticsearch(elasticClientBuilder::create()->build());
+
+         /**
+          * getting searched criteria from the request
+          */
+           
+           $searchCriteria = $request->txtSearch;
+
+        /**
+         * the search can match event's name and/or description and/or location 
+         */
 				$parameters = [
 			    'index' => 'events',
 			    'type' => 'event',
 			    'body' => [
 			          'query'=>[
-                      	   'bool'=>[
-                              'match'=>['name'=>$searchCriteria],
-                              'match'=>['description'=>$searchCriteria],
-                              'match'=>['location'=>$searchCriteria]
+                      	   
+                              'multi_match' => [
+                              	'query' => $searchCriteria,
+                              	'fields' => ['name^3', 'description^2','location'],  // setting periorties to fields 
 
-                      	   	]
+                              	'fuzzy' => [
+	                              	'fuzziness' => 2,
+	                              	'prefix_length' => 0,
+	            					"max_expansions" => 100
+                              	]
+
+                              ],
+
+                              
+
+                      	   	
 			         	 ]	
-			   		 ],
-			   	'fuzziness' => 'AUTO',	 //Allowing for misspellings
-                'fields' => ['name^3', 'description^2','location'],  // setting periorties to fields 
+			   		 ]
                 ];
-             $satisfiedSearchEvents =  $elastic->search($parameters);
-
+         /**
+          * calling search function of elastic.php class and returning the value
+          */
+             $satisfiedSearchEvents =  $client->search($parameters);
+             dd($satisfiedSearchEvents);
              return $satisfiedSearchEvents;
     }
 
         public function searchForOrganizations($searchCriteria)
     {
+      
+         /**
+          * intializing a new instanse of elastic.php class
+          */
+         $client = new Elasticsearch(elasticClientBuilder::create()->build());
+
          /**
           * the search can match organization's name and/or email and/or location and/or rate and/or phone
-          */
-				$parameters = [
+          */    $parameters = [
 			    'index' => 'organizations',
 			    'type' => 'organization',
 			    'body' => [
 			          'query'=>[
-                      	   'bool'=>[
-                              'match'=>['name'=>$searchCriteria],
-                              'match'=>['email'=>$searchCriteria],
-                              'match'=>['location'=>$searchCriteria],
- 							  'match'=>['rate'=>$searchCriteria],
- 							  'match'=>['phone'=>$searchCriteria]
-                      	   	]
+                      	   
+                              'multi_match' => [
+                              	'query' => $searchCriteria,
+                              	'fields' => ['name^3', 'email^2','location','rate','phone'],  
+                              	'fuzzy' => [
+	                              	'fuzziness' => 2,
+	                              	'prefix_length' => 0,
+	            					"max_expansions" => 100
+                              	]
+
+                              ]
 			         	 ]	
-			   		 ],
-			   	'fuzziness' => 'AUTO',	 //Allowing for misspellings
-                'fields' => ['name^3', 'email^2','location','rate','phone'],  // setting periorties to fields 
+			   		 ]
                 ];
-             $satisfiedSearchOrganizations=  $elastic->search($parameters);
+                
+		 /**
+          * calling search function of elastic.php class and returning the value
+          */
+             $satisfiedSearchOrganizations=  $client->search($parameters);
              
              return $satisfiedSearchOrganizations;
     }
