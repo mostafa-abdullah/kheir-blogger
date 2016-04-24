@@ -57,10 +57,14 @@ class Organization extends Authenticatable implements CanResetPassword
         ]; 
                
         try {
+
+          /**
+           * indexing new event and added it to elastic search server
+           */
                
-              $docs = $client->index($parameters);
+              $newEvent = $client->index($parameters);
              
-              dd($docs);
+              //dd($docs);
           }
             catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e) {
                 echo "error";

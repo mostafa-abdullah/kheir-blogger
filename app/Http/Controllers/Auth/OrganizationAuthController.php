@@ -11,7 +11,8 @@ use App\Organization;
 
 use Auth;
 use Input;
-
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 class OrganizationAuthController extends Controller
 {
     public function __construct()
@@ -26,6 +27,39 @@ class OrganizationAuthController extends Controller
         $organization->email = $request->email;
         $organization->password = bcrypt($request->password);
         $organization->save();
+          /**
+           * adding new orgainzation to Elasticsearch in order to keep Elasticsearch in sync with our database
+           */
+            $client = new Elasticsearch(elasticClientBuilder::create()->build());
+
+          $parameters = [
+            'index' => 'organizations',
+            'type' => 'organization',
+            'id' => $organization->id,
+            'body' => [    
+                              'name'=>$organization->name,
+                              'email'=>$organization->email,
+                              'location'=>$organization->location,
+                              'rate'=>$organization->rate,
+                              'phone'=>$organization->phone
+                  ]   
+        ]; 
+               
+        try {
+          /**
+           * indexing new event and added it to elastic search server
+           */
+              $newOrganization = $client->index($parameters);
+             
+             // dd($newOrganization);
+          }
+            catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e) {
+                echo "error";
+              $last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+              $last['response']['error'] = [];
+              dd($last);
+            }
+
         auth()->guard('organization')->login($organization);
         return redirect('/');
     }

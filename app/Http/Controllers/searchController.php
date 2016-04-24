@@ -67,13 +67,17 @@ class searchController extends Controller
           * calling search function of elastic.php class and returning the value
           */
              $satisfiedSearchEvents =  $client->search($parameters);
-             dd($satisfiedSearchEvents);
+             //dd($satisfiedSearchEvents);
              return $satisfiedSearchEvents;
     }
 
-        public function searchForOrganizations($searchCriteria)
+        public function searchForOrganizations(Request $request)
     {
-      
+       	/**
+         * getting searched criteria from the request
+         */
+        $searchCriteria = $request->txtSearch;
+
          /**
           * intializing a new instanse of elastic.php class
           */
@@ -100,7 +104,7 @@ class searchController extends Controller
 			         	 ]	
 			   		 ]
                 ];
-                
+
 		 /**
           * calling search function of elastic.php class and returning the value
           */
@@ -108,4 +112,14 @@ class searchController extends Controller
              
              return $satisfiedSearchOrganizations;
     }
+
+
+	public function searchAll(Request $request){
+	  $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
+	  $satisfiedSearchEvents = $this->satisfiedSearchEvents($request);
+	  $result = array_merge($satisfiedSearchEvents, $satisfiedSearchOrganizations);
+	  return $result;
+	}
+
+
 }
