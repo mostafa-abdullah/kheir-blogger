@@ -1,25 +1,23 @@
 <?php
+
 namespace App\Elastic;
+
 use Elasticsearch\Client;
+
 class Elastic
 {
     protected $client;
     public function __construct(Client $client)
-    {   
+    {
         $this->client = $client;
-
     }
 
     /**
      * Index a single item
      */
-
     public function index(array $parameters)
     {
-        echo "in index function";
-       $result =  $this->client->index($parameters);
-        
-       return $result;
+        return $this->client->index($parameters);
     }
 
     /**
@@ -29,18 +27,17 @@ class Elastic
     {
         return $this->client->delete($parameters);
     }
-    
+
     /**
-     * update a single item
+     * Update a single item
      */
-   
-   public function update(array $parameters)
+    public function update(array $parameters)
     {
         $this->elasticsearch->index($parameters);
     }
-    
+
     /**
-     * search for items that satisfy a specific criteria 
+     * Search for items that satisfy a specific criteria
      */
     public function search(array $parameters)
     {
@@ -48,7 +45,7 @@ class Elastic
     }
 
     /**
-     * get function to return client attribute of this class
+     * Get client attribute of this class
      */
     public function getClient()
     {

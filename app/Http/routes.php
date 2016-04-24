@@ -271,8 +271,8 @@ Route::group(['middleware' => ['web']], function () {
 | These routes are related to search on organizations and on events
 */
 
-    Route::get('searching' , 'searchController@loadSearchPage');
-    Route::post('searching' , 'searchController@searchAll');
+    Route::get('search', 'SearchController@searchPage');
+    Route::post('search', 'SearchController@searchAll');
 
 
 /*
@@ -287,7 +287,6 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Admin assign validator.
      */
-
     Route::post('volunteer/{id}/validate','AdminController@assignValidator');
 
 

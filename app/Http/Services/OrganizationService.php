@@ -8,6 +8,9 @@ use App\Http\Requests\OrganizationRequest;
 use App\Recommendation;
 use App\Organization;
 
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
+
 use Auth;
 
 class OrganizationService
@@ -19,6 +22,7 @@ class OrganizationService
     {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
+        updateElastic($organization->id);
     }
 
     /**
@@ -81,4 +85,20 @@ class OrganizationService
         }
         return null;
     }
+
+    /**
+     * Update organization in Elasticsearch server.
+     */
+    public function updateElastic($organization_id)
+    {
+
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
+        $params = [
+            'index' => 'organizations',
+            'type' 	=> 'organization',
+            'id' 	=> $organization_id;
+        ];
+        $client->update($params);
+    }
+
 }
