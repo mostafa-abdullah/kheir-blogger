@@ -47,11 +47,12 @@ class VolunteerController extends Controller
         {
             $volunteer = User::findorfail($id);
             $sentLocations = Location::all();
+            /* getting all locations which assigned to this user */
             $checkedLocations = Auth::user()->locations()->get()->toArray();
+            /* seprating the locations ids into separate array */
             $locationsIDS = [];
             foreach($checkedLocations as $userLocation){
                 array_push($locationsIDS,$userLocation['id']);
-
             }
             return view('volunteer.edit' , compact('volunteer','sentLocations','locationsIDS'));
         }
@@ -67,12 +68,13 @@ class VolunteerController extends Controller
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
-    /*
-     * sending all locations to the drop down list
+    /**
+     * assign and unAssign user locations
      */
     public function assign_locations(Request $request){
 
         $input = $request->all();
+        /* locations is array of all locations id which the user checked */
         if(Input::has('locations'))
         $checkedLocations = $input['locations'];
         else
@@ -81,24 +83,23 @@ class VolunteerController extends Controller
         $userLocations = Auth::user()->locations()->get()->toArray();
 
         $locationsIDS = [];
-
+        /* seprating locations id from the old userLocations list */
         foreach($userLocations as $userLocation){
             array_push($locationsIDS,$userLocation['id']);
         }
-
-        foreach($locationsIDS as $recievedLocation){
-
-            if(!in_array($recievedLocation,$checkedLocations)){
-                $newLocation = Auth::user()->locations()->findOrFail($recievedLocation);
+        /* check if the user unAssign location so we delete it from pivot table */
+        foreach($locationsIDS as $unUpdatedLocation){
+        /* check if there is a location id found in the non updated pivot table and not found in the updated check list */
+            if(!in_array($unUpdatedLocation,$checkedLocations)){
+                $newLocation = Auth::user()->locations()->findOrFail($unUpdatedLocation);
                 $newLocation['pivot']->delete();
             }
-
-
         }
 
-        foreach($checkedLocations as $recievedLocation){
-            if(!in_array($recievedLocation,$locationsIDS)) {
-                $newLocation = Location::findOrFail($recievedLocation);
+        /* check if the user Assign location so we delete it from pivot table */
+        foreach($checkedLocations as $checkedLocation){
+            if(!in_array($checkedLocation,$locationsIDS)) {
+                $newLocation = Location::findOrFail($checkedLocation);
                 Auth::user()->locations()->save($newLocation);
             }
         }
