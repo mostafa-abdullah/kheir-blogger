@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Contracts\Filesystem;
 
 use App\Photo;
 use App\Event;
 use Validator;
+use File;
+
 
 class EventGalleryController extends Controller
 {
@@ -36,7 +39,7 @@ class EventGalleryController extends Controller
             $input = $request->all();
             $files = $input['images'];
             $names = array();
-            $path = 'app/storage/db/gallery/' . $event->id . '/';
+            $path = 'storage/app/db/gallery/' . $event->id . '/';
 
             foreach ($files as $file) {
                 $rules = array('file' => 'required|image');
@@ -48,11 +51,11 @@ class EventGalleryController extends Controller
                     $upload_success = $file->move($path, $filename);
                     if ($upload_success) {
                         array_push($names, $filename);
-                    } else {
-                        // return redirect()->action('EventController@test');
+                   } else {
+                         return redirect()->action('Event\EventGalleryController@add');
                     }
                 } else {
-                    // return redirect()->action('EventController@test');
+                     return redirect()->action('Event\EventGalleryController@add');
                 }
             }
 
@@ -64,7 +67,7 @@ class EventGalleryController extends Controller
 
     public function store(Request $request, $id)
     {
-        $event = Event::findorfail($id);
+        $event = Event::findOrFail($id);
         if (auth()->guard('organization')->user()->id == $event->organization()->id)
         {
             $input = $request->all();
@@ -82,5 +85,22 @@ class EventGalleryController extends Controller
         }
         return redirect()->action('Event\EventController@show', [$id]);
 
+    }
+
+    /*
+     * delete a photo
+     */
+
+    public function destroy($id, $photo_id)
+    {
+        $event = Event::findOrFail($id);
+        if(auth()->guard('organization')->user()->id == $event->organization()->id)
+        {
+            $photo = Photo::findOrFail($photo_id);
+            File::delete('storage/app/db/gallery/' . $event->id . '/'.$photo->name);
+            $photo->delete();
+            return redirect()->action('Event\EventController@show', [$id]);
+        }
+        return redirect('/');
     }
 }

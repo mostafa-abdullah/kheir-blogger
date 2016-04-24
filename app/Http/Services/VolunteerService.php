@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
 
@@ -24,6 +23,32 @@ class VolunteerService
     {
     	$volunteer = User::findorfail($id);
         $volunteer->update($request->all());
+    }
+
+
+    /**
+     * Show all new notifications for the authenticated user.
+     */
+    public function showNotifications()
+    {
+        $oldNotifications = Auth::user()->notifications()->read()->get();
+        $newNotifications = Auth::user()->notifications()->unread()->get();
+        foreach($newNotifications as $notification)
+        {
+            $notification->pivot->read = 1;
+            $notification->push();
+        }
+        return compact('oldNotifications', 'newNotifications');
+    }
+
+    /**
+     * Mark this notification as unread.
+     */
+    public function unreadNotification(Request $request)
+    {
+        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
+        $notification->pivot->read = 0;
+        $notification->push();
     }
 
     /**

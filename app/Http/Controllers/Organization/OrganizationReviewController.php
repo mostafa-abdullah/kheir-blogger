@@ -56,8 +56,8 @@ class OrganizationReviewController extends Controller
      */
     public function store(OrganizationReviewRequest $request, $id)
     {
-        $this->organizationReviewService->store($request,$id);
-        return redirect()->action('OrganizationController@show', [$id]);
+        $this->organizationReviewService->store($request, $id);
+        return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
     /**
@@ -95,7 +95,7 @@ class OrganizationReviewController extends Controller
     public function report($organization_id, $review_id)
     {
         $this->organizationReviewService->report($organization_id,$review_id);
-        return redirect()->action('OrganizationController@show', [$organization_id]);
+        return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 
 }
