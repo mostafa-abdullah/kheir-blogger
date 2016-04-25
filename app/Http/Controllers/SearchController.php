@@ -12,7 +12,7 @@ use App\Event;
 
 use Validator;
 
-class searchController extends Controller
+class SearchController extends Controller
 {
     public function searchPage()
     {
@@ -34,9 +34,8 @@ class searchController extends Controller
      */
     public function searchForEvents(Request $request)
     {
-        $validator = Validator::make($request->all(), ['searchText' => 'required']);
-
-    	$client = new Elasticsearch(elasticClientBuilder::create()->build());
+        $this->validate($request, ['searchText' => 'required']);
+	    $client = new Elasticsearch(elasticClientBuilder::create()->build());
         $searchCriteria = $request->searchText;
 
 		$parameters = [
@@ -67,7 +66,7 @@ class searchController extends Controller
      */
     public function searchForOrganizations(Request $request)
     {
-        $validator = Validator::make($request->all(), ['searchText' => 'required']);
+        $this->validate($request, ['searchText' => 'required']);
 
         $searchCriteria = $request->searchText;
         $client = new Elasticsearch(elasticClientBuilder::create()->build());

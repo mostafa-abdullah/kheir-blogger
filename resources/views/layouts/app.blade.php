@@ -52,6 +52,11 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}">Home</a></li>
+                    <li>
+                        <div style="padding:10px">
+                            @include('search.query')
+                        </div>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -94,6 +99,8 @@
             </div>
         </div>
     </nav>
+    {{-- For Search Validation --}}
+    @include('errors')
 
     @if(auth()->guard('user')->check())
 
