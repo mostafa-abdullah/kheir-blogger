@@ -65,18 +65,25 @@ class EventPostController extends Controller
     /**
      * Edit an event post
      */
-    public function edit()
+    public function edit($id, $post_id)
     {
-        //TODO
+        $event = Event::findOrFail($id);
+        $post = EventPost::findOrFail($post_id);
+
+        if(auth()->guard('organization')->user()->id == $event->organization()->id)
+            return view('event.post.edit', compact('post','event'));
+
+        return redirect()->action('Event\EventController@show', [$id]);
     }
 
     /**
      * Update the edited event post
      */
-    public function update()
-    {
-        //TODO
-    }
+    public function update(EventPostRequest $request, $id, $post_id)
+   	{
+   		$this->eventPostService->update($request, $id, $post_id);
+   		return redirect()->action('Event\EventController@show', [$id]);
+   	}
 
     /**
      * Delete an event post

@@ -2,30 +2,36 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\RegisterOrganizationRequest;
-
 use App\Http\Controllers\Controller;
+use App\Http\Services\OrganizationService ;
+
+use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests;
+
 use App\User;
 use App\Organization;
+
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 use Auth;
 use Illuminate\Support\Facades\Input;
 
 class OrganizationAuthController extends Controller
 {
+    private $organizationService;
+
     public function __construct()
     {
+        $this->organizationService = new OrganizationService();
+
         $this->middleware('guest:organization', ['except' => 'logout']);
     }
 
     public function register(RegisterOrganizationRequest $request)
     {
-        $organization = new Organization;
-        $organization->name = $request->name;
-        $organization->email = $request->email;
-        $organization->password = bcrypt($request->password);
-        $organization->save();
+        $organization = $this->organizationService->store($request);
+
         auth()->guard('organization')->login($organization);
         return redirect('/');
     }
@@ -59,5 +65,40 @@ class OrganizationAuthController extends Controller
         Auth::guard('organization')->logout();
         Auth::guard('user')->logout();
         return redirect('/');
+    }
+
+    /**
+     * Add new orgainzation to Elasticsearch in order to keep Elasticsearch
+     * in sync with our database.
+     */
+    public function addToElastic($organization)
+    {
+
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
+
+        $parameters = [
+          'index' => 'organizations',
+          'type'  => 'organization',
+          'id'    => $organization->id,
+          'body'  => [
+                        'name'     => $organization->name,
+                        'email'    => $organization->email,
+                        'slogan'   => $organization->slogan,
+                        'location' => $organization->location,
+                        'phone'    => $organization->phone
+                     ]
+        ];
+
+        try
+        {
+            $client->index($parameters);
+        }
+        catch(Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
+        {
+            echo "Error";
+            $last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+            $last['response']['error'] = [];
+            dd($last);
+        }
     }
 }

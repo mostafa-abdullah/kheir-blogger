@@ -154,8 +154,6 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update', 'destroy'
     ]]);
 
-    Route::get('organization/delete/{id}' , 'Organization\OrganizationController@delete');
-
     /*
     |-----------------------
     | Volunteer Routes
@@ -186,9 +184,19 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('feedback' , 'Volunteer\VolunteerController@storeFeedback');
 
     /**
+    * Volunteer view his events.
+    */
+    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
+
+    /**
      * Volunteer dashboard.
      */
-     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
+    Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
+
+     /**
+      * volunteer assign locations
+      */
+    Route::post('locations','Volunteer\VolunteerController@assignLocations');
 
     /**
      * Volunteer CRUD.
@@ -196,16 +204,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','Volunteer\VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
-
-     /**
-     * Volunteer view his events.
-     */
-    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
-
-    /**
-     * Volunteer dashboard.
-     */
-     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
 
     /*
     |-----------------------
@@ -249,6 +247,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('event/{id}/gallery/upload','Event\EventGalleryController@add');
     Route::post('event/{id}/gallery/upload','Event\EventGalleryController@upload');
     Route::post('event/{id}/gallery','Event\EventGalleryController@store');
+    Route::delete('event/{id}/deletephoto/{photo_id}','Event\EventGalleryController@destroy');
+    Route::get('event/{id}/photo/{photo_id}/edit','Event\EventGalleryController@edit');
+    Route::patch('event/{id}/photo/{photo_id}','Event\EventGalleryController@update');
+
 
     /**
      * Event Reviewing.
@@ -260,6 +262,19 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::resource('event','Event\EventController', ['except' => 'index']);
+
+
+/*
+|==========================================================================
+| Search Routes
+|==========================================================================
+|
+| These routes are related to search on organizations and on events
+*/
+
+    Route::get('search', 'SearchController@searchPage');
+    Route::post('search', 'SearchController@searchAll');
+
 
 /*
 |==========================================================================
@@ -410,6 +425,7 @@ Route::group(['middleware' => ['web']], function () {
       * Event Post.
       */
      Route::post('api/event/{id}/post','API\EventPostAPIController@store');
+     Route::patch('api/event/{id}/post/{post_id}','API\EventPostAPIController@update');
 
      /**
       * Event Question.

@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\OrganizationService ;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
-use App\Http\Services\OrganizationService ;
+
 use App\Organization;
 use App\Recommendation;
 use App\OrganizationReview;
 
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
+
 use Hash;
 use Auth;
-
 
 class OrganizationController extends Controller
 {
@@ -159,8 +162,7 @@ class OrganizationController extends Controller
 
     public function destroy($id)
     {
-        $organization = Organization::find($id);
-        $organization->delete();
+        $this->organizationService->destroy($id);
         return redirect('/');
     }
 }

@@ -7,10 +7,13 @@ use App\Http\Services\VolunteerService;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
+
 use App\User;
+use App\Location;
 
 use Carbon\Carbon;
 use Auth;
+use Input;
 
 
 class VolunteerController extends Controller
@@ -22,7 +25,7 @@ class VolunteerController extends Controller
         $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification', 'showDashboard',
-            'createFeedback', 'storeFeedback', 'edit', 'update'
+            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations'
         ]]);
     }
 
@@ -44,7 +47,12 @@ class VolunteerController extends Controller
         if(Auth::user()->id == $id)
         {
             $volunteer = User::findorfail($id);
-            return view('volunteer.edit' , compact('volunteer'));
+            $sentLocations = Location::all();
+            $checkedLocations = Auth::user()->locations()->get()->toArray();
+            $locationsIDS = [];
+            foreach($checkedLocations as $userLocation)
+                array_push($locationsIDS,$userLocation['id']);
+            return view('volunteer.edit' , compact('volunteer','sentLocations','locationsIDS'));
         }
         return redirect('/');
     }
@@ -56,6 +64,15 @@ class VolunteerController extends Controller
     {
         $this->volunteerService->update($request, $id);
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
+    }
+
+    /**
+     * assign and unAssign volunteer locations
+     */
+    public function assignLocations(Request $request)
+    {
+        $this->volunteerService->assignLocations($request);
+        return redirect()->action('Volunteer\VolunteerController@show', [Auth::user()->id]);
     }
 
     /**

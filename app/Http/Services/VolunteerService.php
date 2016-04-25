@@ -9,10 +9,12 @@ use App\User;
 use App\Event;
 use App\Challenge;
 use App\Feedback;
+use App\Location;
 
 use Carbon\Carbon;
 use Auth;
 use Validator;
+use Input;
 
 class VolunteerService
 {
@@ -23,6 +25,34 @@ class VolunteerService
     {
     	$volunteer = User::findorfail($id);
         $volunteer->update($request->all());
+    }
+
+    public function assignLocations(Request $request)
+    {
+
+        $input = $request->all();
+
+        if(Input::has('locations'))
+            $newLocations = $input['locations'];
+        else
+            $newLocations = [];
+
+        $volunteerLocations = Auth::user()->locations()->get()->toArray();
+        $oldLocations = [];
+        foreach($volunteerLocations as $volunteerLocation)
+            array_push($oldLocations, $volunteerLocation['id']);
+
+        foreach($oldLocations as $oldLocation)
+            if(!in_array($oldLocation, $newLocations))
+            {
+                $deleteLocation = Auth::user()->locations()->findOrFail($oldLocation);
+                $deleteLocation['pivot']->delete();
+            }
+
+        foreach($newLocations as $newLocation)
+            if(!in_array($newLocation, $oldLocations))
+                Auth::user()->locations()->save(Location::findOrFail($newLocation));
+
     }
 
 
