@@ -154,8 +154,6 @@ Route::group(['middleware' => ['web']], function () {
         'show', 'edit', 'update', 'destroy'
     ]]);
 
-    Route::get('organization/delete/{id}' , 'Organization\OrganizationController@delete');
-
     /*
     |-----------------------
     | Volunteer Routes
