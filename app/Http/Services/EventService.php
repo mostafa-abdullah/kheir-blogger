@@ -11,9 +11,11 @@ use App\User;
 use App\Event;
 use App\Notification;
 
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
+
 use Carbon\Carbon;
 use Auth;
-use Validator;
 
 class EventService
 {
@@ -28,6 +30,7 @@ class EventService
 		$notification_description = $organization->name." created a new event: ".$request->name;
 		Notification::notify($organization->subscribers, 1, $event,
 							$notification_description, "/event", $event->id);
+		$this->indexEvent($event);
 		return $event;
 	}
 
@@ -44,6 +47,7 @@ class EventService
 			Notification::notify($event->volunteers, 2, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
+		$this->indexEvent($event);
 	}
 
 	/**
@@ -58,6 +62,7 @@ class EventService
 			Notification::notify($event->volunteers, 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
+		$this->unindexEvent($event->id);
 	}
 
 
@@ -102,4 +107,50 @@ class EventService
   	    if($event->timing < carbon::now())
   		    Auth::user()->unattendEvent($id);
     }
+
+	/**
+	 * Add new event to Elasticsearch in order to keep Elasticsearch
+	 * in sync with our database
+	 */
+	public function indexEvent($event)
+	{
+	 	$client = new Elasticsearch(elasticClientBuilder::create()->build());
+		$parameters = [
+		  'index'	=> 'events',
+		  'type'	=> 'event',
+		  'id' 		=> $event->id,
+		  'body' 	=> [
+							'name' 		  => $event->name,
+							'description' => $event->description,
+							'location'    => $event->location
+						]
+	  	];
+
+	  	try
+		{
+			$client->index($parameters);
+		}
+		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
+		{
+			echo "Error";
+			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+			$last['response']['error'] = [];
+			dd($last);
+		}
+	}
+
+	/**
+	 * Delete event from Elasticsearch server
+	 */
+	public function unindexEvent($event_id)
+	{
+		$client = new Elasticsearch(elasticClientBuilder::create()->build());
+		$params = [
+			'index' => 'events',
+			'type' => 'event',
+			'id' => $event_id
+		];
+
+		$client->delete($params);
+	}
 }

@@ -17,6 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\sendConfirmations::class,
+        Commands\ElasticSearchCreateIndex::class,
+        Commands\ElasticSearchDeleteIndex::class,
     ];
 
     /**
