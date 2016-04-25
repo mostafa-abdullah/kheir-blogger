@@ -7,6 +7,12 @@ use Illuminate\Console\Command;
 use App\Elastic\Elastic as Elasticsearch;
 use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
+use App\Organization;
+use App\Event;
+
+use App\Http\Services\EventService;
+use App\Http\Services\OrganizationService;
+
 class ElasticSearchCreateIndex extends Command
 {
     /**
@@ -44,6 +50,34 @@ class ElasticSearchCreateIndex extends Command
         $params = ['index' => $this->argument('index name')];
 
         $response = $client->getClient()->indices()->create($params);
+
+        if($params['index'] == 'organizations')
+            $this->seedOrganizationIndex();
+        elseif($params['index'] == 'events')
+            $this->seedEventIndex();
+
         $this->info("Index created successfully.");
+    }
+
+    /**
+     * Added current organizations to index.
+     */
+    public function seedOrganizationIndex()
+    {
+        $organizations = Organization::all();
+        $organizationService = new organizationService();
+        foreach($organizations as $organization)
+            $organizationService->indexOrganization($organization);
+    }
+
+    /**
+     * Added current organizations to index.
+     */
+    public function seedEventIndex()
+    {
+        $events = Event::all();
+        $eventService = new EventService();
+        foreach($events as $event)
+            $eventService->indexEvent($event);
     }
 }
