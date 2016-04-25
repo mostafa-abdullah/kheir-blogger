@@ -427,6 +427,7 @@ Route::group(['middleware' => ['web']], function () {
       * Event Post.
       */
      Route::post('api/event/{id}/post','API\EventPostAPIController@store');
+     Route::patch('api/event/{id}/post/{post_id}','API\EventPostAPIController@update');
 
      /**
       * Event Question.
