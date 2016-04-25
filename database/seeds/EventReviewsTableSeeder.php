@@ -17,7 +17,7 @@ class EventReviewsTableSeeder extends Seeder
             'user_id'     => '2',
             'event_id'    => '1',
             'review' =>  'great effort',
-            'rate' => '5',
+            'rating' => '5',
         ]);
     }
 }
