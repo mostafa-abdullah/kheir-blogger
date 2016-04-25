@@ -15,12 +15,20 @@ class EventPostAPIController extends Controller
     {
         $this->eventPostService = new EventPostService();
         $this->middleware('auth_organization', ['only' => [
-             'store',
+             'store', 'update'
         ]]);
     }
 
     public function store(EventPostRequest $request, $event_id)
     {
         $this->eventPostService($request, $event_id);
+    }
+
+    /**
+     * Update the edited event post
+     */
+    public function update(EventPostRequest $request, $id, $post_id)
+    {
+        $this->eventPostService->update($request, $id, $post_id);
     }
 }

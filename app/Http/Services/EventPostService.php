@@ -11,6 +11,7 @@ use App\Notification;
 
 class EventPostService
 {
+    
     /*
     * Add a new post to the event (and notify users).
     */
@@ -38,7 +39,7 @@ class EventPostService
 		$event = Event::findorfail($id);
 		if(auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
-			$post= EventPost::findOrFail($post_id);
+			$post = EventPost::findOrFail($post_id);
 			$post->update($request->all());
 		}
 	}

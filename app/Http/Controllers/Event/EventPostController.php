@@ -65,7 +65,7 @@ class EventPostController extends Controller
     /**
      * Edit an event post
      */
-    public function edit($id,$post_id)
+    public function edit($id, $post_id)
     {
         $event = Event::findOrFail($id);
         $post = EventPost::findOrFail($post_id);
@@ -79,11 +79,12 @@ class EventPostController extends Controller
     /**
      * Update the edited event post
      */
-     public function update(EventPostRequest $request, $id,$post_id)
- 	{
- 		$this->eventPostService->update($request, $id,$post_id);
- 		return redirect()->action('Event\EventController@show', [$id]);
- 	}
+    public function update(EventPostRequest $request, $id, $post_id)
+   	{
+   		$this->eventPostService->update($request, $id, $post_id);
+   		return redirect()->action('Event\EventController@show', [$id]);
+   	}
+
     /**
      * Delete an event post
      */
