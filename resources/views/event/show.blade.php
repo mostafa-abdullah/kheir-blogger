@@ -48,6 +48,7 @@
                     @endif
                 @endif
             {{$event->name}}
+            <h3> Hosted by : <a href="/organization/{{$event->organization_id}}">{{$event->organizationName}}</a> </h3>
                <small>
                    <h4>
                        @if($event->timing < Carbon\Carbon::now())
