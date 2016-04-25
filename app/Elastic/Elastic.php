@@ -7,6 +7,7 @@ use Elasticsearch\Client;
 class Elastic
 {
     protected $client;
+    
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -33,7 +34,7 @@ class Elastic
      */
     public function update(array $parameters)
     {
-        $this->elasticsearch->index($parameters);
+        $this->client->index($parameters);
     }
 
     /**

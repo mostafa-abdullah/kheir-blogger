@@ -21,7 +21,7 @@ class searchController extends Controller
 
     public function searchAll(Request $request)
     {
-        // $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
+        $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
         $satisfiedSearchEvents = $this->searchForEvents($request);
         return compact('satisfiedSearchOrganizations', 'satisfiedSearchEvents');
     }
@@ -56,7 +56,7 @@ class searchController extends Controller
         ];
 
         $satisfiedSearchEvents = $client->search($parameters);
-        return $satisfiedSearchEvents;
+        return $satisfiedSearchEvents["hits"]["hits"];
     }
 
     /**
@@ -89,6 +89,6 @@ class searchController extends Controller
 		    ]
         ];
         $satisfiedSearchOrganizations = $client->search($parameters);
-        return $satisfiedSearchOrganizations;
+        return $satisfiedSearchOrganizations["hits"]["hits"];
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\RegisterOrganizationRequest;
-
 use App\Http\Controllers\Controller;
+use App\Http\Services\OrganizationService ;
+
+use App\Http\Requests\RegisterOrganizationRequest;
 use App\Http\Requests;
+
 use App\User;
 use App\Organization;
 
@@ -17,20 +19,18 @@ use Input;
 
 class OrganizationAuthController extends Controller
 {
+    private $organizationService;
+
     public function __construct()
     {
+        $this->organizationService = new OrganizationService();
+
         $this->middleware('guest:organization', ['except' => 'logout']);
     }
 
     public function register(RegisterOrganizationRequest $request)
     {
-        $organization = new Organization;
-        $organization->name = $request->name;
-        $organization->email = $request->email;
-        $organization->password = bcrypt($request->password);
-        $organization->save();
-
-        $this->addToElastic($organization);
+        $organization = $this->organizationService->store($request);
 
         auth()->guard('organization')->login($organization);
         return redirect('/');

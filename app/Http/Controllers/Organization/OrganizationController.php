@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\OrganizationService ;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\ReviewRequest;
-use App\Http\Services\OrganizationService ;
+
 use App\Organization;
 use App\Recommendation;
 use App\OrganizationReview;
@@ -161,22 +162,7 @@ class OrganizationController extends Controller
 
     public function destroy($id)
     {
-        $organization = Organization::find($id);
-        $organization->delete();
-
-        /**
-         * Delete organization from Elasticsearch server
-         */
-        $client = new Elasticsearch(elasticClientBuilder::create()->build());
-
-        $params = [
-            'index' => 'organizations',
-            'type' => 'organization',
-            'id' => $id
-        ];
-
-        $client->delete($params);
-
+        $this->organizationService->destroy($id);
         return redirect('/');
     }
 }

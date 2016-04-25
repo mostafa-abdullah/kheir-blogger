@@ -30,7 +30,7 @@ class EventService
 		$notification_description = $organization->name." created a new event: ".$request->name;
 		Notification::notify($organization->subscribers, 1, $event,
 							$notification_description, "/event", $event->id);
-		$this->addToElastic($event);
+		$this->indexEvent($event);
 		return $event;
 	}
 
@@ -47,7 +47,7 @@ class EventService
 			Notification::notify($event->volunteers, 2, $event,
 								"Event ".($event->name)." has been updated", url("/event",$id));
 		}
-		$this->updateElastic($event->id);
+		$this->indexEvent($event);
 	}
 
 	/**
@@ -62,7 +62,7 @@ class EventService
 			Notification::notify($event->volunteers, 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
 		}
-		$this->deleteFromElastic($event_id);
+		$this->unindexEvent($event->id);
 	}
 
 
@@ -112,10 +112,9 @@ class EventService
 	 * Add new event to Elasticsearch in order to keep Elasticsearch
 	 * in sync with our database
 	 */
-	public function addToElastic($event)
+	public function indexEvent($event)
 	{
 	 	$client = new Elasticsearch(elasticClientBuilder::create()->build());
-
 		$parameters = [
 		  'index'	=> 'events',
 		  'type'	=> 'event',
@@ -141,24 +140,9 @@ class EventService
 	}
 
 	/**
-	 * Update event in Elasticsearch server.
-	 */
-	public function updateElastic($event_id)
-	{
-
-		$client = new Elasticsearch(elasticClientBuilder::create()->build());
-		$params = [
-		    'index' => 'events',
-		    'type' 	=> 'event',
-		    'id' 	=> $event_id
-		];
-		$client->update($params);
-	}
-
-	/**
 	 * Delete event from Elasticsearch server
 	 */
-	public function deleteFromElastic($event_id)
+	public function unindexEvent($event_id)
 	{
 		$client = new Elasticsearch(elasticClientBuilder::create()->build());
 		$params = [
