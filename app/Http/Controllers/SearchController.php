@@ -21,9 +21,11 @@ class searchController extends Controller
 
     public function searchAll(Request $request)
     {
-        $satisfiedSearchOrganizations = $this->searchForOrganizations($request);
-        $satisfiedSearchEvents = $this->searchForEvents($request);
-        return compact('satisfiedSearchOrganizations', 'satisfiedSearchEvents');
+        $searchText = $request->get('searchText');
+        $organizations = $this->searchForOrganizations($request);
+        $events = $this->mapEvents($this->searchForEvents($request));
+        $organizations = $this->mapOrganizations($this->searchForOrganizations($request));
+        return view('search.result', compact('searchText', 'organizations', 'events'));
     }
 
     /**
@@ -90,5 +92,40 @@ class searchController extends Controller
         ];
         $satisfiedSearchOrganizations = $client->search($parameters);
         return $satisfiedSearchOrganizations["hits"]["hits"];
+    }
+
+
+    /**
+     * Maps the result of the elastic search to an array of events.
+     */
+    public function mapEvents($eventResults)
+    {
+        $events = [];
+        foreach($eventResults as $eventResult)
+            $events[] = (object)[
+                    'id' => $eventResult["_id"],
+                    'name' => $eventResult["_source"]["name"],
+                    'description' => $eventResult["_source"]["description"],
+                    'location' => $eventResult["_source"]["location"],
+            ];
+        return $events;
+    }
+
+    /**
+     * Maps the result of the elastic search to an array of organizations.
+     */
+    public function mapOrganizations($organizationResults)
+    {
+        $organizations = [];
+        foreach($organizationResults as $organizationResult)
+            $organizations[] = (object)[
+                    'id' => $organizationResult["_id"],
+                    'name' => $organizationResult["_source"]["name"],
+                    'email' => $organizationResult["_source"]["email"],
+                    'slogan' => $organizationResult["_source"]["slogan"],
+                    'location' => $organizationResult["_source"]["location"],
+                    'phone' => $organizationResult["_source"]["phone"],
+            ];
+        return $organizations;
     }
 }
