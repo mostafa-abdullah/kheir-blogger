@@ -155,10 +155,16 @@ class User extends Authenticatable
     }
 
 /*
-|======================================
-| Challenges and Notifications
-|======================================
+|=========================================
+| Locations, Notifications and Challenges
+|=========================================
 */
+
+    public function locations()
+    {
+        return $this->belongsToMany('App\Location', 'volunteer_locations');
+    }
+
     public function notifications()
     {
         return $this->belongsToMany('App\Notification', 'user_notifications')

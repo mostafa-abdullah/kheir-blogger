@@ -186,9 +186,19 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('feedback' , 'Volunteer\VolunteerController@storeFeedback');
 
     /**
+    * Volunteer view his events.
+    */
+    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
+
+    /**
      * Volunteer dashboard.
      */
-     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
+    Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
+
+     /**
+      * volunteer assign locations
+      */
+    Route::post('locations','Volunteer\VolunteerController@assignLocations');
 
     /**
      * Volunteer CRUD.
@@ -196,16 +206,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('volunteer','Volunteer\VolunteerController', ['only' => [
         'show', 'edit', 'update'
     ]]);
-
-     /**
-     * Volunteer view his events.
-     */
-    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
-
-    /**
-     * Volunteer dashboard.
-     */
-     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
 
     /*
     |-----------------------

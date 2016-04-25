@@ -33,8 +33,12 @@
       {!!Form::text('city',null,array('class' => 'form-control'));!!}
     </div>
      {!!Form::submit('Update', array('class'=>'btn btn-default'));!!}
-  {!! Form::close() !!}
+     {!! Form::close() !!}
+
+
+  @include('volunteer.partials.locations')
 
   @include('errors')
+
 
 @stop
