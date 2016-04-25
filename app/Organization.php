@@ -32,9 +32,9 @@ class Organization extends Authenticatable implements CanResetPassword
 
     public function createEvent($request)
     {
-          $event = new Event($request->all());
-          $this->events()->save($event);
-          return $event;
+        $event = new Event($request->all());
+        $this->events()->save($event);
+        return $event;
     }
 
     public function recommendations()

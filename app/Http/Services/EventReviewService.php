@@ -13,7 +13,6 @@ use App\Feedback;
 
 use Carbon\Carbon;
 use Auth;
-use Validator;
 
 class EventReviewService
 {

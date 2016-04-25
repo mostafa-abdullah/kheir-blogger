@@ -3,15 +3,36 @@
 namespace App\Http\Services;
 
 use App\Http\Requests\RecommendationRequest;
-use Illuminate\Http\Request;
 use App\Http\Requests\OrganizationRequest;
+use App\Http\Requests\RegisterOrganizationRequest;
+
 use App\Recommendation;
 use App\Organization;
+
+use App\Elastic\Elastic as Elasticsearch;
+use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 use Auth;
 
 class OrganizationService
 {
+
+    /**
+     * Store a new organization in the database
+     */
+    public function store(RegisterOrganizationRequest $request)
+    {
+        $organization = new Organization;
+        $organization->name = $request->name;
+        $organization->email = $request->email;
+        $organization->password = bcrypt($request->password);
+        $organization->save();
+
+        $this->indexOrganization($organization);
+
+        return $organization;
+    }
+
     /**
      *  update organization information
      */
@@ -19,8 +40,20 @@ class OrganizationService
     {
         $organization = Organization::findorfail($id);
         $organization->update($request->all());
+
+        $this->indexOrganization($organization);
     }
 
+    /**
+     * Delete an organization
+     */
+    public function destroy($id)
+    {
+        $organization = Organization::find($id);
+        $organization->delete();
+
+        $this->unindexOrganization($id);
+    }
     /**
      *  volunteer subscribe to a certain organization
      */
@@ -81,4 +114,54 @@ class OrganizationService
         }
         return null;
     }
+
+    /**
+     * Insert/Update organization in Elasticsearch server.
+     */
+    public function indexOrganization($organization)
+    {
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
+
+        $parameters = [
+          'index' => 'organizations',
+          'type'  => 'organization',
+          'id'    => $organization->id,
+          'body'  => [
+                        'name'     => $organization->name,
+                        'email'    => $organization->email,
+                        'slogan'   => $organization->slogan,
+                        'location' => $organization->location,
+                        'phone'    => $organization->phone
+                     ]
+        ];
+
+        try
+        {
+            $client->index($parameters);
+        }
+        catch(Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
+        {
+            echo "Error";
+            $last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+            $last['response']['error'] = [];
+            dd($last);
+        }
+    }
+
+    /**
+     * Delete organization from Elasticsearch server
+     */
+    public function unindexOrganization($id)
+    {
+        $client = new Elasticsearch(elasticClientBuilder::create()->build());
+
+        $params = [
+            'index' => 'organizations',
+            'type' => 'organization',
+            'id' => $id
+        ];
+
+        $client->delete($params);
+    }
+
 }

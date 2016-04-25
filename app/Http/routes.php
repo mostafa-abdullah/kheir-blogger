@@ -265,6 +265,19 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::resource('event','Event\EventController', ['except' => 'index']);
 
+
+/*
+|==========================================================================
+| Search Routes
+|==========================================================================
+|
+| These routes are related to search on organizations and on events
+*/
+
+    Route::get('search', 'SearchController@searchPage');
+    Route::post('search', 'SearchController@searchAll');
+
+
 /*
 |==========================================================================
 | Control Routes
