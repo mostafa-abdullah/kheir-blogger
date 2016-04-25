@@ -6,13 +6,12 @@ namespace App\Http\Services;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventReviewRequest;
 
-use App\User;
 use App\Event;
-use App\Challenge;
-use App\Feedback;
+use App\EventReview;
 
 use Carbon\Carbon;
 use Auth;
+use Validator;
 
 class EventReviewService
 {
@@ -26,6 +25,25 @@ class EventReviewService
           $review->user_id = Auth::user()->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
+    }
+
+    /**
+     * Update Event Review.
+     */
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'rating'   => 'required|numeric|min:1|max:5',
+            'review' => 'required'
+        ]);
+
+        if(!$validator->fails())
+        {
+            $event_review = EventReview::findorfail($id);
+            $event_review->update($request->all());
+        }
+
+        return $validator;
     }
 
     /*

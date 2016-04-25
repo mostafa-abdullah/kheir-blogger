@@ -9,6 +9,7 @@ use App\Organization;
 use App\OrganizationReview;
 
 use Auth;
+use Validator;
 
 class OrganizationReviewService
 {
@@ -21,6 +22,25 @@ class OrganizationReviewService
       $review->user_id = Auth::user()->id;
       $organization = Organization::findorfail($id);
       $organization->reviews()->save($review);
+  }
+
+  /**
+   * Update Organization Review.
+   */
+  public function update(Request $request, $id)
+  {
+      $validator = Validator::make($request->all(), [
+          'rating'   => 'required|numeric|min:1|max:5',
+          'review' => 'required'
+      ]);
+
+      if(!$validator->fails())
+      {
+          $organization_review = OrganizationReview::findorfail($id);
+          $organization_review->update($request->all());
+      }
+      
+      return $validator;
   }
 
   public function report($organization_id, $review_id)

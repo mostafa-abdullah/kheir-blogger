@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\EventReviewRequest;
 use App\Http\Services\EventReviewService;
 
@@ -69,17 +70,28 @@ class EventReviewController extends Controller
     /**
      * Edit an event review
      */
-    public function edit()
+    public function edit($event_id, $review_id)
     {
-        //TODO
+        $event_review = Auth::user()->eventReviews()->find($review_id);
+        $event_name = Event::find($event_id)->name;
+        if($event_review)
+            return view('event.review.edit', compact('event_name', 'event_review'));
+        return redirect('/');
     }
 
     /**
      * Update the edited event review
      */
-    public function update()
+    public function update(Request $request, $event_id, $review_id)
     {
-        //TODO
+        if(Auth::user()->eventReviews()->find($review_id))
+        {
+             $validator = $this->eventReviewService->update($request,$review_id);
+             if($validator->fails())
+                return redirect()->action('Event\EventReviewController@edit',
+                        [$event_id, $review_id])->withErrors($validator)->withInput();
+        }
+        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
     /**

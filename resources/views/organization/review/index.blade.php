@@ -9,6 +9,12 @@
             <h4>
                 {{\App\User::find($review->user_id)->name}}
                 <small>
+                    @if (Auth::user() && Auth::user()->organizationReviews()->find($review->id))
+                        <a href="/organization/{{$review->organization_id}}/review/{{$review->id}}/edit">
+                            edit
+                        </a>
+                    .
+                    @endif
                     <a href="/organization/{{$review->organization_id}}/review/{{$review->id}}/report">
                         report
                     </a>
