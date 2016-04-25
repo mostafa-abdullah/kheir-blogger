@@ -20,8 +20,8 @@
             Rate: {{$review->rating}}
             @if (Auth::user() && Auth::user()->eventReviews()->find($review->id))
                 <a href="/event/{{$event->id}}/review/{{$review->id}}/edit">edit</a>
-            @endif
             .
+            @endif
             @if (Auth::user())
                 <a href="/event/{{$event->id}}/review/{{$review->id}}/report">report</a>
             @endif

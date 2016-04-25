@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\OrganizationReviewRequest;
 use App\Http\Services\OrganizationReviewService;
 
@@ -63,17 +64,28 @@ class OrganizationReviewController extends Controller
     /**
      * Edit an organization review.
      */
-    public function edit($organization_id, $review_id)
-    {
-        //TODO
-    }
+     public function edit($organization_id, $review_id)
+     {
+         $organization_review = Auth::user()->organizationReviews()->find($review_id);
+         $organization_name = Organization::find($organization_id)->name;
+         if($organization_review)
+             return view('organization.review.edit', compact('organization_name', 'organization_review'));
+         return redirect('/');
+     }
 
     /**
      * Update the edited organization review
      */
-    public function update($organization_id, $review_id)
+    public function update(Request $request, $organization_id, $review_id)
     {
-        //TODO
+        if(Auth::user()->organizationReviews()->find($review_id))
+        {
+             $validator = $this->organizationReviewService->update($request,$review_id);
+             if($validator->fails())
+                return redirect()->action('Organization\OrganizationReviewController@edit',
+                        [$organization_id, $review_id])->withErrors($validator)->withInput();
+        }
+        return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 
     /**
