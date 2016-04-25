@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Volunteer;
 use App\Http\Controllers\Controller;
 use App\Http\Services\VolunteerService;
 
-use App\Location;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
+
 use App\User;
+use App\Location;
 
 use Carbon\Carbon;
 use Auth;
-use Illuminate\Support\Facades\Input;
+use Input;
 
 
 class VolunteerController extends Controller
@@ -24,7 +25,7 @@ class VolunteerController extends Controller
         $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification', 'showDashboard',
-            'createFeedback', 'storeFeedback', 'edit', 'update'
+            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations'
         ]]);
     }
 
@@ -47,13 +48,10 @@ class VolunteerController extends Controller
         {
             $volunteer = User::findorfail($id);
             $sentLocations = Location::all();
-            /* getting all locations which assigned to this user */
             $checkedLocations = Auth::user()->locations()->get()->toArray();
-            /* seprating the locations ids into separate array */
             $locationsIDS = [];
-            foreach($checkedLocations as $userLocation){
+            foreach($checkedLocations as $userLocation)
                 array_push($locationsIDS,$userLocation['id']);
-            }
             return view('volunteer.edit' , compact('volunteer','sentLocations','locationsIDS'));
         }
         return redirect('/');
@@ -69,44 +67,15 @@ class VolunteerController extends Controller
     }
 
     /**
-     * assign and unAssign user locations
+     * assign and unAssign volunteer locations
      */
-    public function assign_locations(Request $request){
-
-        $input = $request->all();
-        /* locations is array of all locations id which the user checked */
-        if(Input::has('locations'))
-        $checkedLocations = $input['locations'];
-        else
-            $checkedLocations = [];
-
-        $userLocations = Auth::user()->locations()->get()->toArray();
-
-        $locationsIDS = [];
-        /* seprating locations id from the old userLocations list */
-        foreach($userLocations as $userLocation){
-            array_push($locationsIDS,$userLocation['id']);
-        }
-        /* check if the user unAssign location so we delete it from pivot table */
-        foreach($locationsIDS as $unUpdatedLocation){
-        /* check if there is a location id found in the non updated pivot table and not found in the updated check list */
-            if(!in_array($unUpdatedLocation,$checkedLocations)){
-                $newLocation = Auth::user()->locations()->findOrFail($unUpdatedLocation);
-                $newLocation['pivot']->delete();
-            }
-        }
-
-        /* check if the user Assign location so we delete it from pivot table */
-        foreach($checkedLocations as $checkedLocation){
-            if(!in_array($checkedLocation,$locationsIDS)) {
-                $newLocation = Location::findOrFail($checkedLocation);
-                Auth::user()->locations()->save($newLocation);
-            }
-        }
-        return redirect('/');
+    public function assignLocations(Request $request)
+    {
+        $this->volunteerService->assignLocations($request);
+        return redirect()->action('Volunteer\VolunteerController@show', [Auth::user()->id]);
     }
 
-    /*1*
+    /**
      * Show all new notifications for the authenticated user.
      */
     public function showNotifications()

@@ -155,10 +155,16 @@ class User extends Authenticatable
     }
 
 /*
-|======================================
-| Challenges and Notifications
-|======================================
+|=========================================
+| Locations, Notifications and Challenges
+|=========================================
 */
+
+    public function locations()
+    {
+        return $this->belongsToMany('App\Location', 'volunteer_locations');
+    }
+
     public function notifications()
     {
         return $this->belongsToMany('App\Notification', 'user_notifications')
@@ -217,13 +223,4 @@ class User extends Authenticatable
         $sub = $this->events->pluck('id')->toArray();
         return $this->interestingEvents($user_id)->whereNotIn('id', $sub);
     }
-    /*
-     *locations return all the location which assigned to this user .
-     */
-
-    public function locations(){
-        return $this->belongsToMany('App\Location');
-
-    }
-
 }

@@ -11,12 +11,8 @@ class Location extends Model
 
     protected $table = 'locations';
 
-    /*
-     * users return all users which have this location in their available location
-     */
-    public function users(){
-
-        return $this->belongsToMany('App\User');
-
+    public function volunteers()
+    {
+        return $this->belongsToMany('App\User', 'volunteer_locations');
     }
 }

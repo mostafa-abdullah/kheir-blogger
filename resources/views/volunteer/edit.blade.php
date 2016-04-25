@@ -35,7 +35,8 @@
      {!!Form::submit('Update', array('class'=>'btn btn-default'));!!}
      {!! Form::close() !!}
 
-  @include('volunteer.locations');
+
+  @include('volunteer.partials.locations')
 
   @include('errors')
 
