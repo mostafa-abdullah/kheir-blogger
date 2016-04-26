@@ -17,7 +17,7 @@
         @if ($allEvents)
         <h1>My Events</h1>
         <hr>
-            @foreach($event as $allEvents)
+            @foreach($allEvents as $event)
             <p>  {{$event->name}}</p>
             @endforeach
     	@endif
@@ -27,7 +27,7 @@
     	@if ($followedAndRegisteredEvents)
         <h1>Followed/Registered Events</h1>
         <hr>
-            @foreach($event as $followedAndRegisteredEvents)
+            @foreach($followedAndRegisteredEvents as $event)
             <p>  {{$event->name}}</p>
             @endforeach
     	@endif
@@ -37,7 +37,7 @@
     	@if ($subscribedOrganizationEvents)
         <h1>Followed/Registered Events</h1>
         <hr>
-            @foreach($event as $subscribedOrganizationEvents)
+            @foreach($subscribedOrganizationEvents as $event)
             <p>  {{$event->name}}</p>
             @endforeach
     	@endif
