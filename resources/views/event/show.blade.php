@@ -48,6 +48,7 @@
                     @endif
                 @endif
             {{$event->name}}
+            <h3> Hosted by : <a href="/organization/{{$event->organization()->id}}">{{$event->organization()->name}}</a> </h3>
                <small>
                    <h4>
                        @if($event->timing < Carbon\Carbon::now())
@@ -62,6 +63,9 @@
             </h1>
        </div>
        <div class="container panel-body">
+             @if($event->rating && $event->timing < Carbon\Carbon::now())
+                 <p>Rating:{{number_format($event->rating, 1)}}</p>
+             @endif
            <h3 class="text-left">Description</h3>
            <p class="text-left container">
                {{$event->description}}

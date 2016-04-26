@@ -5,5 +5,4 @@
     {!! Form::open(['url' => 'event/'.$event->id.'/review']) !!}
         @include('event.review.partials.form', ['submitButtonText' => 'Add Review!'])
     {!! Form::close() !!}
-    
 @stop
