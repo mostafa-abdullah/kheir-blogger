@@ -57,9 +57,7 @@ class EventController extends Controller
 	 */
 	public function show($id)
 	{
-    		$event = Event::findOrFail($id);
-		$event->organizationName = $event->organization()->name;
-		$event->organization_id = $event->organization()->id;
+    	$event = Event::findOrFail($id);
 		$creator = null;
 		if(Auth::guard('organization')->id() == $event->organization_id)
 			$creator = true;

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EventReviewRequest;
 
 use App\Event;
-use App\Challenge;
-use App\Feedback;
 use App\EventReview;
 
 use Carbon\Carbon;

@@ -15,7 +15,7 @@ use App\Elastic\Elastic as Elasticsearch;
 use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 use Auth;
-use Illuminate\Support\Facades\Input;
+use Input;
 
 class OrganizationAuthController extends Controller
 {
