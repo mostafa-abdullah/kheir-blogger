@@ -55,7 +55,6 @@ class VolunteerService
 
     }
 
-
     /**
      * Show all new notifications for the authenticated user.
      */
@@ -91,7 +90,6 @@ class VolunteerService
             'message' => 'required',
         ]);
         $feedback = new Feedback($request->all());
-        $feedback->user_id = Auth::user()->id;
-        $feedback->save();
+        Auth::user()->feedbacks()->save($feedback);
     }
 }

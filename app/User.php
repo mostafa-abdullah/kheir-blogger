@@ -156,7 +156,7 @@ class User extends Authenticatable
 
 /*
 |=========================================
-| Locations, Notifications and Challenges
+| Other Functionalities
 |=========================================
 */
 
@@ -184,6 +184,11 @@ class User extends Authenticatable
     public function previousYearsChallenges()
     {
         return $this->challenges()->previousYears();
+    }
+
+    public function feedbacks()
+    {
+        return $this->hasMany('App\Feedback');
     }
 
 

@@ -107,5 +107,11 @@ class AdminController  extends Controller{
               $report->pivot->push();
           }
           return redirect()->action('AdminController@viewEventReviewReports');
-    }
+      }
+
+      public function viewFeedbacks()
+      {
+          $feedbacks = Feedback::latest()->get();
+          return view('admin.feedback', compact('feedbacks'));
+      }
 }
