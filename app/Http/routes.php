@@ -292,7 +292,7 @@ Route::group(['middleware' => ['web']], function () {
 
 
     /**
-     * admin view organizations.
+     * Admin view organizations.
      */
     Route::get('organizations', 'AdminController@viewOrganizations');
 
@@ -311,7 +311,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
 
-
+    Route::get('feedbacks', 'AdminController@viewFeedbacks');
 
 /*
 |==========================================================================
