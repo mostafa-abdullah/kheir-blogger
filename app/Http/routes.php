@@ -288,7 +288,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Admin assign validator.
      */
-    Route::post('volunteer/{id}/validate','AdminController@assignValidator');
+    Route::get('volunteer/{id}/validate','AdminController@assignValidator');
 
 
     /**

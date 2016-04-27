@@ -45,7 +45,7 @@ class EventQuestionService
 		$question->save();
 
         $description = "Your question has been answered";
-        $link = url("/event/".$question->event_id."question/".$question->id);
+        $link = "/event/".$question->event_id."/question/".$question->id;
 		Notification::notify(array($question->user()->first()), 5, $event, $description, $link);
     }
 
