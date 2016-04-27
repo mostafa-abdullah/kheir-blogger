@@ -55,9 +55,9 @@ class EventGalleryController extends Controller
                         array_push($names, $filename);
                 }
             }
-
-
-            return view('event.gallery.caption', compact('names','event', 'path'));
+            if(sizeof($names)>0) {
+                return view('event.gallery.caption', compact('names', 'event', 'path'));
+            }
         }
         return redirect('/');
     }
