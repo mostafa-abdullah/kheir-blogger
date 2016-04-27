@@ -11,6 +11,7 @@ use App\Challenge;
 
 use Carbon\Carbon;
 use Auth;
+use Validator;
 
 class ChallengeController extends Controller
 {
@@ -22,8 +23,8 @@ class ChallengeController extends Controller
 
     public function index()
     {
-       $challenges = $this->challengeService->index();
-       return view('volunteer.challenge.index' , $challenges);
+        $challenges = $this->challengeService->index();
+        return view('volunteer.challenge.index' , $challenges);
     }
 
     /**
@@ -41,6 +42,12 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
+        $input = $request->all();
+        $num = $input['events'];
+        if($num<0)
+        {
+            return redirect('volunteer/challenge/create');
+        }
         $this->challengeService->store($request);
         return redirect('/');
     }
@@ -61,6 +68,12 @@ class ChallengeController extends Controller
      */
     public function update(Request $request)
     {
+        $input = $request->all();
+        $num = $input['events'];
+        if($num<0)
+        {
+            return redirect('volunteer/challenge/edit');
+        }
         $this->challengeService->update($request);
         return redirect('/');
     }
