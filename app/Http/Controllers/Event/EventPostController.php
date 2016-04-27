@@ -21,7 +21,7 @@ class EventPostController extends Controller
     {
         $this->eventPostService = new EventPostService();
         $this->middleware('auth_organization', ['only' => [
-            'create', 'store', 'edit', 'update','destroy'
+            'create', 'store', 'edit', 'update'
         ]]);
     }
 
@@ -93,7 +93,7 @@ class EventPostController extends Controller
         $event = Event::findOrFail($id);
         $post  = EventPost::findOrFail($post_id);
 
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		if(auth()->guard('organization')->user()->id == $event->organization()->id || (Auth::user() && Auth::user()->role >= 8))
 		{
 			$post->delete();
 		}

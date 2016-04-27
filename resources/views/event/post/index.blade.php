@@ -11,11 +11,13 @@
                  @if($creator)
                      @include('event.partials.button', ['buttonText' => 'Edit Post', 'action' => "post/".$post->id."/edit/"])
                  @endif
-                 <form action="{{ url('event/'.$event->id."/post/".$post->id) }}" method="POST">
-                      {!! csrf_field() !!}
-                      {!! method_field('DELETE') !!}
-                      <button type="submit" class="btn btn-danger btn-event">Delete Post</button>
-                 </form>
+                 @if ($creator || (Auth::user() && Auth::user()->role >= 8))
+                     <form action="{{ url('event/'.$event->id."/post/".$post->id) }}" method="POST">
+                          {!! csrf_field() !!}
+                          {!! method_field('DELETE') !!}
+                          <button type="submit" class="btn btn-danger btn-event">Delete Post</button>
+                     </form>
+                @endif
                  <h4>{{$post->title}}  <small>{{$post->created_at}}</small></h4>
                  <p>
                      {{$post->description}}

@@ -26,7 +26,6 @@
                                 <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Delete photo</button>
                             </form>
                             <form action="{!! url('event/'.$event->id.'/photo/'.$photo->id.'/edit') !!}" method="get">
-                                {!! csrf_field() !!}
                                 @if($photo->caption)
                                     <button type="submit" class="btn btn-danger btn-event">Edit caption</button>
                                 @else

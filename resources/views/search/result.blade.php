@@ -13,7 +13,7 @@
             @foreach ($events as $event)
                 <div class="container">
                 <h3>
-                    <a href="url('/event/'.{{$event->id}})">{{$event->name}}</a>
+                    <a href="{{url('/event/'.$event->id)}}">{{$event->name}}</a>
                     <small>{{$event->location}}</small>
                 </h3>
                     <div class="container">
@@ -27,7 +27,7 @@
             @foreach ($organizations as $organization)
                 <div class="container">
                 <h3>
-                    <a href="url('/organization/'.{{$organization->id}})">{{$organization->name}}</a>
+                    <a href="{{url('/organization/'.$organization->id)}}">{{$organization->name}}</a>
                     <small>{{$organization->slogan}}</small>
                 </h3>
                     <div class="container">
