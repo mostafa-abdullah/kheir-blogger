@@ -23,8 +23,8 @@ class ChallengeController extends Controller
 
     public function index()
     {
-        $challenges = $this->challengeService->index();
-        return view('volunteer.challenge.index' , $challenges);
+       $challenges = $this->challengeService->index();
+       return view('volunteer.challenge.index' , $challenges);
     }
 
     /**
