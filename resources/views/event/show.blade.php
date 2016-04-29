@@ -14,7 +14,7 @@
 
            <h1>
                {{--  Cancel Event --}}
-               @if($creator)
+               @if ($creator || (Auth::user() && Auth::user()->role >= 8))
                  <form action="{{ url('event/'.$event->id) }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
