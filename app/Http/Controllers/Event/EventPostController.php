@@ -12,6 +12,7 @@ use App\Event;
 use App\EventPost;
 use App\Notification;
 use App\Organization;
+use Auth;
 
 class EventPostController extends Controller
 {
@@ -93,7 +94,7 @@ class EventPostController extends Controller
         $event = Event::findOrFail($id);
         $post  = EventPost::findOrFail($post_id);
 
-		if(auth()->guard('organization')->user()->id == $event->organization()->id || (Auth::user() && Auth::user()->role >= 8))
+		if((Auth::user() && Auth::user()->role >= 8) || auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
 			$post->delete();
 		}
