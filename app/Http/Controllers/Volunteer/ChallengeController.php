@@ -11,7 +11,6 @@ use App\Challenge;
 
 use Carbon\Carbon;
 use Auth;
-use Validator;
 
 class ChallengeController extends Controller
 {
