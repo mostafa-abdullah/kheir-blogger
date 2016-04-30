@@ -94,7 +94,7 @@ class EventPostController extends Controller
         $event = Event::findOrFail($id);
         $post  = EventPost::findOrFail($post_id);
 
-		if((Auth::user() && Auth::user()->role >= 8) || auth()->guard('organization')->user()->id == $event->organization()->id)
+		if((Auth::user() && Auth::user()->role >= 5) || auth()->guard('organization')->user()->id == $event->organization()->id)
 		{
 			$post->delete();
 		}

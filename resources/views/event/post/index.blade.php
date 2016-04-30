@@ -13,7 +13,7 @@
                          @if($creator)
                              @include('event.partials.button', ['buttonText' => 'Edit Post', 'action' => "post/".$post->id."/edit/"])
                          @endif
-                         @if ($creator || (Auth::user() && Auth::user()->role >= 8))
+                         @if ($creator || (Auth::user() && Auth::user()->role >= 5))
                              <form action="{{ url('event/'.$event->id."/post/".$post->id) }}" method="POST">
                                   {!! csrf_field() !!}
                                   {!! method_field('DELETE') !!}
