@@ -11,6 +11,7 @@ use App\Challenge;
 
 use Carbon\Carbon;
 use Auth;
+use Validator;
 
 class ChallengeController extends Controller
 {
@@ -22,8 +23,8 @@ class ChallengeController extends Controller
 
     public function index()
     {
-       $challenges = $this->challengeService->index();
-       return view('volunteer.challenge.index' , $challenges);
+        $challenges = $this->challengeService->index();
+        return view('volunteer.challenge.index', $challenges);
     }
 
     /**
@@ -31,7 +32,7 @@ class ChallengeController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->currentYearChallenge()->first())
+        if (Auth::user()->currentYearChallenge()->first())
             return redirect('volunteer/challenge/edit');
         return view('volunteer.challenge.create');
     }
@@ -41,13 +42,9 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        $num = $input['events'];
-        if($num<0)
-        {
-            return redirect('volunteer/challenge/create');
-        }
-        $this->challengeService->store($request);
+        $validator = $this->challengeService->store($request);
+        if ($validator->fails())
+            return redirect()->action('Volunteer\ChallengeController@create')->withErrors($validator)->withInput();
         return redirect('/');
     }
 
@@ -57,8 +54,8 @@ class ChallengeController extends Controller
     public function edit()
     {
         $challenge = Auth::user()->currentYearChallenge()->first();
-        if($challenge)
-            return view('volunteer.challenge.edit' , compact('challenge'));
+        if ($challenge)
+            return view('volunteer.challenge.edit', compact('challenge'));
         return redirect('volunteer/challenge/create');
     }
 
@@ -67,13 +64,9 @@ class ChallengeController extends Controller
      */
     public function update(Request $request)
     {
-        $input = $request->all();
-        $num = $input['events'];
-        if($num<0)
-        {
-            return redirect('volunteer/challenge/edit');
-        }
-        $this->challengeService->update($request);
+        $validator = $this->challengeService->update($request);
+        if ($validator->fails())
+            return redirect()->action('Volunteer\ChallengeController@edit')->withErrors($validator)->withInput();
         return redirect('/');
     }
 
@@ -83,6 +76,6 @@ class ChallengeController extends Controller
     public function viewCurrentYearAttendedEvents()
     {
         $events = $this->challengeService->viewCurrentYearAttendedEvents();
-        return view('volunteer.challenge.achieved' , $events);
+        return view('volunteer.challenge.achieved', $events);
     }
 }
