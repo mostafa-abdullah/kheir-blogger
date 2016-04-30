@@ -1,27 +1,52 @@
-# Laravel PHP Framework
+# Kheir Blogger
+This project is built using laravel 5.2
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+#### Server Deployment
+You can run the server using artisan:
+```
+$ php artisan serve
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+It will run on `localhost` port `8000`. The command has options to change the host and port configurations. To run the server forever, you will need something like
+**Supervisor**.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+#### Scheduling
+There are some scheduled tasks that run periodically. For example, the server needs to send notifications to volunteers registering for recently finished events to confirm their attendance. To run the schedule for only one time, run the following command:
+```
+$ php artisan schedule:run
+```
 
-## Official Documentation
+To synchronize the schedule run, add this cron entry to the server:
+```
+* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
+```
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Schedule commands can be found in `app/Console/Kernel.php`. Current commands are set to one minute for development. You can set them to more reasonable values in case of production.
 
-## Contributing
+#### Elasticsearch Server
+Search engine works with Elasticsearch. For the engine to work, you will need to install Elasticsearch server and run it on the default port `9300`. organizations and events are added/deleted to the Elasticsearch index on their creation/deletion. For more control on the indices, two artisan commands are added
+```
+$ php artisan elastic:create index_name
+```
+This will create a new Elasticsearch index and add currently created records
+that exist in the database to the index.
+```
+$ php artisan elastic:delete index_name
+```
+This will delete an existing Elasticsearch index from the server.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Available index_name: `organizations`, `events`
 
-## Security Vulnerabilities
+#### Mail Server
+Needed for email verifications and password reset. To configure the mail server
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+- Go to .env file
+- **Assuming you are using Gmail**, make the email configuration as follows:
+```
+MAIL_DRIVER=smtp MAIL_HOST=smtp.gmail.com MAIL_PORT=587 MAIL_USERNAME=<< Your email here >> MAIL_PASSWORD=<< Your password here >> MAIL_ENCRYPTION=tls
+```
+- Go to config\mail.php and find this line
+```
+'from' => ['address' => 'mostafaabdullahahmed@gmail.com', 'name' => 'Kheir Blogger'],
+```
+Change the address to the email you entered in the .env file. Now the volunteer and the organization can reset their password and the email is sent from the entered email.
