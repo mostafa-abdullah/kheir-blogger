@@ -85,6 +85,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::auth();
 
     /**
+     *  Volunteer Registeration Page.
+     */
+    Route::get('register',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('/');
+        return view('auth.register');
+    });
+
+    /**
      *  Volunteer Login Page.
      */
     Route::get('login',function(){

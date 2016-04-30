@@ -141,6 +141,7 @@ class EventService
 
 	/**
 	 * Delete event from Elasticsearch server
+	 * @param  [Integer] $event_id [the id of the event to be deleted]
 	 */
 	public function unindexEvent($event_id)
 	{
@@ -152,5 +153,16 @@ class EventService
 		];
 
 		$client->delete($params);
+	}
+
+	/**
+	 * Delete all events of an organization from Elasticsearch server
+	 * @param  [Organization] $organization [the organization to delete its events]
+	 */
+	public function unindexOrganizationEvents($organization)
+	{
+		$events = $organization->events()->get();
+		foreach ($events as $event)
+			$this->unindexEvent($event->id);
 	}
 }

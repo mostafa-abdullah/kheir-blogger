@@ -35,11 +35,21 @@ class CreateEventReviewsTable extends Migration
         ");
 
         DB::unprepared("
+            CREATE TRIGGER upd_event_reviews AFTER UPDATE ON `event_reviews`
+                FOR EACH ROW
+                    BEGIN
+                        UPDATE events
+                        SET rating = (SELECT AVG(rating) FROM event_reviews WHERE event_id = NEW.event_id)
+                        WHERE id = NEW.event_id;
+                    END
+        ");
+
+        DB::unprepared("
             CREATE TRIGGER del_event_reviews AFTER DELETE ON `event_reviews`
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                            SET rating = (SELECT AVG(rating) FROM event_reviews WHERE id = OLD.event_id)
+                            SET rating = (SELECT AVG(rating) FROM event_reviews WHERE event_id = OLD.event_id)
                         WHERE id = OLD.event_id;
                     END
         ");

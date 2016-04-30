@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Services;
+use App\Http\Services\EventService;
 
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
@@ -49,9 +50,11 @@ class OrganizationService
      */
     public function destroy($id)
     {
+        $eventService = new EventService();
         $organization = Organization::find($id);
-        $organization->delete();
 
+        $eventService->unindexOrganizationEvents($organization);
+        $organization->delete();
         $this->unindexOrganization($id);
     }
     /**
