@@ -22,7 +22,7 @@ class EventPostAPIController extends Controller
     public function store(EventPostRequest $request, $event_id)
     {
         $this->eventPostService($request, $event_id);
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
@@ -31,6 +31,6 @@ class EventPostAPIController extends Controller
     public function update(EventPostRequest $request, $id, $post_id)
     {
         $this->eventPostService->update($request, $id, $post_id);
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 }

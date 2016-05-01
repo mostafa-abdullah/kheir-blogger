@@ -43,7 +43,7 @@ class VolunteerAPIController extends Controller
     public function update(VolunteerRequest $request, $id)
     {
     	$this->volunteerService->update($request, $id);
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
@@ -60,7 +60,7 @@ class VolunteerAPIController extends Controller
     public function unreadNotification(Request $request)
     {
         $this->volunteerService->unreadNotification();
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
@@ -69,6 +69,6 @@ class VolunteerAPIController extends Controller
     public function storeFeedback(Request $request)
     {
         $this->volunteerService->storeFeedback($request);
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 }

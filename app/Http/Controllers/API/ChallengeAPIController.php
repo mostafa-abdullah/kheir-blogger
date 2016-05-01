@@ -32,7 +32,7 @@ class ChallengeAPIController extends Controller
     public function store(Request $request)
     {
         $this->challengeService->store($request);
-        return response('Success.', 200);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
@@ -41,7 +41,7 @@ class ChallengeAPIController extends Controller
     public function update(Request $request)
     {
         $this->challengeService->update($request);
-        return response('Success.', 200);
+        return response()->json('Success.', 200);
     }
 
     /**

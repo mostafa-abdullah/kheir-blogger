@@ -12,7 +12,8 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'notifications', 'event/{id}/review/{r_id}/report', 'organization/{id}/review/{r_id}/report'
+        'notifications', 'event/{id}/review/{r_id}/report', 'organization/{id}/review/{r_id}/report',
+        'api/*'
     ];
 
 
