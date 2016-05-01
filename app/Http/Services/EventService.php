@@ -25,7 +25,7 @@ class EventService
 	 */
 	public function store(EventRequest $request)
 	{
-		$organization = auth()->guard('organization')->user();
+		$organization = $request->get('organization');
 		$event = $organization->createEvent($request);
 		$notification_description = $organization->name." created a new event: ".$request->name;
 		Notification::notify($organization->subscribers, 1, $event,
@@ -40,7 +40,7 @@ class EventService
 	public function update(EventRequest $request, $id)
 	{
 		$event = Event::findorfail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		if($request->get('organization')->id == $event->organization()->id)
 		{
 			$event = Event::findOrFail($id);
 			$event->update($request->all());
@@ -53,10 +53,10 @@ class EventService
 	/**
 	 * Cancel an event.
 	 */
-	public function destroy($id)
+	public function destroy($id, $organization)
 	{
 		$event = Event::findOrFail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		if($organization->id == $event->organization()->id)
 		{
 			$event->delete();
 			Notification::notify($event->volunteers, 3, null,

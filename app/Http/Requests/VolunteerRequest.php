@@ -15,7 +15,7 @@ class VolunteerRequest extends Request
     {
         $id = $this->route()->getParameter('volunteer');
 
-        return $id == auth()->user()->id;
+        return $id == $this->get('volunteer')->id;
     }
 
     /**

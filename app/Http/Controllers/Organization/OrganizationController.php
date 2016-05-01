@@ -101,7 +101,7 @@ class OrganizationController extends Controller
      */
     public function subscribe($id)
     {
-        $this->organizationService->subscribe($id);
+        $this->organizationService->subscribe($id, Auth::user());
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -110,7 +110,7 @@ class OrganizationController extends Controller
      */
     public function unsubscribe($id)
     {
-        $this->organizationService->unsubscribe($id);
+        $this->organizationService->unsubscribe($id, Auth::user());
         return redirect()->action('Organization\OrganizationController@show', [$id]);
     }
 
@@ -147,7 +147,7 @@ class OrganizationController extends Controller
      */
     public function block($organization_id)
     {
-        $this->organizationService->block($organization_id);
+        $this->organizationService->block($organization_id, Auth::user());
         return redirect('/');
     }
 
@@ -156,7 +156,7 @@ class OrganizationController extends Controller
      */
     public function unblock($organization_id)
     {
-        $this->organizationService->unblock($organization_id);
+        $this->organizationService->unblock($organization_id, Auth::user());
         return redirect('/');
     }
 

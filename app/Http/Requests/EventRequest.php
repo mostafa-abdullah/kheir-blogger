@@ -9,7 +9,7 @@ class EventRequest extends Request
 
     public function authorize()
     {
-        return auth()->guard('organization')->check();
+        return true;
     }
 
     public function rules()

@@ -15,9 +15,9 @@ class EventReviewRequest extends Request
     public function authorize()
     {
         $event_id = $this->route()->getParameter('id');
-        if(Auth::user()->eventReviews()->where('event_id', $event_id)->first())
+        if($this->get('volunteer')->eventReviews()->where('event_id', $event_id)->first())
             return false;
-        if(!Auth::user()->attendedEvents()->find($event_id))
+        if(!$this->get('volunteer')->attendedEvents()->find($event_id))
             return false;
         return true;
     }

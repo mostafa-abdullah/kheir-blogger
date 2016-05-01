@@ -3,6 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+
+use Tymon\JWTAuth\Token;
+use JWTAuth;
+use App\User;
 use Auth;
 
 class OrganizationReviewRequest extends Request
@@ -15,7 +20,9 @@ class OrganizationReviewRequest extends Request
     public function authorize()
     {
         $organization_id = $this->route()->getParameter('id');
-        return !Auth::user()->organizationReviews()
+
+
+        return !$this->get('volunteer')->organizationReviews()
                             ->where('organization_id', $organization_id)->first();
     }
 

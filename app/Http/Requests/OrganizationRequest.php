@@ -15,7 +15,7 @@ class OrganizationRequest extends Request
     {
         $organization_id = $this->route()->getParameter('organization');
 
-        return $organization_id == auth()->guard('organization')->id();
+        return $organization_id == $this->get('organization')->id;
     }
 
     /**
