@@ -49,9 +49,9 @@ class VolunteerAPIController extends Controller
     /**
      * Show all new notifications for the authenticated user.
      */
-    public function showNotifications()
+    public function showNotifications(Request $request)
     {
-        return response()->json($this->volunteerService->showNotifications());
+        return response()->json($this->volunteerService->showNotifications($request->get('volunteer')));
     }
 
     /**

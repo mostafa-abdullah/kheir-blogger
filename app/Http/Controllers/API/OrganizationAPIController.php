@@ -69,36 +69,36 @@ class OrganizationAPIController extends Controller
     /**
      *  volunteer subscribe to a certain organization
      */
-    public function subscribe($id)
+    public function subscribe(Request $request, $id)
     {
-        $this->organizationService->subscribe($id);
+        $this->organizationService->subscribe($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      *  volunteer unsubscribe to a certain organization
      */
-    public function unsubscribe($id)
+    public function unsubscribe(Request $request, $id)
     {
-        $this->organizationService->unsubscribe($id);
+        $this->organizationService->unsubscribe($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      * volunteer block an organization
      */
-    public function block($organization_id)
+    public function block(Request $request, $organization_id)
     {
-        $this->organizationService->block($organization_id);
+        $this->organizationService->block($organization_id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      * volunteer unblock an organization
      */
-    public function unblock($organization_id)
+    public function unblock(Request $request, $organization_id)
     {
-        $this->organizationService->unblock($organization_id);
+        $this->organizationService->unblock($organization_id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 

@@ -43,10 +43,10 @@ class OrganizationReviewService
       return $validator;
   }
 
-  public function report($organization_id, $review_id)
+  public function report($organization_id, $review_id, $volunteer)
   {
       $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);
-      if(!$review->reportingUsers()->find(Auth::user()->id))
-          Auth::user()->reportedOrganizationReviews()->attach($review);
+      if(!$review->reportingUsers()->find($volunteer->id))
+          $volunteer->reportedOrganizationReviews()->attach($review);
   }
 }

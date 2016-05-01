@@ -20,9 +20,9 @@ class ChallengeAPIController extends Controller
         $this->middleware('auth_volunteer');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $challenges = $this->challengeService->index();
+        $challenges = $this->challengeService->index($request->get('volunteer'));
         return response()->json($challenges);
     }
 
@@ -47,9 +47,9 @@ class ChallengeAPIController extends Controller
     /**
      * View all attended events of the current year.
      */
-    public function viewCurrentYearAttendedEvents()
+    public function viewCurrentYearAttendedEvents(Request $request)
     {
-        $events = $this->challengeService->viewCurrentYearAttendedEvents();
+        $events = $this->challengeService->viewCurrentYearAttendedEvents($request->get('volunteer'));
         return response()->json($events);
     }
 }

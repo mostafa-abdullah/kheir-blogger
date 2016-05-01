@@ -36,9 +36,9 @@ class EventQuestionAPIController extends Controller
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function viewUnansweredQuestions($event_id)
+    public function viewUnansweredQuestions(Request $request, $event_id)
     {
-        $result = $this->eventQuestionService->viewUnansweredQuestions($event_id);
+        $result = $this->eventQuestionService->viewUnansweredQuestions($event_id, $request->get('organization'));
 		return response()->json($result);
     }
 }

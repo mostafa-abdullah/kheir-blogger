@@ -77,9 +77,9 @@ class EventAPIController extends Controller
   	/**
   	 * Cancel an event.
   	 */
-  	public function destroy($id)
+  	public function destroy(Request $request, $id)
   	{
-  		  $this->eventService->destroy($id);
+  		  $this->eventService->destroy($id, $request->get('organization'));
         return response()->json(['message' => 'Success.'], 200);
   	}
 
@@ -89,39 +89,39 @@ class EventAPIController extends Controller
 |==========================================================================
 |
 */
-    public function follow($id)
+    public function follow(Request $request, $id)
     {
-        $this->eventService->follow($id);
+        $this->eventService->follow($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function unfollow($id)
+    public function unfollow(Request $request, $id)
     {
-        $this->eventService->unfollow($id);
+        $this->eventService->unfollow($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function register($id)
+    public function register(Request $request, $id)
     {
-        $this->eventService->register($id);
+        $this->eventService->register($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function unregister($id)
+    public function unregister(Request $request, $id)
     {
-        $this->eventService->unregister($id);
+        $this->eventService->unregister($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function attend($id)
+    public function attend(Request $request, $id)
     {
-        $this->eventService->attend($id);
+        $this->eventService->attend($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 
-    public function unattend($id)
+    public function unattend(Request $request, $id)
     {
-        $this->eventService->unattend($id);
+        $this->eventService->unattend($id, $request->get('volunteer'));
         return response()->json(['message' => 'Success.'], 200);
     }
 }

@@ -27,9 +27,9 @@ class OrganizationReviewAPIController extends Controller
       return response()->json(['message' => 'Success.'], 200);
   }
 
-  public function report($organization_id, $review_id)
+  public function report(Request $request, $organization_id, $review_id)
   {
-      $this->organizationReviewService->report($organization_id,$review_id);
+      $this->organizationReviewService->report($organization_id,$review_id, $request->get('volunteer'));
       return response()->json(['message' => 'Success.'], 200);
   }
 
