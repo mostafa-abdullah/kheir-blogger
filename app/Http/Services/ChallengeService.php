@@ -13,10 +13,10 @@ use Validator;
 class ChallengeService
 {
 
-    public function index()
+    public function index($volunteer)
     {
-       $currentChallenge = Auth::user()->currentYearChallenge()->first();
-       $previousChallenges = Auth::user()->previousYearsChallenges()->latest('year')->get();
+       $currentChallenge = $volunteer->currentYearChallenge()->first();
+       $previousChallenges = $volunteer->previousYearsChallenges()->latest('year')->get();
        return compact('currentChallenge' , 'previousChallenges');
     }
 
@@ -28,8 +28,7 @@ class ChallengeService
         $validator = Validator::make($request->all(), [
             'events' => 'required|numeric|min:1'
         ]);
-        if($validator->passes())
-        {
+        if ($validator->passes()) {
             $challenge = new Challenge($request->all());
             $challenge->year = Carbon::now()->year;
             Auth::user()->challenges()->save($challenge);
@@ -47,8 +46,9 @@ class ChallengeService
         ]);
         if($validator->passes())
         {
-            $challenge = Auth::user()->currentYearChallenge();
-            if ($challenge) {
+            $challenge = $request->get('volunteer')->currentYearChallenge();
+            if($challenge)
+            {
                 $input['events'] = $request->get('events');
                 $challenge->update($input);
             }
@@ -59,9 +59,9 @@ class ChallengeService
     /**
      * View all attended events of the current year.
      */
-    public function viewCurrentYearAttendedEvents()
+    public function viewCurrentYearAttendedEvents($volunteer)
     {
-        $events = Auth::user()->attendedEvents()->year(Carbon::now()->year)->get();
+        $events = $volunteer->attendedEvents()->year(Carbon::now()->year)->get();
         return compact('events');
     }
 

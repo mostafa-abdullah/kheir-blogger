@@ -23,8 +23,8 @@ class ChallengeController extends Controller
 
     public function index()
     {
-        $challenges = $this->challengeService->index();
-        return view('volunteer.challenge.index', $challenges);
+       $challenges = $this->challengeService->index(Auth::user());
+       return view('volunteer.challenge.index' , $challenges);
     }
 
     /**
@@ -75,7 +75,7 @@ class ChallengeController extends Controller
      */
     public function viewCurrentYearAttendedEvents()
     {
-        $events = $this->challengeService->viewCurrentYearAttendedEvents();
-        return view('volunteer.challenge.achieved', $events);
+        $events = $this->challengeService->viewCurrentYearAttendedEvents(Auth::user());
+        return view('volunteer.challenge.achieved' , $events);
     }
 }

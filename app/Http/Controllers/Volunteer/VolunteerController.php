@@ -80,7 +80,7 @@ class VolunteerController extends Controller
      */
     public function showNotifications()
     {
-        $notifications = $this->volunteerService->showNotifications();
+        $notifications = $this->volunteerService->showNotifications(Auth::user());
         return view('volunteer.notification.show', $notifications);
     }
 

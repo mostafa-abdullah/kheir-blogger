@@ -111,7 +111,7 @@ class EventReviewController extends Controller
 
     public function report($event_id, $review_id)
     {
-        $this->eventReviewService->report($event_id,$review_id);
+        $this->eventReviewService->report($event_id,$review_id, Auth::user());
         return redirect()->action('Event\EventController@show', [$event_id]);
     }
 

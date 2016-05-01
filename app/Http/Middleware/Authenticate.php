@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
+use Tymon\JWTAuth\Token;
+use JWTAuth;
 use Closure;
 use Auth;
 
@@ -15,16 +18,27 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
-    {
-        if (Auth::guard($guard)->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest('login');
-            }
-        }
+     public function handle($request, Closure $next, $guard = null)
+     {
+         if ($request->ajax() || $request->wantsJson())
+         {
+             $token = $request->header('x-access-token');
+             if(!$token)
+               return response()->json(['error' => 'Unauthorized.'], 401);
+             try
+             {
+                  JWTAuth::decode(new Token($token));
+             }
+             catch(TokenInvalidException $e)
+             {
+                  return response()->json(['error' => 'Unauthorized.'], 401);
+             }
+         }
+         else
+             if(Auth::guard($guard)->guest())
+                 return redirect()->guest('login');
 
-        return $next($request);
-    }
+         // Authenticated!
+         return $next($request);
+     }
 }

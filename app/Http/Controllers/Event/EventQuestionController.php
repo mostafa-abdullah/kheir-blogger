@@ -74,7 +74,7 @@ class EventQuestionController extends Controller
 
     public function viewUnansweredQuestions($event_id)
     {
-        $result = $this->eventQuestionService->viewUnansweredQuestions($event_id);
+        $result = $this->eventQuestionService->viewUnansweredQuestions($event_id, auth()->guard('organization')->user());
 		if($result)
         	return view("event.question.answer", $result);
 		return redirect()->action('Event\EventController@show', [$event_id])
