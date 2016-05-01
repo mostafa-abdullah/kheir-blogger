@@ -27,11 +27,13 @@ class EventQuestionAPIController extends Controller
     public function store(Request $request, $id)
     {
         $result = $this->eventQuestionService->store($request, $id);
+        return response('Success.', 200);
     }
 
     public function answer(Request $request, $event_id, $question_id)
     {
         $result = $this->eventQuestionService->answer($request, $event_id, $question_id);
+        return response('Success.', 200);
     }
 
     public function viewUnansweredQuestions($event_id)

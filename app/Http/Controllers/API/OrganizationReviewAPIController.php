@@ -23,11 +23,13 @@ class OrganizationReviewAPIController extends Controller
   public function store(OrganizationReviewRequest $request, $id)
   {
       $this->organizationReviewService->store($request,$id);
+      return response('Success.', 200);
   }
 
   public function report($organization_id, $review_id)
   {
       $this->organizationReviewService->report($organization_id,$review_id);
+      return response('Success.', 200);
   }
 
 }

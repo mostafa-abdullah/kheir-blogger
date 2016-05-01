@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\EventService;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\EventRequest;
 
 use App\Event;
 
@@ -61,6 +62,7 @@ class EventAPIController extends Controller
     public function store(EventRequest $request)
     {
         $this->eventService->store($request);
+        return response('Success.', 200);
     }
 
   	/**
@@ -69,6 +71,7 @@ class EventAPIController extends Controller
   	public function update(EventRequest $request, $id)
   	{
   		  $this->eventService->update($request, $id);
+        return response('Success.', 200);
   	}
 
   	/**
@@ -77,6 +80,7 @@ class EventAPIController extends Controller
   	public function destroy($id)
   	{
   		  $this->eventService->destroy($id);
+        return response('Success.', 200);
   	}
 
 /*
@@ -88,30 +92,36 @@ class EventAPIController extends Controller
     public function follow($id)
     {
         $this->eventService->follow($id);
+        return response('Success.', 200);
     }
 
     public function unfollow($id)
     {
         $this->eventService->unfollow($id);
+        return response('Success.', 200);
     }
 
     public function register($id)
     {
         $this->eventService->register($id);
+        return response('Success.', 200);
     }
 
     public function unregister($id)
     {
         $this->eventService->unregister($id);
+        return response('Success.', 200);
     }
 
     public function attend($id)
     {
         $this->eventService->attend($id);
+        return response('Success.', 200);
     }
 
     public function unattend($id)
     {
         $this->eventService->unattend($id);
+        return response('Success.', 200);
     }
 }

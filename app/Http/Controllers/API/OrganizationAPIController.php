@@ -63,6 +63,7 @@ class OrganizationAPIController extends Controller
     public function update(OrganizationRequest $request , $id)
     {
         $this->organizationService->update($request , $id);
+        return response('Success.', 200);
     }
 
     /**
@@ -71,6 +72,7 @@ class OrganizationAPIController extends Controller
     public function subscribe($id)
     {
         $this->organizationService->subscribe($id);
+        return response('Success.', 200);
     }
 
     /**
@@ -79,6 +81,7 @@ class OrganizationAPIController extends Controller
     public function unsubscribe($id)
     {
         $this->organizationService->unsubscribe($id);
+        return response('Success.', 200);
     }
 
     /**
@@ -87,6 +90,7 @@ class OrganizationAPIController extends Controller
     public function block($organization_id)
     {
         $this->organizationService->block($organization_id);
+        return response('Success.', 200);
     }
 
     /**
@@ -95,6 +99,7 @@ class OrganizationAPIController extends Controller
     public function unblock($organization_id)
     {
         $this->organizationService->unblock($organization_id);
+        return response('Success.', 200);
     }
 
     /**
@@ -103,6 +108,7 @@ class OrganizationAPIController extends Controller
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
         $this->organizationService->storeRecommendation($request, $id);
+        return response('Success.', 200);
     }
 
     /**
