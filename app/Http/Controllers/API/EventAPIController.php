@@ -50,8 +50,8 @@ class EventAPIController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->posts = $event->posts()->get();
-        $event->reviews = $event->reviews()->get();
-        $event->questions = $event->questions()->get();
+        $event->reviews = $event->reviews()->with('user')->get();
+        $event->questions = $event->questions()->with('user')->get();
         $event->photos = $event->photos()->get();
         return response()->json($event);
     }

@@ -52,7 +52,7 @@ class OrganizationAPIController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $organization->events = $organization->events()->get();
-        $organization->reviews = $organization->reviews()->get();
+        $organization->reviews = $organization->reviews()->with('user')->get();
         $organization->subscribers = $organization->subscribers()->get();
         return response()->json($organization);
     }
