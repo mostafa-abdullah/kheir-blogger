@@ -10,7 +10,7 @@
 
     <div class = "form-group">
         {!! Form::label('events' , 'Edit the number of events') !!}
-        {!! Form::number('events' , $challenge->events, ['class' => 'form-control']) !!}
+        {!! Form::number('events' , $challenge->events, ['class' => 'form-control' , 'min' => 1]) !!}
     </div>
 
     <div>
