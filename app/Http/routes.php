@@ -333,6 +333,12 @@ Route::group(['middleware' => ['web']], function () {
 |   - Event API Routes
 */
 
+    Route::get('api/authenticate', 'API\AuthAPIController@index');
+    Route::post('api/authenticate', 'API\AuthAPIController@authenticate');
+    Route::post('api/login_organization', 'API\OrganizationAuthAPIController@login');
+    Route::post('api/test', 'API\OrganizationAuthAPIController@authenticate');
+    Route::post('api/logout', 'API\OrganizationAuthAPIController@logout');
+
     /*
     |--------------------------
     | Organizations API Routes
