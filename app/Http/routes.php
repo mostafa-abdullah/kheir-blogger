@@ -332,12 +332,14 @@ Route::group(['middleware' => ['web']], function () {
 |   - Volunteer API Routes
 |   - Event API Routes
 */
-
-    Route::get('api/authenticate', 'API\AuthAPIController@index');
-    Route::post('api/authenticate', 'API\AuthAPIController@authenticate');
+    /*
+    |--------------------------
+    | Authentication API Routes
+    |--------------------------
+    */
+    Route::post('api/register_organization', 'API\OrganizationAuthAPIController@register');
     Route::post('api/login_organization', 'API\OrganizationAuthAPIController@login');
-    Route::post('api/test', 'API\OrganizationAuthAPIController@authenticate');
-    Route::post('api/logout', 'API\OrganizationAuthAPIController@logout');
+    Route::post('api/logout_organization', 'API\OrganizationAuthAPIController@logout');
 
     /*
     |--------------------------

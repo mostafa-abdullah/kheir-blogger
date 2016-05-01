@@ -60,18 +60,6 @@ class OrganizationAuthAPIController extends Controller
         return Response::json(['token' => $token->get()]);
     }
 
-    public function authenticate(Request $request)
-    {
-        try
-        {
-            return JWTAuth::decode(new Token($request->get('token')));
-        }
-        catch(TokenInvalidException $e)
-        {
-            return response()->json(['error' => 'Invalid Token'], 401);
-        }
-    }
-
     /**
      * Logout for an organization.
      */
