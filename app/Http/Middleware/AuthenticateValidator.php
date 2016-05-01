@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 use Tymon\JWTAuth\Token;
+use App\User;
 use JWTAuth;
 use Closure;
 use Auth;
@@ -38,10 +39,13 @@ class AuthenticateValidator
              {
                  return response()->json(['error' => 'Invalid token.'], 401);
              }
+             $request['volunteer'] = User::find($payload['sub']);
          }
          else
              if(!Auth::user() || Auth::user()->role < 5)
                  return redirect()->guest('login');
+            else
+                $request['volunteer'] = Auth::user();
 
          // Authenticated!
          return $next($request);

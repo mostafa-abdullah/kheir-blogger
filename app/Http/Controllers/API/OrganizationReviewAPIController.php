@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\OrganizationReviewRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -22,7 +23,7 @@ class OrganizationReviewAPIController extends Controller
 
   public function store(OrganizationReviewRequest $request, $id)
   {
-      $this->organizationReviewService->store($request,$id);
+      $this->organizationReviewService->store($request, $id);
       return response()->json(['message' => 'Success.'], 200);
   }
 

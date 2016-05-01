@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 use Tymon\JWTAuth\Token;
+use App\Organization;
 use JWTAuth;
 use Closure;
 
@@ -38,11 +39,14 @@ class AuthenticateOrganization
             {
                 return response()->json(['error' => 'Invalid token.'], 401);
             }
+            $request['organization'] = Organization::find($payload['sub']);
         }
         else
             if(!auth()->guard('organization')->check())
                 return redirect()->guest('login_organization');
-                
+            else
+                $request['organization'] = auth()->guard('organization')->user();
+
         // Authenticated!
         return $next($request);
     }

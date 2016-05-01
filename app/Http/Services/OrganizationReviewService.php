@@ -19,7 +19,7 @@ class OrganizationReviewService
   public function store(OrganizationReviewRequest $request, $id)
   {
       $review = new OrganizationReview($request->all());
-      $review->user_id = Auth::user()->id;
+      $review->user_id = $request->get('volunteer')->id;
       $organization = Organization::findorfail($id);
       $organization->reviews()->save($review);
   }
@@ -39,7 +39,7 @@ class OrganizationReviewService
           $organization_review = OrganizationReview::findorfail($id);
           $organization_review->update($request->all());
       }
-      
+
       return $validator;
   }
 

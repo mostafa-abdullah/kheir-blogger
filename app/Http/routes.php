@@ -374,7 +374,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Review API routes.
      */
-    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
+    Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
 
     /**
