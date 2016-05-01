@@ -73,7 +73,7 @@ class OrganizationAuthAPIController extends Controller
     }
 
     /**
-     * Organization logout.
+     * Logout for an organization.
      */
     public function logout(Request $request)
     {
