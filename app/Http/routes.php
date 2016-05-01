@@ -328,6 +328,7 @@ Route::group(['middleware' => ['web']], function () {
 |==========================================================================
 |
 | API routes are used by Android or IOS applications.
+|   - Authentication API Routes
 |   - Organization API Routes
 |   - Volunteer API Routes
 |   - Event API Routes
@@ -337,6 +338,17 @@ Route::group(['middleware' => ['web']], function () {
     | Authentication API Routes
     |--------------------------
     */
+
+    /**
+     * Volunteer Authentication
+     */
+    Route::post('api/register', 'API\AuthAPIController@register');
+    Route::post('api/login', 'API\AuthAPIController@login');
+    Route::post('api/logout', 'API\AuthAPIController@logout');
+
+    /**
+     * Organization Authentication
+     */
     Route::post('api/register_organization', 'API\OrganizationAuthAPIController@register');
     Route::post('api/login_organization', 'API\OrganizationAuthAPIController@login');
     Route::post('api/logout_organization', 'API\OrganizationAuthAPIController@logout');
@@ -346,7 +358,6 @@ Route::group(['middleware' => ['web']], function () {
     | Organizations API Routes
     |--------------------------
     */
-
 
     /**
      *  subscriptions API routes

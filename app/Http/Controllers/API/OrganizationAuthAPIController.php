@@ -39,7 +39,7 @@ class OrganizationAuthAPIController extends Controller
     {
         // verify the credentials
         $credentials = $request->only('email', 'password');
-        if(!auth()->guard('organization')->attempt($credentials))
+        if(!auth()->guard('organization')->attempt($credentials, false, false))
             return response()->json(['error' => 'Invalid Credentials'], 401);
 
         //create token
@@ -67,7 +67,8 @@ class OrganizationAuthAPIController extends Controller
     {
         try
         {
-            JWTAuth::setToken(new Token($request->get('token')))->invalidate();
+            if($request->header('x-access-token'))
+                JWTAuth::setToken(new Token($request->header('x-access-token')))->invalidate();
         }
         catch(TokenInvalidException $e)
         {
