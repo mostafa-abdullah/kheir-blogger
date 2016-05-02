@@ -113,7 +113,7 @@ class EventController extends Controller
 	 */
 	public function destroy($id)
 	{
-		$this->eventService->destroy($id);
+		$this->eventService->destroy($id, auth()->guard('organization')->user());
 		return redirect('/');
 	}
 
@@ -125,37 +125,37 @@ class EventController extends Controller
 */
 	public function follow($id)
 	{
-		$this->eventService->follow($id);
+		$this->eventService->follow($id, Auth::user());
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unfollow($id)
 	{
-		$this->eventService->unfollow($id);
+		$this->eventService->unfollow($id, Auth::user());
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function register($id)
 	{
-		$this->eventService->register($id);
+		$this->eventService->register($id, Auth::user());
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function unregister($id)
 	{
-		$this->eventService->unregister($id);
+		$this->eventService->unregister($id, Auth::user());
 		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	public function attend($id)
 	{
-		$this->eventService->attend($id);
+		$this->eventService->attend($id, Auth::user());
 		return redirect()->action('Event\EventController@show',[$id]);
 	}
 
 	public function unattend($id)
 	{
-		$this->eventService->unattend($id);
+		$this->eventService->unattend($id, Auth::user());
 		return redirect()->action('Event\EventController@show',[$id]);
 	}
 }

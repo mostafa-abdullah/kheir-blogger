@@ -52,7 +52,7 @@ class OrganizationAPIController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $organization->events = $organization->events()->get();
-        $organization->reviews = $organization->reviews()->get();
+        $organization->reviews = $organization->reviews()->with('user')->get();
         $organization->subscribers = $organization->subscribers()->get();
         return response()->json($organization);
     }
@@ -63,38 +63,43 @@ class OrganizationAPIController extends Controller
     public function update(OrganizationRequest $request , $id)
     {
         $this->organizationService->update($request , $id);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      *  volunteer subscribe to a certain organization
      */
-    public function subscribe($id)
+    public function subscribe(Request $request, $id)
     {
-        $this->organizationService->subscribe($id);
+        $this->organizationService->subscribe($id, $request->get('volunteer'));
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      *  volunteer unsubscribe to a certain organization
      */
-    public function unsubscribe($id)
+    public function unsubscribe(Request $request, $id)
     {
-        $this->organizationService->unsubscribe($id);
+        $this->organizationService->unsubscribe($id, $request->get('volunteer'));
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      * volunteer block an organization
      */
-    public function block($organization_id)
+    public function block(Request $request, $organization_id)
     {
-        $this->organizationService->block($organization_id);
+        $this->organizationService->block($organization_id, $request->get('volunteer'));
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
      * volunteer unblock an organization
      */
-    public function unblock($organization_id)
+    public function unblock(Request $request, $organization_id)
     {
-        $this->organizationService->unblock($organization_id);
+        $this->organizationService->unblock($organization_id, $request->get('volunteer'));
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**
@@ -103,6 +108,7 @@ class OrganizationAPIController extends Controller
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
         $this->organizationService->storeRecommendation($request, $id);
+        return response()->json(['message' => 'Success.'], 200);
     }
 
     /**

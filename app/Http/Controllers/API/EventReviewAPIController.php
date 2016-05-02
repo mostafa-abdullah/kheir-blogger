@@ -26,11 +26,13 @@ class EventReviewAPIController extends Controller
   public function store(EventReviewRequest $request, $id)
   {
       $this->eventReviewService->store($request,$id);
+      return response()->json(['message' => 'Success.'], 200);
   }
 
 
-  public function report($event_id, $review_id)
+  public function report(Request $request, $event_id, $review_id)
   {
-      $this->eventReviewService->report($event_id,$review_id);
+      $this->eventReviewService->report($event_id,$review_id, $request->get('volunteer'));
+      return response()->json(['message' => 'Success.'], 200);
   }
 }

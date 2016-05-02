@@ -37,7 +37,7 @@ class VolunteerService
         else
             $newLocations = [];
 
-        $volunteerLocations = Auth::user()->locations()->get()->toArray();
+        $volunteerLocations = $request->get('volunteer')->locations()->get()->toArray();
         $oldLocations = [];
         foreach($volunteerLocations as $volunteerLocation)
             array_push($oldLocations, $volunteerLocation['id']);
@@ -45,23 +45,23 @@ class VolunteerService
         foreach($oldLocations as $oldLocation)
             if(!in_array($oldLocation, $newLocations))
             {
-                $deleteLocation = Auth::user()->locations()->findOrFail($oldLocation);
+                $deleteLocation = $request->get('volunteer')->locations()->findOrFail($oldLocation);
                 $deleteLocation['pivot']->delete();
             }
 
         foreach($newLocations as $newLocation)
             if(!in_array($newLocation, $oldLocations))
-                Auth::user()->locations()->save(Location::findOrFail($newLocation));
+                $request->get('volunteer')->locations()->save(Location::findOrFail($newLocation));
 
     }
 
     /**
      * Show all new notifications for the authenticated user.
      */
-    public function showNotifications()
+    public function showNotifications($volunteer)
     {
-        $oldNotifications = Auth::user()->notifications()->read()->get();
-        $newNotifications = Auth::user()->notifications()->unread()->get();
+        $oldNotifications = $volunteer->notifications()->read()->get();
+        $newNotifications = $volunteer->notifications()->unread()->get();
         foreach($newNotifications as $notification)
         {
             $notification->pivot->read = 1;
@@ -75,7 +75,7 @@ class VolunteerService
      */
     public function unreadNotification(Request $request)
     {
-        $notification = Auth::user()->notifications()->findOrFail($request['notification_id']);
+        $notification = $request->get('volunteer')->notifications()->findOrFail($request['notification_id']);
         $notification->pivot->read = 0;
         $notification->push();
     }
@@ -90,6 +90,6 @@ class VolunteerService
             'message' => 'required',
         ]);
         $feedback = new Feedback($request->all());
-        Auth::user()->feedbacks()->save($feedback);
+        $request->get('volunteer')->feedbacks()->save($feedback);
     }
 }

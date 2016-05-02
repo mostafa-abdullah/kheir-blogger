@@ -11,13 +11,13 @@ use App\Notification;
 
 class EventPostService
 {
-    
+
     /*
     * Add a new post to the event (and notify users).
     */
     public function store(EventPostRequest $request, $event_id)
     {
-        $organization_id = auth()->guard('organization')->user()->id;
+        $organization_id = $request->get('organization')->id;
         $eventPost = new EventPost($request->all());
         $eventPost->event_id = $event_id;
         $eventPost->organization_id = $organization_id;
@@ -34,10 +34,10 @@ class EventPostService
     /**
 	 * Update the information of an edited event post.
 	 */
-	public function update(EventPostRequest $request, $id,$post_id)
+	public function update(EventPostRequest $request, $id, $post_id)
 	{
 		$event = Event::findorfail($id);
-		if(auth()->guard('organization')->user()->id == $event->organization()->id)
+		if($request->get('organization')->id == $event->organization()->id)
 		{
 			$post = EventPost::findOrFail($post_id);
 			$post->update($request->all());
