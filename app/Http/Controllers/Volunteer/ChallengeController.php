@@ -31,7 +31,7 @@ class ChallengeController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->currentYearChallenge()->first())
+        if (Auth::user()->currentYearChallenge()->first())
             return redirect('volunteer/challenge/edit');
         return view('volunteer.challenge.create');
     }
@@ -41,7 +41,9 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->challengeService->store($request);
+        $validator = $this->challengeService->store($request);
+        if ($validator->fails())
+            return redirect()->action('Volunteer\ChallengeController@create')->withErrors($validator)->withInput();
         return redirect('/');
     }
 
@@ -51,8 +53,8 @@ class ChallengeController extends Controller
     public function edit()
     {
         $challenge = Auth::user()->currentYearChallenge()->first();
-        if($challenge)
-            return view('volunteer.challenge.edit' , compact('challenge'));
+        if ($challenge)
+            return view('volunteer.challenge.edit', compact('challenge'));
         return redirect('volunteer/challenge/create');
     }
 
@@ -61,7 +63,9 @@ class ChallengeController extends Controller
      */
     public function update(Request $request)
     {
-        $this->challengeService->update($request);
+        $validator = $this->challengeService->update($request);
+        if ($validator->fails())
+            return redirect()->action('Volunteer\ChallengeController@edit')->withErrors($validator)->withInput();
         return redirect('/');
     }
 

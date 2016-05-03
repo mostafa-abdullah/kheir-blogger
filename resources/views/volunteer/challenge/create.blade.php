@@ -9,7 +9,7 @@
 
     <div class = "form-group">
         {!! Form::label('events' , 'How many events will you attend?') !!}
-        {!! Form::number('events' , '0' , ['class' => 'form-control']) !!}
+        {!! Form::number('events' , '0' , ['class' => 'form-control' , 'min' => 1]) !!}
     </div>
 
     <div>

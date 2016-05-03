@@ -28,9 +28,12 @@ class ChallengeService
         $validator = Validator::make($request->all(), [
             'events' => 'required|numeric|min:1'
         ]);
-        $challenge = new Challenge($request->all());
-        $challenge->year = Carbon::now()->year;
-        $request->get('volunteer')->challenges()->save($challenge);
+        if ($validator->passes()) {
+            $challenge = new Challenge($request->all());
+            $challenge->year = Carbon::now()->year;
+            $request->get('volunteer')->challenges()->save($challenge);
+        }
+        return $validator;
     }
 
     /**
@@ -41,13 +44,16 @@ class ChallengeService
         $validator = Validator::make($request->all(), [
             'events' => 'required|numeric|min:1'
         ]);
-
-        $challenge = $request->get('volunteer')->currentYearChallenge();
-        if($challenge)
+        if($validator->passes())
         {
-            $input['events'] = $request->get('events');
-            $challenge->update($input);
+            $challenge = $request->get('volunteer')->currentYearChallenge();
+            if($challenge)
+            {
+                $input['events'] = $request->get('events');
+                $challenge->update($input);
+            }
         }
+        return $validator;
     }
 
     /**
