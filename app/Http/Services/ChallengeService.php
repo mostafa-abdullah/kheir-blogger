@@ -31,7 +31,7 @@ class ChallengeService
         if ($validator->passes()) {
             $challenge = new Challenge($request->all());
             $challenge->year = Carbon::now()->year;
-            Auth::user()->challenges()->save($challenge);
+            $request->get('volunteer')->challenges()->save($challenge);
         }
         return $validator;
     }
