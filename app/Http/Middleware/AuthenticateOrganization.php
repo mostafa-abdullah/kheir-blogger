@@ -20,34 +20,34 @@ class AuthenticateOrganization
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-        if ($request->ajax() || $request->wantsJson())
+     public function handle($request, Closure $next, $guard = null)
+     {
+        $authenticated = true;
+        $token = $request->header('x-access-token');
+        if($token)
         {
-
-            $token = $request->header('x-access-token');
-            if(!$token)
-                return response()->json(['error' => 'No token provided.'], 401);
-
             try
             {
                 $payload = JWTAuth::decode(new Token($token));
-                if($payload['type'] != 'organization')
-                    return response()->json(['error' => 'Unauthorized.'], 401);
+                if($payload['type'] == 'organization')
+                    $request['organization'] = Organization::find($payload['sub']);
+                else
+                    $authenticated = false;
             }
             catch(TokenInvalidException $e)
             {
-                return response()->json(['error' => 'Invalid token.'], 401);
+                $authenticated = false;
             }
-            $request['organization'] = Organization::find($payload['sub']);
         }
+        else if(auth()->guard('organization')->check())
+            $request['organization'] = auth()->guard('organization')->user();
         else
-            if(!auth()->guard('organization')->check())
-                return redirect()->guest('login_organization');
-            else
-                $request['organization'] = auth()->guard('organization')->user();
+            $authenticated = false;
 
-        // Authenticated!
-        return $next($request);
-    }
+        if($authenticated)
+            return $next($request);
+        if($request->ajax() || $request->wantsJson())
+           return response()->json(['error' => 'Unauthorized.'], 401);
+        return redirect()->guest('login_organization');
+     }
 }

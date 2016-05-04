@@ -20,33 +20,34 @@ class AuthenticateVolunteer
      * @param  \Closure  $next
      * @return mixed
      */
-     public function handle($request, Closure $next)
+     public function handle($request, Closure $next, $guard = null)
      {
-         if ($request->ajax() || $request->wantsJson())
-         {
+        $authenticated = true;
+        $token = $request->header('x-access-token');
+        if($token)
+        {
+            try
+            {
+                $payload = JWTAuth::decode(new Token($token));
+                if($payload['type'] == 'volunteer' && $payload['role'])
+                    $request['volunteer'] = User::find($payload['sub']);
+                else
+                    $authenticated = false;
+            }
+            catch(TokenInvalidException $e)
+            {
+                $authenticated = false;
+            }
+        }
+        else if(Auth::user() && Auth::user()->role)
+            $request['volunteer'] = Auth::user();
+        else
+            $authenticated = false;
 
-             $token = $request->header('x-access-token');
-             if(!$token)
-                 return response()->json(['error' => 'No token provided.'], 401);
-
-             try
-             {
-                 $payload = JWTAuth::decode(new Token($token));
-                 if($payload['type'] != 'volunteer' || !$payload['role'])
-                     return response()->json(['error' => 'Unauthorized.'], 401);
-             }
-             catch(TokenInvalidException $e)
-             {
-                 return response()->json(['error' => 'Invalid token.'], 401);
-             }
-             $request['volunteer'] = User::find($payload['sub']);
-         }
-         else
-            if(!Auth::user() || !Auth::user()->role)
-                 return redirect()->guest('login');
-            else
-                $request['volunteer'] = Auth::user();
-         // Authenticated!
-         return $next($request);
+       if($authenticated)
+            return $next($request);
+       if($request->ajax() || $request->wantsJson())
+           return response()->json(['error' => 'Unauthorized.'], 401);
+       return redirect()->guest('login');
      }
 }
