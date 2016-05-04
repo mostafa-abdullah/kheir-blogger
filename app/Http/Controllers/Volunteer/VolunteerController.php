@@ -121,7 +121,7 @@ class VolunteerController extends Controller
         usort($followedAndRegisteredEvents, array($this, "cmp"));
         usort($subscribedOrganizationEvents, array($this, "cmp"));
         usort($allEvents, array($this, "cmp"));
-        return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
+        return view('volunteer.dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
     }
     /**
      * Shows the logged-in volunteer's dashboard
@@ -136,7 +136,7 @@ class VolunteerController extends Controller
         $data = array_merge($posts, $events);
         usort($data, array($this, "compare"));
         $size = count($data);
-        return view('volunteer.dashboard' , compact('size','offset','data'));
+        return view('volunteer.dashboard.show' , compact('size','offset','data'));
     }
 
     /**
