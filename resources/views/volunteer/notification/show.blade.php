@@ -39,6 +39,7 @@
             @endforeach
         </ul>
     </div>
+    {{ csrf_field() }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">
 
@@ -46,13 +47,15 @@
         $("button").click(function(){
             $(this).hide();
             var notification_id = $(this).attr("name");
+
             $.ajax({
                 type: "POST",
                 url: "notifications",
-                data: {'notification_id': notification_id},
+                data: {'notification_id': notification_id,
+                _token: $("input[name=_token]").attr("value")},
                 success: function(data) {
                        console.log(data);
-                }
+                },
             });
         });
     });
