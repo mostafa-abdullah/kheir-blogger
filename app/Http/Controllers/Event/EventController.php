@@ -137,8 +137,10 @@ class EventController extends Controller
 
 	public function register($id)
 	{
-		$this->eventService->register($id);
-		return redirect()->action('Event\EventController@show', [$id]);
+		$validator = $this->eventService->register($id);
+		if($validator->passes())
+			return redirect()->action('Event\EventController@show', [$id]);
+		return redirect()->action('Event\EventController@show', [$id])->withErrors($validator)->withInput();
 	}
 
 	public function unregister($id)
