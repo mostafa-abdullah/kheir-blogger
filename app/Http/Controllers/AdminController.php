@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Services\OrganizationService;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
@@ -13,10 +14,14 @@ use App\EventReview;
 use Carbon\Carbon;
 use Auth;
 
-class AdminController  extends Controller{
+class AdminController  extends Controller
+{
+
+    private $organizationService;
 
     public function __construct()
     {
+        $this->organizationService = new OrganizationService();
         $this->middleware('auth_admin', ['only' => ['assignValidator']]);
         $this->middleware('auth_validator');
     }
@@ -46,7 +51,7 @@ class AdminController  extends Controller{
 
     public function readdOrganization($id)
     {
-        Organization::withTrashed()->where('id', $id)->restore();
+        $this->organizationService->readd($id);
         return redirect()->action('AdminController@viewRemovedOrganizations');
     }
 

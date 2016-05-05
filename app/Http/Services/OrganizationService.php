@@ -57,6 +57,24 @@ class OrganizationService
         $organization->delete();
         $this->unindexOrganization($id);
     }
+
+    /**
+     * Re-add an organization
+     */
+    public function readd($id)
+    {
+        $eventService = new EventService();
+        Organization::withTrashed()->where('id', $id)->restore();
+        $organization = Organization::findorfail($id);
+        $events = $organization->events()->get();
+
+        foreach($events as $event)
+        {
+            $eventService->indexEvent($event);
+        }
+        $this->indexOrganization($organization);
+    }
+
     /**
      *  volunteer subscribe to a certain organization
      */
