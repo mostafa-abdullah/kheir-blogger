@@ -28,7 +28,17 @@ class CreateOrganizationReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                        SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE id = NEW.organization_id)
+                        SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE organization_id = NEW.organization_id)
+                        WHERE id = NEW.organization_id;
+                    END
+        ");
+
+        DB::unprepared("
+            CREATE TRIGGER upd_organization_reviews AFTER UPDATE ON `organization_reviews`
+                FOR EACH ROW
+                    BEGIN
+                        UPDATE organizations
+                            SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE organization_id = NEW.organization_id)
                         WHERE id = NEW.organization_id;
                     END
         ");
@@ -38,7 +48,7 @@ class CreateOrganizationReviewsTable extends Migration
                 FOR EACH ROW
                     BEGIN
                         UPDATE organizations
-                            SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE id = OLD.organization_id)
+                            SET rating = (SELECT AVG(rating) FROM organization_reviews WHERE organization_id = OLD.organization_id)
                         WHERE id = OLD.organization_id;
                     END
         ");

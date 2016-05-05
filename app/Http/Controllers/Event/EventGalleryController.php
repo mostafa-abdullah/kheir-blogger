@@ -13,6 +13,7 @@ use App\Event;
 
 use Validator;
 use File;
+use Auth;
 
 class EventGalleryController extends Controller
 {
@@ -123,7 +124,7 @@ class EventGalleryController extends Controller
     public function destroy($id, $photo_id)
     {
         $event = Event::findOrFail($id);
-        if(auth()->guard('organization')->user()->id == $event->organization()->id)
+        if((Auth::user() && Auth::user()->role >= 8) || auth()->guard('organization')->user()->id == $event->organization()->id)
         {
             $photo = Photo::findOrFail($photo_id);
             File::delete('storage/app/db/gallery/' . $event->id . '/'.$photo->name);

@@ -22,7 +22,7 @@ class EventReviewService
     public function store(EventReviewRequest $request, $id)
     {
           $review = new EventReview($request->all());
-          $review->user_id = Auth::user()->id;
+          $review->user_id = $request->get('volunteer')->id;
           $event = Event::findorfail($id);
           $event->reviews()->save($review);
     }
@@ -49,10 +49,10 @@ class EventReviewService
     /*
     * Report event review.
     */
-    public function report($event_id, $review_id)
+    public function report($event_id, $review_id, $volunteer)
     {
       $review = Event::findOrFail($event_id)->reviews()->findOrFail($review_id);
-      if(!$review->reportingUsers()->find(Auth::user()->id))
-          Auth::user()->reportedEventReviews()->attach($review);
+      if(!$review->reportingUsers()->find($volunteer->id))
+          $volunteer->reportedEventReviews()->attach($review);
     }
 }

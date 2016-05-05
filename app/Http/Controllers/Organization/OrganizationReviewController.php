@@ -106,7 +106,7 @@ class OrganizationReviewController extends Controller
 
     public function report($organization_id, $review_id)
     {
-        $this->organizationReviewService->report($organization_id,$review_id);
+        $this->organizationReviewService->report($organization_id,$review_id, Auth::user());
         return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 

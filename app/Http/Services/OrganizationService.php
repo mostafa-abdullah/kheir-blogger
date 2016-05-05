@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Services;
+use App\Http\Services\EventService;
 
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Requests\OrganizationRequest;
@@ -49,43 +50,45 @@ class OrganizationService
      */
     public function destroy($id)
     {
+        $eventService = new EventService();
         $organization = Organization::find($id);
-        $organization->delete();
 
+        $eventService->unindexOrganizationEvents($organization);
+        $organization->delete();
         $this->unindexOrganization($id);
     }
     /**
      *  volunteer subscribe to a certain organization
      */
-    public function subscribe($id)
+    public function subscribe($id, $volunteer)
     {
-        Auth::user()->subscribe($id);
+        $volunteer->subscribe($id);
     }
 
     /**
      *  volunteer unsubscribe to a certain organization
      */
-    public function unsubscribe($id)
+    public function unsubscribe($id, $volunteer)
     {
-        Auth::user()->unsubscribe($id);
+        $volunteer->unsubscribe($id);
     }
 
     /**
      * volunteer block an organization
      */
-    public function block($organization_id)
+    public function block($organization_id, $volunteer)
     {
         $organization = Organization::findOrFail($organization_id);
-        $organization->blockingVolunteers()->attach(Auth::user());
+        $organization->blockingVolunteers()->attach($volunteer);
     }
 
     /**
      * volunteer unblock an organization
      */
-    public function unblock($organization_id)
+    public function unblock($organization_id, $volunteer)
     {
         $organization = Organization::find($organization_id);
-        $organization->blockingVolunteers()->detach(Auth::user());
+        $organization->blockingVolunteers()->detach($volunteer);
     }
 
     /**
@@ -94,7 +97,7 @@ class OrganizationService
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
         $recommendation = new Recommendation($request->all());
-        $recommendation->user_id = Auth::user()->id;
+        $recommendation->user_id = $request->get('volunteer')->id;
         $organization = Organization::findOrFail($id);
         $organization->recommendations()->save($recommendation);
     }
@@ -110,7 +113,6 @@ class OrganizationService
             $recommendations = $organization->recommendations()
                 ->orderBy('created_at', 'desc')->get();
             return $recommendations;
-
         }
         return null;
     }

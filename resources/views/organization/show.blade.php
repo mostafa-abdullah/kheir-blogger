@@ -71,7 +71,9 @@
         <h4>Events</h4>
         <ul>
             @for ($i = 0; $i < 3 && $i < count($organization->events); $i++)
-                <li>{{$organization->events[$i]->name}}</li>
+                <a href="{{url('event', $organization->events[$i])}}">
+                    <li>{{$organization->events[$i]->name}}</li>
+                </a>
             @endfor
             @if(count($organization->events))
                     <a href="/organization/{{$organization->id}}/events">View All >></a>

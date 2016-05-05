@@ -85,6 +85,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::auth();
 
     /**
+     *  Volunteer Registeration Page.
+     */
+    Route::get('register',function(){
+        if(Auth::user() || auth()->guard('organization')->check())
+            return redirect('/');
+        return view('auth.register');
+    });
+
+    /**
      *  Volunteer Login Page.
      */
     Route::get('login',function(){
@@ -319,17 +328,36 @@ Route::group(['middleware' => ['web']], function () {
 |==========================================================================
 |
 | API routes are used by Android or IOS applications.
+|   - Authentication API Routes
 |   - Organization API Routes
 |   - Volunteer API Routes
 |   - Event API Routes
 */
+    /*
+    |--------------------------
+    | Authentication API Routes
+    |--------------------------
+    */
+
+    /**
+     * Volunteer Authentication
+     */
+    Route::post('api/register', 'API\AuthAPIController@register');
+    Route::post('api/login', 'API\AuthAPIController@login');
+    Route::post('api/logout', 'API\AuthAPIController@logout');
+
+    /**
+     * Organization Authentication
+     */
+    Route::post('api/register_organization', 'API\OrganizationAuthAPIController@register');
+    Route::post('api/login_organization', 'API\OrganizationAuthAPIController@login');
+    Route::post('api/logout_organization', 'API\OrganizationAuthAPIController@logout');
 
     /*
     |--------------------------
     | Organizations API Routes
     |--------------------------
     */
-
 
     /**
      *  subscriptions API routes
@@ -346,7 +374,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Review API routes.
      */
-    Route::post('api/review/organization' , 'API\OrganizationReviewAPIController@store  ');
+    Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
 
     /**

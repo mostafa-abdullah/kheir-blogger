@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Http\Middleware;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
+use Tymon\JWTAuth\Token;
+use App\Organization;
+use JWTAuth;
 use Closure;
 
 /**
@@ -16,15 +20,34 @@ class AuthenticateOrganization
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-        if (!auth()->guard('organization')->check()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest('login_organization');
+     public function handle($request, Closure $next, $guard = null)
+     {
+        $authenticated = true;
+        $token = $request->header('x-access-token');
+        if($token)
+        {
+            try
+            {
+                $payload = JWTAuth::decode(new Token($token));
+                if($payload['type'] == 'organization')
+                    $request['organization'] = Organization::find($payload['sub']);
+                else
+                    $authenticated = false;
+            }
+            catch(TokenInvalidException $e)
+            {
+                $authenticated = false;
             }
         }
-        return $next($request);
-    }
+        else if(auth()->guard('organization')->check())
+            $request['organization'] = auth()->guard('organization')->user();
+        else
+            $authenticated = false;
+
+        if($authenticated)
+            return $next($request);
+        if($request->ajax() || $request->wantsJson())
+           return response()->json(['error' => 'Unauthorized.'], 401);
+        return redirect()->guest('login_organization');
+     }
 }
