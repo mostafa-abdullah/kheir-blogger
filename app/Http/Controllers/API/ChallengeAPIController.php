@@ -31,8 +31,7 @@ class ChallengeAPIController extends Controller
      */
     public function store(Request $request)
     {
-        $this->challengeService->store($request);
-        return response()->json(['message' => 'Success.'], 200);
+        return $this->getResponse($this->challengeService->store($request));
     }
 
     /**
@@ -40,8 +39,7 @@ class ChallengeAPIController extends Controller
      */
     public function update(Request $request)
     {
-        $this->challengeService->update($request);
-        return response()->json('Success.', 200);
+        return $this->getResponse($this->challengeService->update($request));
     }
 
     /**
@@ -51,5 +49,29 @@ class ChallengeAPIController extends Controller
     {
         $events = $this->challengeService->viewCurrentYearAttendedEvents($request->get('volunteer'));
         return response()->json($events);
+    }
+
+    private function getResponse($validator){
+
+        if($validator->fails())
+            $statusCode = 400;
+        else
+            $statusCode = 200;
+
+        switch($statusCode){
+            case 200:
+                $message = 'Success';
+                break;
+            case 400:
+                $message = 'Bad request';
+                break;
+            case 403:
+                $message = 'Forbidden';
+                break;
+            default:
+                $message = 'Something wrong happened';
+        }
+
+        return response()->json( ['message' => $message] , $statusCode);
     }
 }
