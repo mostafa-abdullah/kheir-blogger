@@ -36,6 +36,21 @@ class AdminController  extends Controller{
     }
 
     /**
+     * Admin show removed organizations
+     */
+    public function viewRemovedOrganizations()
+    {
+        $organizations =  Organization::onlyTrashed()->get();
+        return view('admin.view-removed-organizations', compact('organizations'));
+    }
+
+    public function readdOrganization($id)
+    {
+        Organization::withTrashed()->where('id', $id)->restore();
+        return redirect()->action('AdminController@viewRemovedOrganizations');
+    }
+
+    /**
      * Validator can ban or unban volunteers.
      */
      public function banVolunteer($id)

@@ -306,6 +306,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organizations', 'AdminController@viewOrganizations');
 
     /**
+     * Admin view and readd deleted Organizations
+     */
+    Route::get('removed_organizations', 'AdminController@viewRemovedOrganizations');
+    Route::post('readd/{id}', 'AdminController@readdOrganization');
+
+    /**
      * Validator ban volunteer.
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');

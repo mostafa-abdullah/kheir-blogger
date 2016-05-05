@@ -47,5 +47,16 @@
             </div>
         </div>
     </div>
+    @if(Auth::user()->role >= 8)
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <form method="" action="{{url('removed_organizations')}}">
+                        <input type="submit" value="See Removed Organizations" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 @endif
 @endsection
