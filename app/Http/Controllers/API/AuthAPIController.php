@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterOrganizationRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -44,6 +45,10 @@ class AuthAPIController extends Controller
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users|unique:organizations',
             'password' => 'required|confirmed|min:6',
+            'birth_date' => 'date',
+            'phone' => 'max:255',
+            'address' => 'max:255',
+            'city' => 'max:255',
         ]);
     }
 
@@ -66,12 +71,25 @@ class AuthAPIController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $temp = [
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+            'password' => bcrypt($data['password'])];
+
+        if(isset($data['birth_date']))
+            $temp['birth_date'] = $data['birth_date'];
+
+        if(isset($data['phone']))
+            $temp['phone'] = $data['phone'];
+
+        if(isset($data['address']))
+            $temp['address'] = $data['address'];
+
+        if(isset($data['city']))
+            $temp['city'] = $data['city'];
+
+        return User::create($temp);
     }
 
     /**
