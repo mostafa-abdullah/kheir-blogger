@@ -44,7 +44,9 @@ class AuthAPIController extends Controller
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users|unique:organizations',
-            'password' => 'required|confirmed|min:6',
+            //Password confirmation is done on the device
+            'password' => 'required|min:6',
+            //TODO: Check for correct date input
             'birth_date' => 'date',
             'phone' => 'max:255',
             'address' => 'max:255',
@@ -123,7 +125,7 @@ class AuthAPIController extends Controller
         }
 
         // no errors, return the token
-        return Response::json(['token' => $token->get()]);
+        return Response::json(['token' => $token->get() , 'user_id' => $volunteer->id]);
     }
 
     /**
