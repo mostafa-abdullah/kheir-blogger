@@ -51,9 +51,9 @@ class EventService
 	}
 
 	/**
-	 * Cancel an event.
+	 * Organization cancel an event.
 	 */
-	public function destroy($id, $organization)
+	public function organization_cancel($id, $organization)
 	{
 		$event = Event::findOrFail($id);
 		if($organization->id == $event->organization()->id)
@@ -61,8 +61,38 @@ class EventService
 			$event->delete();
 			Notification::notify($event->volunteers, 3, null,
 								"Event ".($event->name)."has been cancelled", url("/"));
+			$this->unindexEvent($event->id);
 		}
-		$this->unindexEvent($event->id);
+	}
+
+	/**
+	 * Admin cancel an event.
+	 */
+	public function admin_cancel($id, $user)
+	{
+		$event = Event::findOrFail($id);
+		if($user->role >= 8)
+		{
+			$event->delete();
+			Notification::notify($event->volunteers, 3, null,
+				"Event ".($event->name)."has been cancelled", url("/"));
+			$this->unindexEvent($event->id);
+		}
+	}
+
+	/**
+	 * Delete an event permanently.
+	 */
+	public function destroy($id ,$user)
+	{
+		$event = Event::findOrFail($id);
+		if($user->role >= 8)
+		{
+			$event->forceDelete();
+			Notification::notify($event->volunteers, 3, null,
+				"Event ".($event->name)."has been cancelled", url("/"));
+			$this->unindexEvent($event->id);
+		}
 	}
 
 

@@ -268,6 +268,16 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('event/{id}/review','Event\EventReviewController');
 
     /**
+     * Event Cancelling by Organization
+     */
+    Route::delete('event/{id}/organization_cancel','Event\EventController@organization_cancel');
+
+    /**
+     * Event Cancelling by Admin
+     */
+    Route::delete('event/{id}/admin_cancel','Event\EventController@admin_cancel');
+
+    /**
      *  Event CRUD.
      */
     Route::resource('event','Event\EventController', ['except' => 'index']);
