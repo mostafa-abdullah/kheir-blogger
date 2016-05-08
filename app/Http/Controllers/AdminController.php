@@ -21,7 +21,7 @@ class AdminController  extends Controller
     public function __construct()
     {
         $this->eventService = new EventService();
-        $this->middleware('auth_admin', ['only' => ['assignValidator']]);
+        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewDeletedEvents', 'restoreEvent']]);
         $this->middleware('auth_validator');
     }
 
