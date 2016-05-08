@@ -22,7 +22,7 @@ class AdminController  extends Controller
     public function __construct()
     {
         $this->organizationService = new OrganizationService();
-        $this->middleware('auth_admin', ['only' => ['assignValidator']]);
+        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewDeletedOrganizations', 'restoreOrganization']]);
         $this->middleware('auth_validator');
     }
 
@@ -43,16 +43,16 @@ class AdminController  extends Controller
     /**
      * Admin show removed organizations
      */
-    public function viewRemovedOrganizations()
+    public function viewDeletedOrganizations()
     {
         $organizations =  Organization::onlyTrashed()->get();
         return view('admin.view-removed-organizations', compact('organizations'));
     }
 
-    public function readdOrganization($id)
+    public function restoreOrganization($id)
     {
-        $this->organizationService->readd($id);
-        return redirect()->action('AdminController@viewRemovedOrganizations');
+        $this->organizationService->restore($id);
+        return redirect()->action('AdminController@viewDeletedOrganizations');
     }
 
     /**

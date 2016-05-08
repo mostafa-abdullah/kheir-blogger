@@ -34,7 +34,7 @@
                 <td>{{$organization->cancellationRate}}</td>
                 <td>{{$organization->rate}}</td>
                 <td>
-                    <form method="POST" action="{{url('readd/'.$organization->id)}}">
+                    <form method="POST" action="{{url('restore/'.$organization->id)}}">
                         {!! csrf_field() !!}
                         <input type="submit" value="Readd Organization" class="btn btn-success">
                     </form>

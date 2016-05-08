@@ -61,7 +61,7 @@ class OrganizationService
     /**
      * Re-add an organization
      */
-    public function readd($id)
+    public function restore($id)
     {
         $eventService = new EventService();
         Organization::withTrashed()->where('id', $id)->restore();
