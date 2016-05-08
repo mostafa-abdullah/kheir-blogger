@@ -138,7 +138,7 @@ class EventController extends Controller
 	public function register($id)
 	{
 		$validator = $this->eventService->register($id, Auth::user());
-		if($validator->passes())
+		if($validator->passes() || !(Event::findorfail($id)->required_contact_info))
 			return redirect()->action('Event\EventController@show', [$id]);
 		return redirect()->action('Event\EventController@show', [$id])->withErrors($validator);
 	}

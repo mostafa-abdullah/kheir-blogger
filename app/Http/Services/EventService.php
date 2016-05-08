@@ -97,9 +97,9 @@ class EventService
 		'address' => 'required',
 		'city' => 'required'
 	  ]);
-	  if($validator->passes())
+	  $event = Event::findOrFail($id);
+	  if($validator->passes() || !($event->required_contact_info))
 	  {
-		$event = Event::findOrFail($id);
 		if ($event->timing > carbon::now())
 			Auth::user()->registerEvent($id);
 	  }
