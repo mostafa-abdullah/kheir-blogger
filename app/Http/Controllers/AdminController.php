@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
+use App\Http\Services\EventService;
 
 use App\User;
 use App\Event;
@@ -13,10 +14,13 @@ use App\EventReview;
 use Carbon\Carbon;
 use Auth;
 
-class AdminController  extends Controller{
+class AdminController  extends Controller
+{
+    private $eventService;
 
     public function __construct()
     {
+        $this->eventService = new EventService();
         $this->middleware('auth_admin', ['only' => ['assignValidator']]);
         $this->middleware('auth_validator');
     }
@@ -33,6 +37,24 @@ class AdminController  extends Controller{
             $volunteer->role = 5 ;
         $volunteer->save();
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
+    }
+
+    /**
+     * Admin view canceled events
+     */
+    public function viewDeletedEvents()
+    {
+        $events =  Event::onlyTrashed()->get();
+        return view('admin.view-deleted-events', compact('events'));
+    }
+
+    /**
+     * Admin restore canceled event
+     */
+    public function restoreEvent($id)
+    {
+        $this->eventService->restore($id, Auth::user());
+        return redirect()->action('AdminController@viewDeletedEvents');
     }
 
     /**

@@ -306,6 +306,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('organizations', 'AdminController@viewOrganizations');
 
     /**
+     * Admin view and restore deleted events
+     */
+    Route::get('deleted_events', 'AdminController@viewDeletedEvents');
+    Route::post('restore_event/{id}', 'AdminController@restoreEvent');
+
+    /**
      * Validator ban volunteer.
      */
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');

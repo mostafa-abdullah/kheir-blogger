@@ -66,6 +66,18 @@ class EventService
 		$this->unindexEvent($event->id);
 	}
 
+	/**
+	 * Restoring soft-deleted event
+	 */
+	public function restore($id, $user)
+	{
+		if($user->role >= 8)
+		{
+			Event::withTrashed()->where('id', $id)->restore();
+			$event = Event::findorfail($id);
+			$this->indexEvent($event);
+		}
+	}
 
 /*
 |==========================================================================
@@ -142,18 +154,7 @@ class EventService
 							'location'    => $event->location
 						]
 	  	];
-
-	  	try
-		{
-			$client->index($parameters);
-		}
-		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
-		{
-			echo "Error";
-			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
-			$last['response']['error'] = [];
-			dd($last);
-		}
+		$client->index($parameters);
 	}
 
 	/**
