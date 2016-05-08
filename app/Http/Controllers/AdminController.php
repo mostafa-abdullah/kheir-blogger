@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Services\OrganizationService;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
@@ -13,11 +14,15 @@ use App\EventReview;
 use Carbon\Carbon;
 use Auth;
 
-class AdminController  extends Controller{
+class AdminController  extends Controller
+{
+
+    private $organizationService;
 
     public function __construct()
     {
-        $this->middleware('auth_admin', ['only' => ['assignValidator']]);
+        $this->organizationService = new OrganizationService();
+        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewDeletedOrganizations', 'restoreOrganization']]);
         $this->middleware('auth_validator');
     }
 
@@ -33,6 +38,21 @@ class AdminController  extends Controller{
             $volunteer->role = 5 ;
         $volunteer->save();
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
+    }
+
+    /**
+     * Admin show removed organizations
+     */
+    public function viewDeletedOrganizations()
+    {
+        $organizations =  Organization::onlyTrashed()->get();
+        return view('admin.view-removed-organizations', compact('organizations'));
+    }
+
+    public function restoreOrganization($id)
+    {
+        $this->organizationService->restore($id);
+        return redirect()->action('AdminController@viewDeletedOrganizations');
     }
 
     /**

@@ -57,6 +57,24 @@ class OrganizationService
         $organization->delete();
         $this->unindexOrganization($id);
     }
+
+    /**
+     * Re-add an organization
+     */
+    public function restore($id)
+    {
+        $eventService = new EventService();
+        Organization::withTrashed()->where('id', $id)->restore();
+        $organization = Organization::findorfail($id);
+        $events = $organization->events()->get();
+
+        foreach($events as $event)
+        {
+            $eventService->indexEvent($event);
+        }
+        $this->indexOrganization($organization);
+    }
+
     /**
      *  volunteer subscribe to a certain organization
      */
@@ -137,17 +155,7 @@ class OrganizationService
                      ]
         ];
 
-        try
-        {
-            $client->index($parameters);
-        }
-        catch(Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
-        {
-            echo "Error";
-            $last = $elastic->transport->getLastConnection()->getLastRequestInfo();
-            $last['response']['error'] = [];
-            dd($last);
-        }
+        $client->index($parameters);
     }
 
     /**
