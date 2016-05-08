@@ -140,7 +140,7 @@ class EventController extends Controller
 		$validator = $this->eventService->register($id, Auth::user());
 		if($validator->passes())
 			return redirect()->action('Event\EventController@show', [$id]);
-		return redirect()->action('Event\EventController@show', [$id])->withErrors($validator)->withInput();
+		return redirect()->action('Event\EventController@show', [$id])->withErrors($validator);
 	}
 
 	public function unregister($id)
