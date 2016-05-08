@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Services\OrganizationService;
 use App\Organization;
 use Illuminate\Http\Request;
-
-use App\Http\Requests\OrganizationRequest;
 
 
 class OrganizationAPIController extends Controller
@@ -54,6 +53,7 @@ class OrganizationAPIController extends Controller
         $organization->events = $organization->events()->get();
         $organization->reviews = $organization->reviews()->with('user')->get();
         $organization->subscribers = $organization->subscribers()->get();
+        $organization->rating = round($organization->rating , 1);
         return response()->json($organization);
     }
 
