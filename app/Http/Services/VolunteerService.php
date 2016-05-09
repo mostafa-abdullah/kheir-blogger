@@ -24,7 +24,12 @@ class VolunteerService
     public function update(VolunteerRequest $request, $id)
     {
     	$volunteer = User::findorfail($id);
-        $volunteer->update($request->all());
+        $volunteer->update($request->except('birth_date'));
+        if($request->has('birth_date'))
+        {
+            $volunteer->birth_date = $request->get('birth_date');
+            $volunteer->save();
+        }
     }
 
     public function assignLocations(Request $request)
