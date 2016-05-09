@@ -45,16 +45,25 @@ class OrganizationAPIController extends Controller
 
 
     /**
-     *  show a json of an organization and all its events, reviews and subscribers
+     *  show a json of an organization and all its events, reviews count and subscribers
      */
     public function show($id)
     {
         $organization = Organization::findOrFail($id);
         $organization->events = $organization->events()->get();
-        $organization->reviews = $organization->reviews()->with('user')->get();
+        $organization->reviews = count($organization->reviews()->with('user')->get());
         $organization->subscribers = $organization->subscribers()->get();
         $organization->rating = round($organization->rating , 1);
         return response()->json($organization);
+    }
+
+    /**
+     * show a json of all reviews of an ORganization
+     */
+    public function reviews($id){
+        $organization = Organization::findOrFail($id);
+        $reviews = $organization->reviews()->with('user')->get();
+        return response()->json($reviews);
     }
 
     /**
