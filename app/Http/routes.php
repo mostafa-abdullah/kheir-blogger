@@ -467,6 +467,7 @@ Route::group(['middleware' => ['web']], function () {
      Route::post('api/event/{id}/question/{question}/answer', 'API\EventQuestionAPIController@answer');
      Route::resource('api/event/{id}/question', 'API\EventQuestionAPIController', ['only' => ['store']]);
 
+
     /**
      * Event Reviewing.
      */
