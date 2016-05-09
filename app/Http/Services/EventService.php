@@ -16,6 +16,7 @@ use Elasticsearch\ClientBuilder as elasticClientBuilder;
 
 use Carbon\Carbon;
 use Auth;
+use Validator;
 
 class EventService
 {
@@ -72,40 +73,56 @@ class EventService
 |==========================================================================
 |
 */
-    public function follow($id)
+    public function follow($id, $volunteer)
     {
-      Auth::user()->followEvent($id);
+      $volunteer->followEvent($id);
     }
 
-    public function unfollow($id)
+    public function unfollow($id, $volunteer)
     {
-      Auth::user()->unfollowEvent($id);
+      $volunteer->unfollowEvent($id);
     }
 
-    public function register($id)
+    public function register($id, $volunteer)
     {
-      $event = Event::findOrFail($id);
-      if($event->timing > carbon::now())
-        Auth::user()->registerEvent($id);
+	  $validator = Validator::make(
+	  [
+		'phone' => Auth::user()->phone,
+		'address' => Auth::user()->address,
+		'city' => Auth::user()->city
+	  ]
+	  ,
+	  [
+		'phone' => 'required',
+		'address' => 'required',
+		'city' => 'required'
+	  ]);
+	  $event = Event::findOrFail($id);
+	  if($validator->passes() || !($event->required_contact_info))
+	  {
+		if ($event->timing > carbon::now())
+			Auth::user()->registerEvent($id);
+	  }
+	  return $validator;
     }
 
-    public function unregister($id)
+    public function unregister($id, $volunteer)
     {
-      Auth::user()->unregisterEvent($id);
+      $volunteer->unregisterEvent($id);
     }
 
-    public function attend($id)
+    public function attend($id, $volunteer)
     {
       $event = Event::findOrFail($id);
       if($event->timing < carbon::now())
-        Auth::user()->attendEvent($id);
+        $volunteer->attendEvent($id);
     }
 
-    public function unattend($id)
+    public function unattend($id, $volunteer)
     {
         $event = Event::findOrFail($id);
   	    if($event->timing < carbon::now())
-  		    Auth::user()->unattendEvent($id);
+  		    $volunteer->unattendEvent($id);
     }
 
 	/**
