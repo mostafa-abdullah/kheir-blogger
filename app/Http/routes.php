@@ -377,6 +377,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Review API routes.
      */
+    //TODO : add to android app
     Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
     Route::get('api/organization/{id}/reviews','API\OrganizationAPIController@reviews');
