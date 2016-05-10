@@ -14,12 +14,20 @@ use Auth;
 
 class ChallengeController extends Controller
 {
+    private $challengeService;
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes challenge service.
+     */
     public function __construct()
     {
         $this->challengeService = new ChallengeService();
         $this->middleware('auth_volunteer');
     }
 
+    /**
+     * Show challenges of the authenticated volunteer.
+     */
     public function index()
     {
        $challenges = $this->challengeService->index(Auth::user());

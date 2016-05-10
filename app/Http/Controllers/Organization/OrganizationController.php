@@ -25,14 +25,17 @@ class OrganizationController extends Controller
 
     private $organizationService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes organization service.
+     */
     public function __construct()
     {
         $this->organizationService = new OrganizationService();
 
         $this->middleware('auth_volunteer', ['only' => [
-            'subscribe', 'unsubscribe',
-            'recommend', 'storeRecommendation',
-            'block', 'unblock'
+            'subscribe', 'unsubscribe', 'block', 'unblock',
+            'recommend', 'storeRecommendation'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
@@ -51,6 +54,7 @@ class OrganizationController extends Controller
     * 	1 => Auth is organization
     * 	2 => Auth is volunteer and subscribed to this organization
     * 	3 => Auth is volunteer and not subscribed to this organization
+    * 	@param int $id organization id
     */
     public function show($id)
     {
@@ -76,6 +80,7 @@ class OrganizationController extends Controller
 
     /**
     * Edit organization profile.
+    * @param int $id organization id
     */
     public function edit($id)
     {
@@ -89,6 +94,7 @@ class OrganizationController extends Controller
 
     /**
     * Update organization profile.
+    * @param int $id organization id
     */
     public function update(OrganizationRequest $request, $id)
     {
@@ -98,6 +104,7 @@ class OrganizationController extends Controller
 
     /**
      * A volunteer can subscribe for an organization.
+     * @param int $id organization id
      */
     public function subscribe($id)
     {
@@ -107,6 +114,7 @@ class OrganizationController extends Controller
 
     /**
      * A volunteer can unsubscribe from an organization.
+     * @param int $id organization id
      */
     public function unsubscribe($id)
     {
@@ -116,6 +124,7 @@ class OrganizationController extends Controller
 
     /**
      * Recommendation Form.
+     * @param int $id organization id.
      */
     public function recommend($id)
     {
@@ -123,7 +132,8 @@ class OrganizationController extends Controller
     }
 
     /**
-     * A volunteer can send a recommendation to an organization.
+     * Store recommendation in the databse.
+     * @param int $id organization id
      */
     public function storeRecommendation(RecommendationRequest $request , $id)
     {
@@ -133,6 +143,7 @@ class OrganizationController extends Controller
 
     /**
      * An organization can view recommendations sent to it.
+     * @param int $id organization id
      */
     public function viewRecommendations($id)
     {
@@ -160,6 +171,10 @@ class OrganizationController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Delete an organization
+     * @param int $id organization id
+     */
     public function destroy($id)
     {
         $this->organizationService->destroy($id);

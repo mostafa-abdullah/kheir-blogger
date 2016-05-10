@@ -15,7 +15,6 @@ class OrganizationReviewRequest extends Request
 
     /**
      * A volunteer can't write more than one review
-     * TODO: allow volunteer to edit his/her review
      */
     public function authorize()
     {

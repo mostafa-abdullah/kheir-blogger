@@ -72,10 +72,10 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization forget password.
      */
-    Route::get('password_organization/reset','Auth\OrganizationPasswordController@getEmail');
-    Route::post('password_organization/email','Auth\OrganizationPasswordController@sendResetLinkEmail');
-    Route::get('password_organization/reset/{token}','Auth\OrganizationPasswordController@getReset');
-    Route::post('password_organization/reset','Auth\OrganizationPasswordController@reset');
+    Route::get('password_organization/reset', 'Auth\OrganizationPasswordController@getEmail');
+    Route::post('password_organization/email', 'Auth\OrganizationPasswordController@sendResetLinkEmail');
+    Route::get('password_organization/reset/{token?}', 'Auth\OrganizationPasswordController@getReset');
+    Route::post('password_organization/reset', 'Auth\OrganizationPasswordController@reset');
 
     /**
      *  Volunteer Authentication (register/login/logout)
@@ -179,19 +179,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('feedback' , 'Volunteer\VolunteerController@createFeedback');
     Route::post('feedback' , 'Volunteer\VolunteerController@storeFeedback');
 
-    /**
-     * Volunteer view organizations he is subscribed to.
-     */
-    Route::get('dashboard/subscribed_organizations', 'Volunteer\VolunteerController@showSubscribedOrganizations');
-
-    /**
-    * Volunteer view his events.
-    */
-    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
 
     /**
      * Volunteer dashboard.
      */
+    Route::get('dashboard/subscribed_organizations', 'Volunteer\VolunteerController@showSubscribedOrganizations');
+    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
 
      /**
@@ -248,10 +241,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('event/{id}/gallery/upload','Event\EventGalleryController@add');
     Route::post('event/{id}/gallery/upload','Event\EventGalleryController@upload');
     Route::post('event/{id}/gallery','Event\EventGalleryController@store');
-    Route::delete('event/{id}/deletephoto/{photo_id}','Event\EventGalleryController@destroy');
-    Route::get('event/{id}/photo/{photo_id}/edit','Event\EventGalleryController@edit');
-    Route::patch('event/{id}/photo/{photo_id}','Event\EventGalleryController@update');
-
+    Route::get('event/{id}/gallery/{photo_id}/edit','Event\EventGalleryController@edit');
+    Route::patch('event/{id}/gallery/{photo_id}','Event\EventGalleryController@update');
+    Route::delete('event/{id}/gallery/{photo_id}','Event\EventGalleryController@destroy');
 
     /**
      * Event Reviewing.
@@ -273,7 +265,6 @@ Route::group(['middleware' => ['web']], function () {
 | These routes are related to search on organizations or events.
 */
 
-    Route::get('search', 'SearchController@searchPage');
     Route::post('search', 'SearchController@searchAll');
 
 
@@ -292,7 +283,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('volunteer/{id}/validate','AdminController@assignValidator');
 
     /**
-     * Validator view organizations.
+     * Validator view org   anizations.
      */
     Route::get('organizations', 'AdminController@viewOrganizations');
 

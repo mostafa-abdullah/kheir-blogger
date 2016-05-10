@@ -14,11 +14,10 @@ use Validator;
 
 class SearchController extends Controller
 {
-    public function searchPage()
-    {
-        return view('search.query');
-    }
 
+    /**
+     * Search for organizations or events matching the query text.
+     */
     public function searchAll(Request $request)
     {
         $searchText = $request->get('searchText');
@@ -30,7 +29,7 @@ class SearchController extends Controller
 
     /**
      *  Get a list of all events that have a substring in its name or description
-     *  equal to searched criteria
+     *  equal to searched criteria.
      */
     public function searchForEvents(Request $request)
     {
@@ -62,7 +61,7 @@ class SearchController extends Controller
 
     /**
      *  Get a list of all organizations that have a substring in its name
-     *  email, slogan, location, phone equal to searched criteria
+     *  email, slogan, location, phone equal to searched criteria.
      */
     public function searchForOrganizations(Request $request)
     {

@@ -14,12 +14,20 @@ use Auth;
 
 class ChallengeAPIController extends Controller
 {
+    private $challengeService;
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes challenge service.
+     */
     public function __construct()
     {
         $this->challengeService = new ChallengeService();
         $this->middleware('auth_volunteer');
     }
 
+    /**
+     * Get a json of all volunteer's challenges.
+     */
     public function index(Request $request)
     {
         $challenges = $this->challengeService->index($request->get('volunteer'));
