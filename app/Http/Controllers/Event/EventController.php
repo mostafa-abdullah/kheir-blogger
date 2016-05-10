@@ -32,9 +32,11 @@ class EventController extends Controller
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            'create', 'store', 'edit', 'update', 'destroy',
+            'create', 'store', 'edit', 'update', 'cancel'
         ]]);
-    }
+
+		$this->middleware('auth_admin', ['only' => ['destroy']]);
+	}
 
 /*
 |==========================================================================
@@ -109,11 +111,20 @@ class EventController extends Controller
 	}
 
 	/**
-	 * Cancel an event.
+	 * Organization cancel an event
+	 */
+	public function cancel($id)
+	{
+		$this->eventService->cancel($id);
+		return redirect('/');
+	}
+
+	/**
+	 * Admin Delete an event.
 	 */
 	public function destroy($id)
 	{
-		$this->eventService->destroy($id, auth()->guard('organization')->user());
+		$this->eventService->destroy($id);
 		return redirect('/');
 	}
 
