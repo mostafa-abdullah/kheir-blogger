@@ -15,7 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Middleware\InputCleanup::class
+        \App\Http\Middleware\InputCleanup::class,
+        \App\Http\Middleware\RefreshToken::class
     ];
 
     /**
