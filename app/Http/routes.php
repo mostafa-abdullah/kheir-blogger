@@ -380,7 +380,7 @@ Route::group(['middleware' => ['web']], function () {
     //TODO : add to android app
     Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
-    Route::get('api/organization/{id}/reviews','API\OrganizationAPIController@reviews');
+    Route::get('api/organization/{id}/reviews','API\OrganizationReviewAPIController@index');
 
     /**
      * blocking API routes
@@ -441,7 +441,6 @@ Route::group(['middleware' => ['web']], function () {
      Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
      Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
 
-
     /**
      *  Event Registeration.
      */
@@ -467,12 +466,12 @@ Route::group(['middleware' => ['web']], function () {
      Route::post('api/event/{id}/question/{question}/answer', 'API\EventQuestionAPIController@answer');
      Route::resource('api/event/{id}/question', 'API\EventQuestionAPIController', ['only' => ['store']]);
 
-
     /**
      * Event Reviewing.
      */
      Route::get('api/event/{id}/review/{r_id}/report' , 'API\EventReviewAPIController@report');
      Route::post('api/review/event' , 'API\EventReviewAPIController@store');
+     Route::get('api/event/{id}/reviews' , 'API\EventReviewAPIController@index');
 
     /**
      * Event API resource.

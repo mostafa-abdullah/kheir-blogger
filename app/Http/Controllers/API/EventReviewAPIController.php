@@ -3,13 +3,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use App\Http\Services\EventReviewService;
-
-use App\Photo;
 use App\Event;
+use App\Http\Controllers\Controller;
+use App\Http\Services\EventReviewService;
+use Illuminate\Http\Request;
 
 class EventReviewAPIController extends Controller
 {
@@ -21,6 +18,13 @@ class EventReviewAPIController extends Controller
       $this->middleware('auth_volunteer', ['only' => [
           'store', 'update', 'report'
       ]]);
+  }
+
+  public function index($id)
+  {
+      $event = Event::findOrFail($id);
+      $reviews = $event->reviews()->with('user')->get();
+      return response()->json($reviews);
   }
 
   public function store(EventReviewRequest $request, $id)

@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\ChallengeService;
-
-use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\Challenge;
-
-use Carbon\Carbon;
+use App\Http\Services\ChallengeService;
 use Auth;
+use Illuminate\Http\Request;
 
 class ChallengeAPIController extends Controller
 {
@@ -51,12 +47,14 @@ class ChallengeAPIController extends Controller
         return response()->json($events);
     }
 
-    private function getResponse($validator){
-
-        if($validator->fails())
+    private function getResponse($validator)
+    {
+        if($validator->fails()){
             $statusCode = 400;
-        else
+        }
+        else{
             $statusCode = 200;
+        }
 
         switch($statusCode){
             case 200:

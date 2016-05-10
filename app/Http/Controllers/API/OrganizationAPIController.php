@@ -58,15 +58,6 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     * show a json of all reviews of an Organization
-     */
-    public function reviews($id){
-        $organization = Organization::findOrFail($id);
-        $reviews = $organization->reviews()->with('user')->get();
-        return $reviews;
-    }
-
-    /**
      *  update organization information
      */
     public function update(OrganizationRequest $request , $id)

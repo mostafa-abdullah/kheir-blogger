@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\OrganizationReviewRequest;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\OrganizationReviewRequest;
 use App\Http\Services\OrganizationReviewService;
+use Illuminate\Http\Request;
 
 class OrganizationReviewAPIController extends Controller
 {
@@ -19,6 +18,13 @@ class OrganizationReviewAPIController extends Controller
       $this->middleware('auth_volunteer', ['only' => [
           'store', 'update', 'report'
       ]]);
+  }
+
+  public function index($id)
+  {
+    $organization = Organization::findOrFail($id);
+    $reviews = $organization->reviews()->with('user')->get();
+    return response()->json($reviews);
   }
 
   public function store(OrganizationReviewRequest $request, $id)

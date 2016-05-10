@@ -3,19 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterOrganizationRequest;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-
-use Tymon\JWTAuth\Token;
 use App\User;
+use Auth;
+use Illuminate\Http\Request;
 use JWTAuth;
 use JWTFactory;
 use Response;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Token;
 use Validator;
-use Auth;
 
 /**
  * API Authentication Controller for organizations
@@ -77,7 +74,8 @@ class AuthAPIController extends Controller
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password'])];
+            'password' => bcrypt($data['password']
+            )];
 
         if(isset($data['birth_date']))
             $temp['birth_date'] = $data['birth_date'];
