@@ -12,7 +12,7 @@
        @endif
        @if ($volunteer->address)
            <li>Address: {{ $volunteer->address }}</li>
-       @endif
+       @endifC
        @if ($volunteer->city)
            <li>City: {{ $volunteer->city }}</li>
        @endif

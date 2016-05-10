@@ -47,5 +47,14 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="" action="{{url('dashboard/subscribed_organizations')}}">
+                    <input type="submit" value="See Subscribed Organizations" class="btn btn-success">
+                </form>
+            </div>
+        </div>
+    </div>
 @endif
 @endsection
