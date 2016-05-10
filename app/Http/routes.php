@@ -134,6 +134,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization Recommendation.
      */
+
     Route::get('organization/{id}/recommend' , 'Organization\OrganizationController@recommend');
     Route::post('organization/{id}/recommend' , 'Organization\OrganizationController@storeRecommendation');
     Route::get('organization/{id}/recommendations', 'Organization\OrganizationController@viewRecommendations');
@@ -351,6 +352,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('api/login', 'API\AuthAPIController@login');
     Route::post('api/logout', 'API\AuthAPIController@logout');
 
+    //TODO : add to android app
     /**
      * Organization Authentication
      */
@@ -374,13 +376,16 @@ Route::group(['middleware' => ['web']], function () {
      * Recommendations API routes
      */
     Route::post('api/organization/{id}/recommend' , 'API\OrganizationAPIController@storeRecommendation');
+    //TODO : add to android app
     Route::get('api/organization/{id}/recommendations', 'API\OrganizationAPIController@viewRecommendations');
 
     /**
      * Organization Review API routes.
      */
+    //TODO : add to android app
     Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
+    Route::get('api/organization/{id}/reviews','API\OrganizationReviewAPIController@index');
 
     /**
      * blocking API routes
@@ -441,7 +446,6 @@ Route::group(['middleware' => ['web']], function () {
      Route::get('api/event/follow/{id}' , 'API\EventAPIController@follow');
      Route::get('api/event/unfollow/{id}' , 'API\EventAPIController@unfollow');
 
-
     /**
      *  Event Registeration.
      */
@@ -472,6 +476,7 @@ Route::group(['middleware' => ['web']], function () {
      */
      Route::get('api/event/{id}/review/{r_id}/report' , 'API\EventReviewAPIController@report');
      Route::post('api/review/event' , 'API\EventReviewAPIController@store');
+     Route::get('api/event/{id}/reviews' , 'API\EventReviewAPIController@index');
 
     /**
      * Event API resource.

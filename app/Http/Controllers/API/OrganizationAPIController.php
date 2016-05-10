@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrganizationRequest;
 use App\Http\Requests\RecommendationRequest;
 use App\Http\Services\OrganizationService;
 use App\Organization;
 use Illuminate\Http\Request;
-
-use App\Http\Requests\OrganizationRequest;
 
 
 class OrganizationAPIController extends Controller
@@ -46,14 +45,15 @@ class OrganizationAPIController extends Controller
 
 
     /**
-     *  show a json of an organization and all its events, reviews and subscribers
+     *  show a json of an organization and all its events, reviews count and subscribers
      */
     public function show($id)
     {
         $organization = Organization::findOrFail($id);
         $organization->events = $organization->events()->get();
-        $organization->reviews = $organization->reviews()->with('user')->get();
+        $organization->reviews = count($organization->reviews()->with('user')->get());
         $organization->subscribers = $organization->subscribers()->get();
+        $organization->rating = round($organization->rating , 1);
         return response()->json($organization);
     }
 

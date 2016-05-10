@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Services\EventService;
-
-use Illuminate\Http\Request;
-use App\Http\Requests\EventRequest;
-
 use App\Event;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\EventRequest;
+use App\Http\Services\EventService;
+use Illuminate\Http\Request;
 
 class EventAPIController extends Controller
 {
@@ -50,7 +48,6 @@ class EventAPIController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->posts = $event->posts()->get();
-        $event->reviews = $event->reviews()->with('user')->get();
         $event->questions = $event->questions()->with('user')->get();
         $event->photos = $event->photos()->get();
         return response()->json($event);
