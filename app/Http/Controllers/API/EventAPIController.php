@@ -106,7 +106,7 @@ class EventAPIController extends Controller
         $validator = $this->eventService->register($id, $request->get('volunteer'));
         if($validator->passes())
             return response()->json(['message' => 'Success.'], 200);
-        return response()->json(['message' => 'Registration Failed.', 'errors' => $validator->errors()], 200);
+        return response()->json(['message' => 'Registration Failed.', 'errors' => $validator->errors()], 400);
     }
 
     public function unregister(Request $request, $id)
