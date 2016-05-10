@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
       {!!Form::label('birth_date', 'Birth Date');!!}
-      {!!Form::input('date', 'birth_date', date('d-m-Y'),array('class' => 'form-control'));!!}
+      {!!Form::date('birth_date', null, array('class' => 'form-control'));!!}
     </div>
     <div class="form-group">
       {!!Form::label('address', 'Address');!!}
