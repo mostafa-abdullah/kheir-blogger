@@ -25,7 +25,8 @@ class VolunteerController extends Controller
         $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification', 'showDashboard',
-            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations'
+            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations',
+            'showSubscribedOrganizations'
         ]]);
     }
 
@@ -107,6 +108,16 @@ class VolunteerController extends Controller
     {
         $this->volunteerService->storeFeedback($request);
         return redirect('/');
+    }
+
+    /**
+     * Show all organizations i'am subscribed to
+     */
+    public function showSubscribedOrganizations()
+    {
+        $user = Auth::user();
+        $organizations = $user->subscribedOrganizations()->get();
+        return view('dashboard.subscribed-organizations', compact('organizations'));
     }
 
     /**

@@ -180,7 +180,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('feedback' , 'Volunteer\VolunteerController@storeFeedback');
 
     /**
-    * Volunteer view his/her events.
+     * Volunteer view organizations he is subscribed to.
+     */
+    Route::get('dashboard/subscribed_organizations', 'Volunteer\VolunteerController@showSubscribedOrganizations');
+
+    /**
+    * Volunteer view his events.
     */
     Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
 
