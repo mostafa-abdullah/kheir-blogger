@@ -14,20 +14,17 @@
 
            <h1>
                {{--  Cancel Event --}}
-               @if ($creator)
-                 <form action="{{ url('/event/'.$event->id.'/organization_cancel') }}" method="POST">
+               @if ($creator || (Auth::user() && Auth::user()->role >= 8))
+                 <form action="{{ url('/event/'.$event->id.'/cancel') }}" method="POST">
                       {!! csrf_field() !!}
                       {!! method_field('DELETE') !!}
                       <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Cancel</button>
                  </form>
+                 @if($creator)
                    @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
+                 @endif
                @endif
                @if(Auth::user() && Auth::user()->role >= 8)
-                       <form action="{{ url('/event/'.$event->id.'/admin_cancel') }}" method="POST">
-                           {!! csrf_field() !!}
-                           {!! method_field('DELETE') !!}
-                           <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Cancel</button>
-                       </form>
                        <form action="{{ url('/event/'.$event->id) }}" method="POST">
                            {!! csrf_field() !!}
                            {!! method_field('DELETE') !!}
