@@ -21,21 +21,29 @@ class OrganizationAuthController extends Controller
 {
     private $organizationService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes organization service.
+     */
     public function __construct()
     {
         $this->organizationService = new OrganizationService();
-
         $this->middleware('guest:organization', ['except' => 'logout']);
     }
 
+    /**
+     * Register a new organization.
+     */
     public function register(RegisterOrganizationRequest $request)
     {
         $organization = $this->organizationService->store($request);
-
         auth()->guard('organization')->login($organization);
         return redirect('/');
     }
 
+    /**
+     * Login for an organization.
+     */
     public function login()
     {
         $input = Input::all();
@@ -60,6 +68,9 @@ class OrganizationAuthController extends Controller
         return redirect('/login_organization');
     }
 
+    /**
+     * Logout for an organization.
+     */
     public function logout()
     {
         Auth::guard('organization')->logout();

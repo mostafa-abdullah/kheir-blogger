@@ -14,6 +14,10 @@ class VolunteerAPIController extends Controller
 {
     private $volunteerService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes volunteer service instance.
+     */
     public function __construct()
     {
         $this->volunteerService = new volunteerService();
@@ -24,7 +28,8 @@ class VolunteerAPIController extends Controller
     }
 
     /**
-     * Show volunteer profile.
+     * Volunteer's profile. All volunteer's reviews, subscribed organizations
+     * and followed and registered events are encapsulated within the response.
      */
     public function show($id)
     {
@@ -38,8 +43,8 @@ class VolunteerAPIController extends Controller
     }
 
     /**
-    * Update volunteer profile.
-    */
+     * Update volunteer profile.
+     */
     public function update(VolunteerRequest $request, $id)
     {
     	$this->volunteerService->update($request, $id);
@@ -47,7 +52,7 @@ class VolunteerAPIController extends Controller
     }
 
     /**
-     * Show all new notifications for the authenticated user.
+     * Show all notifications for the authenticated volunteer.
      */
     public function showNotifications(Request $request)
     {
@@ -55,7 +60,7 @@ class VolunteerAPIController extends Controller
     }
 
     /**
-     * Mark this notification as unread.
+     * Mark notification as unread.
      */
     public function unreadNotification(Request $request)
     {

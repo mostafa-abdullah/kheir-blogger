@@ -13,6 +13,9 @@ use Validator;
 class ChallengeService
 {
 
+    /**
+     * Get all challenges of the authenticated volunteer.
+     */
     public function index($volunteer)
     {
        $currentChallenge = $volunteer->currentYearChallenge()->first();

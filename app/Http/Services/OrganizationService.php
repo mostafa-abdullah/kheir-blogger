@@ -19,7 +19,7 @@ class OrganizationService
 {
 
     /**
-     * Store a new organization in the database
+     * Store a new organization in the database.
      */
     public function store(RegisterOrganizationRequest $request)
     {
@@ -35,7 +35,8 @@ class OrganizationService
     }
 
     /**
-     *  update organization information
+     *  update organization information.
+     *  @param int $id organization id
      */
     public function update(OrganizationRequest $request , $id)
     {
@@ -46,7 +47,8 @@ class OrganizationService
     }
 
     /**
-     * Delete an organization
+     * Delete an organization.
+     * @param int $id organization id
      */
     public function destroy($id)
     {
@@ -58,7 +60,8 @@ class OrganizationService
         $this->unindexOrganization($id);
     }
     /**
-     *  volunteer subscribe to a certain organization
+     * Volunteer subscribe to a certain organization.
+     * @param int $id organization id
      */
     public function subscribe($id, $volunteer)
     {
@@ -66,7 +69,8 @@ class OrganizationService
     }
 
     /**
-     *  volunteer unsubscribe to a certain organization
+     * Volunteer unsubscribe to a certain organization.
+     * @param int $id organization id
      */
     public function unsubscribe($id, $volunteer)
     {
@@ -74,7 +78,8 @@ class OrganizationService
     }
 
     /**
-     * volunteer block an organization
+     * Volunteer block an organization.
+     * @param int $id organization id
      */
     public function block($organization_id, $volunteer)
     {
@@ -83,7 +88,8 @@ class OrganizationService
     }
 
     /**
-     * volunteer unblock an organization
+     * Volunteer unblock an organization.
+     * @param int $id organization id
      */
     public function unblock($organization_id, $volunteer)
     {
@@ -92,7 +98,8 @@ class OrganizationService
     }
 
     /**
-     *  store a recommendation into the database
+     * Store a recommendation into the database
+     * @param int $id organization id
      */
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
@@ -103,7 +110,8 @@ class OrganizationService
     }
 
     /**
-     *  view all recommendations sent to the organization
+     * View all recommendations sent to the organization.
+     * @param int $id organization id
      */
     public function viewRecommendations($id)
     {
@@ -151,7 +159,8 @@ class OrganizationService
     }
 
     /**
-     * Delete organization from Elasticsearch server
+     * Delete organization from Elasticsearch server.
+     * @param int $id organization id
      */
     public function unindexOrganization($id)
     {

@@ -15,7 +15,10 @@ use Validator;
 
 class EventQuestionService
 {
-
+    /**
+     * Store new question in the database.
+     * @param  int $id event id
+     */
     public function store(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -27,6 +30,9 @@ class EventQuestionService
         Event::findOrFail($id)->questions()->save($question);
     }
 
+    /**
+     * Answer a question.
+     */
     public function answer(Request $request, $event_id, $question_id)
     {
         $validator = Validator::make($request->all(), [
@@ -49,6 +55,9 @@ class EventQuestionService
 		Notification::notify(array($question->user()->first()), 5, $event, $description, $link);
     }
 
+    /**
+     * View all unanswered questions of a given event.
+     */
     public function viewUnansweredQuestions($event_id, $organization)
     {
         $event = Event::findorfail($event_id);

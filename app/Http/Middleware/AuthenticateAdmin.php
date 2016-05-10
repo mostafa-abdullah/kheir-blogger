@@ -9,7 +9,7 @@ use JWTAuth;
 use Closure;
 use Auth;
 /**
- * Handles requests that are only allowed for admins.
+ * Authenticate admins.
  */
 class AuthenticateAdmin
 {
