@@ -62,7 +62,7 @@ class EventGalleryController extends Controller
 
                 if ($validator->passes())
                 {
-                    $filename = md5($file->getClientOriginalName(), false);
+                    $filename = str_random(40). '.' .$file->getClientOriginalExtension();
                     $upload_success = $file->move($path, $filename);
                     if ($upload_success)
                         array_push($names, $filename);
