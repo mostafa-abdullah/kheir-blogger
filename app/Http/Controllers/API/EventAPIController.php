@@ -14,6 +14,10 @@ class EventAPIController extends Controller
 {
   private $eventService;
 
+  /**
+   * Constructor.
+   * Sets middlewares for controller functions and initializes event service.
+   */
   public function __construct()
   {
       $this->eventService = new EventService();
@@ -34,7 +38,7 @@ class EventAPIController extends Controller
 |
 */
     /**
-     *  get json list of all organizations
+     *  Get json list of all events.
      */
     public function index()
     {
@@ -42,9 +46,8 @@ class EventAPIController extends Controller
         return response()->json($events);
     }
 
-
     /**
-     *  show a json of an organization and all its events, reviews and subscribers
+     *  Show a json of an event and all its posts, reviews and questions and photos.
      */
     public function show($id)
     {
@@ -103,8 +106,10 @@ class EventAPIController extends Controller
 
     public function register(Request $request, $id)
     {
-        $this->eventService->register($id, $request->get('volunteer'));
-        return response()->json(['message' => 'Success.'], 200);
+        $validator = $this->eventService->register($id, $request->get('volunteer'));
+        if($validator->passes())
+            return response()->json(['message' => 'Success.'], 200);
+        return response()->json(['message' => 'Registration Failed.', 'errors' => $validator->errors()], 400);
     }
 
     public function unregister(Request $request, $id)

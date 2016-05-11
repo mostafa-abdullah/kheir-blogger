@@ -23,6 +23,10 @@ class EventController extends Controller
 {
 	private $eventService;
 
+	/**
+	 * Constructor.
+	 * Sets middlewares for controller functions and initializes event service.
+	 */
 	public function __construct()
 	{
 		$this->eventService = new EventService();
@@ -56,6 +60,7 @@ class EventController extends Controller
 
 	/**
 	 * Show Event's page.
+	 * @param int $id event id.
 	 */
 	public function show($id)
 	{
@@ -92,6 +97,7 @@ class EventController extends Controller
 
 	/**
 	 * Edit the information of a certain event.
+	 * @param int $id event id.
 	 */
 	public function edit($id)
 	{
@@ -103,6 +109,7 @@ class EventController extends Controller
 
 	/**
 	 * Update the information of an edited event.
+	 * @param int $id event id.
 	 */
 	public function update(EventRequest $request, $id)
 	{
@@ -121,7 +128,7 @@ class EventController extends Controller
 
 	/**
 	 * Admin Delete an event.
-	 */
+	*/
 	public function destroy($id)
 	{
 		$this->eventService->destroy($id);

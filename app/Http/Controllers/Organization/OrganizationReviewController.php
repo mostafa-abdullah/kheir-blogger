@@ -15,7 +15,12 @@ use Auth;
 
 class OrganizationReviewController extends Controller
 {
-  private $organizationReviewService;
+    private $organizationReviewService;
+
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes organization review service.
+     */
     public function __construct()
     {
       $this->organizationReviewService = new OrganizationReviewService();
@@ -28,6 +33,7 @@ class OrganizationReviewController extends Controller
 
     /**
      * Show all reviews of a certain organization.
+     * @param int $id organization id
      */
     public function index($id)
     {
@@ -45,6 +51,7 @@ class OrganizationReviewController extends Controller
 
     /**
      * Create a new organization review.
+     * @param int $id organization id
      */
     public function create($id)
     {
@@ -54,6 +61,7 @@ class OrganizationReviewController extends Controller
 
     /**
      * Store the created organization review.
+     * @param int $id organization id
      */
     public function store(OrganizationReviewRequest $request, $id)
     {
@@ -89,7 +97,7 @@ class OrganizationReviewController extends Controller
     }
 
     /**
-     * Delete an organization review
+     * Delete an organization review.
      */
     public function destroy($organization_id, $review_id)
     {
@@ -104,6 +112,9 @@ class OrganizationReviewController extends Controller
         return redirect()->action('Organization\OrganizationController@show', [$organization_id]);
     }
 
+    /**
+     * Report organization review to admin.
+     */
     public function report($organization_id, $review_id)
     {
         $this->organizationReviewService->report($organization_id,$review_id, Auth::user());

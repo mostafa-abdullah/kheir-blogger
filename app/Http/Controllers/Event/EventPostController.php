@@ -18,6 +18,10 @@ class EventPostController extends Controller
 {
     private $eventPostService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes event post service.
+     */
     public function __construct()
     {
         $this->eventPostService = new EventPostService();
@@ -27,7 +31,8 @@ class EventPostController extends Controller
     }
 
     /**
-     * Show all posts of a certain event
+     * Show all posts of a certain event.
+     * @param int $id event id
      */
     public function index($id)
     {
@@ -44,7 +49,7 @@ class EventPostController extends Controller
     }
 
     /**
-     * Create a new event post
+     * Create a new event post.
      */
     public function create($event_id)
     {
@@ -64,7 +69,8 @@ class EventPostController extends Controller
     }
 
     /**
-     * Edit an event post
+     * Edit an event post.
+     * @param int $id event id
      */
     public function edit($id, $post_id)
     {
@@ -78,7 +84,8 @@ class EventPostController extends Controller
     }
 
     /**
-     * Update the edited event post
+     * Update the edited event post.
+     * @param int $id event id
      */
     public function update(EventPostRequest $request, $id, $post_id)
    	{
@@ -87,9 +94,10 @@ class EventPostController extends Controller
    	}
 
     /**
-     * Delete an event post
+     * Delete an event post.
+     * @param int $id event id
      */
-    public function destroy($id,$post_id)
+    public function destroy($id, $post_id)
     {
         $event = Event::findOrFail($id);
         $post  = EventPost::findOrFail($post_id);

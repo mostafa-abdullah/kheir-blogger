@@ -33,6 +33,7 @@ class EventPostService
 
     /**
 	 * Update the information of an edited event post.
+	 * @param int $id event id
 	 */
 	public function update(EventPostRequest $request, $id, $post_id)
 	{

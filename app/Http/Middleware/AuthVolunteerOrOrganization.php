@@ -8,6 +8,9 @@ use JWTAuth;
 use Closure;
 use Auth;
 
+/**
+ * Authenticate volunteers and organizations.
+ */
 class AuthVolunteerOrOrganization
 {
     /**

@@ -14,6 +14,10 @@ class EventQuestionController extends Controller
 {
     private $eventQuestionService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes event question service.
+     */
     public function __construct()
     {
         $this->eventQuestionService = new EventQuestionService();
@@ -26,12 +30,19 @@ class EventQuestionController extends Controller
         ]]);
     }
 
+    /**
+     * View all answered questions of a certain event.
+     * @param  int $id event id
+     */
     public function index($id)
     {
         $event = Event::findOrFail($id);
         return $event->questions()->answered()->get();
     }
 
+    /**
+     * Show a certain event question.
+     */
     public function show($event_id, $question_id)
     {
         $question = Event::findOrFail($event_id)->questions()->findOrFail($question_id);
@@ -40,11 +51,19 @@ class EventQuestionController extends Controller
         return view('event.question.show', compact('question'));
     }
 
+    /**
+     * Ask question form.
+     * @param  int $id event id
+     */
     public function create($id)
     {
         return view('event.question.create', compact('id'));
     }
 
+    /**
+     * Store asked question in the databse.
+     * @param int $id event id
+     */
     public function store(Request $request, $id)
     {
         $result = $this->eventQuestionService->store($request, $id);

@@ -37,6 +37,7 @@ class EventService
 
 	/**
 	 * Update the information of an edited event.
+	 * @param int $id event id
 	 */
 	public function update(EventRequest $request, $id)
 	{
@@ -52,7 +53,8 @@ class EventService
 	}
 
 	/**
-	 * Cancel an event
+	 * Cancel an event.
+	 * @param int $id event id
 	 */
 	public function cancel($id)
 	{
@@ -82,16 +84,25 @@ class EventService
 |==========================================================================
 |
 */
+	/**
+	 * @param int $id event id
+	 */
     public function follow($id, $volunteer)
     {
       $volunteer->followEvent($id);
     }
 
+	/**
+	 * @param int $id event id
+	 */
     public function unfollow($id, $volunteer)
     {
       $volunteer->unfollowEvent($id);
     }
 
+	/**
+	 * @param int $id event id
+	 */
     public function register($id, $volunteer)
     {
 	  $validator = Validator::make(
@@ -115,11 +126,17 @@ class EventService
 	  return $validator;
     }
 
+	/**
+	 * @param int $id event id
+	 */
     public function unregister($id, $volunteer)
     {
       $volunteer->unregisterEvent($id);
     }
 
+	/**
+	 * @param int $id event id
+	 */
     public function attend($id, $volunteer)
     {
       $event = Event::findOrFail($id);
@@ -127,6 +144,9 @@ class EventService
         $volunteer->attendEvent($id);
     }
 
+	/**
+	 * @param int $id event id
+	 */
     public function unattend($id, $volunteer)
     {
         $event = Event::findOrFail($id);

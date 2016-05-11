@@ -20,7 +20,9 @@
                       {!! method_field('DELETE') !!}
                       <button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-event">Cancel</button>
                  </form>
-                 @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
+                @endif
+                @if ($creator)
+                    @include('event.partials.button', ['buttonText' => 'Edit', 'action' => 'edit'])
                 @endif
                @if(Auth::user() && Auth::user()->role >= 8)
                    <form action="{{ url('event/'.$event->id) }}" method="POST">

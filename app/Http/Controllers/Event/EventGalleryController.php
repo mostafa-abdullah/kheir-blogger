@@ -17,6 +17,10 @@ use Auth;
 
 class EventGalleryController extends Controller
 {
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions.
+     */
     public function __construct()
 	{
         $this->middleware('auth_organization', ['only' => [
@@ -24,6 +28,10 @@ class EventGalleryController extends Controller
         ]]);
     }
 
+    /**
+     * Add photos form.
+     * @param int $id event id
+     */
     public function add($id)
     {
         $event = Event::findOrFail($id);
@@ -33,6 +41,10 @@ class EventGalleryController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Upload photos to server and add captions to photos.
+     * @param int $id event id
+     */
     public function upload(Request $request,$id)
     {
         $event = Event::findOrFail($id);
@@ -50,7 +62,7 @@ class EventGalleryController extends Controller
 
                 if ($validator->passes())
                 {
-                    $filename = md5($file->getClientOriginalName(), false);
+                    $filename = str_random(40). '.' .$file->getClientOriginalExtension();
                     $upload_success = $file->move($path, $filename);
                     if ($upload_success)
                         array_push($names, $filename);
@@ -63,6 +75,10 @@ class EventGalleryController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Store photos with their captions in the database.
+     * @param int $id event id
+     */
     public function store(Request $request, $id)
     {
         $event = Event::findOrFail($id);
@@ -85,8 +101,9 @@ class EventGalleryController extends Controller
 
     }
 
-    /*
-     *  edit or add caption to a single photo
+    /**
+     *  Edit or add caption to a single photo.
+     *  @param int $id event id
      */
     public function edit($id, $photo_id)
     {
@@ -100,8 +117,9 @@ class EventGalleryController extends Controller
         return redirect('/');
     }
 
-    /*
-     * updates the photo with the modified or new caption
+    /**
+     * Update the photo with the modified or new caption.
+     * @param int $id event id
      */
     public function update(Request $request, $id, $photo_id)
     {
@@ -118,8 +136,9 @@ class EventGalleryController extends Controller
         return redirect('/');
     }
 
-    /*
-     * delete a photo
+    /**
+     * Delete a photo from event gallery.
+     * @param int $id event id
      */
     public function destroy($id, $photo_id)
     {

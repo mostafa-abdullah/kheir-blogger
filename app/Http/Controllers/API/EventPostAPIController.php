@@ -11,6 +11,10 @@ class EventPostAPIController extends Controller
 {
     private $eventPostService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes event post service.
+     */
     public function __construct()
     {
         $this->eventPostService = new EventPostService();
@@ -19,6 +23,9 @@ class EventPostAPIController extends Controller
         ]]);
     }
 
+    /**
+     * Create a new post and store it in the database.
+     */
     public function store(EventPostRequest $request, $event_id)
     {
         $this->eventPostService($request, $event_id);
@@ -26,7 +33,7 @@ class EventPostAPIController extends Controller
     }
 
     /**
-     * Update the edited event post
+     * Update the edited event post.
      */
     public function update(EventPostRequest $request, $id, $post_id)
     {
