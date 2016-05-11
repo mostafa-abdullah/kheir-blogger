@@ -122,8 +122,12 @@ class EventController extends Controller
 	 */
 	public function cancel($id)
 	{
-		$this->eventService->cancel($id);
-		return redirect('/');
+		if(auth()->guard('organization')->user()->id == Event::findorfail($id)->organization()->id)
+		{
+			$this->eventService->cancel($id);
+			return redirect('/');
+		}
+		return redirect()->action('Event\EventController@show', [$id]);
 	}
 
 	/**
