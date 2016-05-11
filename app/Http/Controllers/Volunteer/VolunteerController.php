@@ -20,17 +20,23 @@ class VolunteerController extends Controller
 {
     private $volunteerService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes volunteer service.
+     */
     public function __construct()
     {
         $this->volunteerService = new volunteerService();
         $this->middleware('auth_volunteer', ['only' => [
             'showNotifications', 'unreadNotification', 'showDashboard',
-            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations'
+            'createFeedback', 'storeFeedback', 'edit', 'update', 'assignLocations',
+            'showSubscribedOrganizations'
         ]]);
     }
 
     /**
      * Show volunteer profile.
+     * @param int $id voluneer id
      */
     public static function show($id)
     {
@@ -41,6 +47,7 @@ class VolunteerController extends Controller
 
     /**
     * Edit volunteer profile.
+    * @param int $id voluneer id
     */
     public function edit($id)
     {
@@ -58,8 +65,9 @@ class VolunteerController extends Controller
     }
 
     /**
-    * Update volunteer profile.
-    */
+     * Update volunteer profile.
+     * @param int $id voluneer id
+     */
     public function update(VolunteerRequest $request, $id)
     {
         $this->volunteerService->update($request, $id);
@@ -67,7 +75,7 @@ class VolunteerController extends Controller
     }
 
     /**
-     * assign and unAssign volunteer locations
+     * Assign and unassign volunteer locations.
      */
     public function assignLocations(Request $request)
     {
@@ -110,7 +118,17 @@ class VolunteerController extends Controller
     }
 
     /**
-     * Show all my events
+     * Show all organizations i'am subscribed to.
+     */
+    public function showSubscribedOrganizations()
+    {
+        $user = Auth::user();
+        $organizations = $user->subscribedOrganizations()->get();
+        return view('volunteer.dashboard.subscribed-organizations', compact('organizations'));
+    }
+
+    /**
+     * Show all my events.
      */
     public function showAllEvents()
     {
@@ -121,11 +139,11 @@ class VolunteerController extends Controller
         usort($followedAndRegisteredEvents, array($this, "cmp"));
         usort($subscribedOrganizationEvents, array($this, "cmp"));
         usort($allEvents, array($this, "cmp"));
-        return view('dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
+        return view('volunteer.dashboard.events',compact('allEvents','followedAndRegisteredEvents','subscribedOrganizationEvents'));
     }
+
     /**
-     * Shows the logged-in volunteer's dashboard
-     * @return [view]           [the dashboard view]
+     * Shows the logged-in volunteer's dashboard.
      */
     public function showDashboard()
     {
@@ -136,16 +154,13 @@ class VolunteerController extends Controller
         $data = array_merge($posts, $events);
         usort($data, array($this, "compare"));
         $size = count($data);
-        return view('volunteer.dashboard' , compact('size','offset','data'));
+        return view('volunteer.dashboard.show' , compact('size','offset','data'));
     }
 
     /**
-     * Comparator used for sorting events and posts
-     * @param  [type] $record1 [first record in data array]
-     * @param  [type] $record2 [second record in data array]
-     * @return [type]          [signal]
+     * Comparator used for sorting events and posts.
      */
-    public function compare($record1, $record2)
+    private function compare($record1, $record2)
     {
          if ($record1->updated_at == $record2->updated_at)
              return 0;

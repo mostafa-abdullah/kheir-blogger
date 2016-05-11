@@ -18,6 +18,10 @@ class EventReviewController extends Controller
 {
     private $eventReviewService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes event review service.
+     */
     public function __construct()
     {
         $this->eventReviewService = new EventReviewService();
@@ -29,7 +33,7 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Show all reviews of a certain event
+     * Show all reviews of a certain event.
      */
     public function index($event_id)
     {
@@ -38,7 +42,7 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Show a certain event review
+     * Show a certain event review.
      */
     public function show($event_id, $review_id)
     {
@@ -46,7 +50,8 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Create a new event review
+     * Create a new event review.
+     * @param int $id event id
      */
     public function create($id)
     {
@@ -59,7 +64,8 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Store the created event review
+     * Store the created event review.
+     * @param int $id event id
      */
     public function store(EventReviewRequest $request, $id)
     {
@@ -68,7 +74,7 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Edit an event review
+     * Edit an event review.
      */
     public function edit($event_id, $review_id)
     {
@@ -80,7 +86,7 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Update the edited event review
+     * Update the edited event review.
      */
     public function update(Request $request, $event_id, $review_id)
     {
@@ -95,7 +101,7 @@ class EventReviewController extends Controller
     }
 
     /**
-     * Delete an event review
+     * Delete an event review.
      */
     public function destroy($event_id, $review_id)
     {
@@ -109,6 +115,9 @@ class EventReviewController extends Controller
        return redirect()->action('Event\EventController@show', [$event_id]);
     }
 
+    /**
+     * Report event review to the admin.
+     */
     public function report($event_id, $review_id)
     {
         $this->eventReviewService->report($event_id,$review_id, Auth::user());

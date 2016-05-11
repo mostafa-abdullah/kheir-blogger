@@ -13,6 +13,7 @@
 |       |- Organization Routes
 |       |- Volunteer Routes
 |       |- Event Routes
+|    - Search Routes
 |    - Control Routes
 |    - API Routes
 */
@@ -38,33 +39,30 @@ Route::group(['middleware' => ['web']], function () {
 | These routes are related to the authentication of volunteers/organizations.
 |
 */
-    /**
-     * Organization login page.
-     */
-    Route::get('login_organization',function(){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('/');
-       return view('auth.login_organization');
-    });
-
-    /**
-     * Organization login request.
-     */
-    Route::post('login_organization','Auth\OrganizationAuthController@login');
 
     /**
      * Organization register page.
      */
-    Route::get('register_organization',function(){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('/');
+    Route::get('register_organization', ['middleware' => 'guest', function(){
         return view('auth.register_organization');
-    });
+    }]);
 
     /**
      * Organization register request.
      */
     Route::post('register_organization','Auth\OrganizationAuthController@register');
+
+    /**
+     * Organization login page.
+     */
+    Route::get('login_organization', ['middleware' => 'guest', function(){
+        return view('auth.login_organization');
+    }]);
+
+    /**
+     * Organization login request.
+     */
+    Route::post('login_organization','Auth\OrganizationAuthController@login');
 
     /**
      * Organization logout request.
@@ -74,10 +72,10 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Organization forget password.
      */
-    Route::get('/password_organization/reset','Auth\OrganizationPasswordController@getEmail');
-    Route::post('/password_organization/email','Auth\OrganizationPasswordController@sendResetLinkEmail');
-    Route::get('/password_organization/reset/{token}','Auth\OrganizationPasswordController@getReset');
-    Route::post('/password_organization/reset','Auth\OrganizationPasswordController@reset');
+    Route::get('password_organization/reset', 'Auth\OrganizationPasswordController@getEmail');
+    Route::post('password_organization/email', 'Auth\OrganizationPasswordController@sendResetLinkEmail');
+    Route::get('password_organization/reset/{token?}', 'Auth\OrganizationPasswordController@getReset');
+    Route::post('password_organization/reset', 'Auth\OrganizationPasswordController@reset');
 
     /**
      *  Volunteer Authentication (register/login/logout)
@@ -87,20 +85,17 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Volunteer Registeration Page.
      */
-    Route::get('register',function(){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('/');
+    Route::get('register', ['middleware' => 'guest', function(){
         return view('auth.register');
-    });
+    }]);
 
     /**
      *  Volunteer Login Page.
      */
-    Route::get('login',function(){
-        if(Auth::user() || auth()->guard('organization')->check())
-            return redirect('/');
+    Route::get('login', ['middleware' => 'guest', function(){
         return view('auth.login');
-    });
+    }]);
+
 
 /*
 |==========================================================================
@@ -109,14 +104,6 @@ Route::group(['middleware' => ['web']], function () {
 |
 | These routes are related to the main actions of the applications
 | associated with volunteers, organizations or events.
-| For the resource, use the following functions:
-|       index   => view page for all models
-|       show    => view page for a single model
-|       create  => view page for creating a model
-|       store   => create a model with the passed request
-|       edit    => view page for updating a model
-|       update  => update a model with the passed request
-|       destroy => delete a model
 */
 
     /*
@@ -170,7 +157,7 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-     *  Challenges Routes.
+     *  Volunteer challenges.
      */
     Route::get('volunteer/challenge', 'Volunteer\ChallengeController@index');
     Route::get('volunteer/challenge/create', 'Volunteer\ChallengeController@create');
@@ -181,7 +168,7 @@ Route::group(['middleware' => ['web']], function () {
                 'Volunteer\ChallengeController@viewCurrentYearAttendedEvents');
 
     /**
-     * Notification Routes.
+     * Volunteer notifications.
      */
     Route::get('notifications', 'Volunteer\VolunteerController@showNotifications');
     Route::post('notifications', 'Volunteer\VolunteerController@unreadNotification');
@@ -192,18 +179,16 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('feedback' , 'Volunteer\VolunteerController@createFeedback');
     Route::post('feedback' , 'Volunteer\VolunteerController@storeFeedback');
 
-    /**
-    * Volunteer view his events.
-    */
-    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
 
     /**
      * Volunteer dashboard.
      */
+    Route::get('dashboard/subscribed_organizations', 'Volunteer\VolunteerController@showSubscribedOrganizations');
+    Route::get('dashboard/events','Volunteer\VolunteerController@showAllEvents');
     Route::get('dashboard', 'Volunteer\VolunteerController@showDashboard');
 
      /**
-      * volunteer assign locations
+      * Volunteer assign locations.
       */
     Route::post('locations','Volunteer\VolunteerController@assignLocations');
 
@@ -256,10 +241,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('event/{id}/gallery/upload','Event\EventGalleryController@add');
     Route::post('event/{id}/gallery/upload','Event\EventGalleryController@upload');
     Route::post('event/{id}/gallery','Event\EventGalleryController@store');
-    Route::delete('event/{id}/deletephoto/{photo_id}','Event\EventGalleryController@destroy');
-    Route::get('event/{id}/photo/{photo_id}/edit','Event\EventGalleryController@edit');
-    Route::patch('event/{id}/photo/{photo_id}','Event\EventGalleryController@update');
-
+    Route::get('event/{id}/gallery/{photo_id}/edit','Event\EventGalleryController@edit');
+    Route::patch('event/{id}/gallery/{photo_id}','Event\EventGalleryController@update');
+    Route::delete('event/{id}/gallery/{photo_id}','Event\EventGalleryController@destroy');
 
     /**
      * Event Reviewing.
@@ -278,10 +262,9 @@ Route::group(['middleware' => ['web']], function () {
 | Search Routes
 |==========================================================================
 |
-| These routes are related to search on organizations and on events
+| These routes are related to search on organizations or events.
 */
 
-    Route::get('search', 'SearchController@searchPage');
     Route::post('search', 'SearchController@searchAll');
 
 
@@ -290,8 +273,8 @@ Route::group(['middleware' => ['web']], function () {
 | Control Routes
 |==========================================================================
 |
-| These routes are related to admins and validators to control
-| the interactions on the website.
+| These routes are related to admins and validators to control the
+| interactions on the website. Admins are considered as validators.
 */
 
     /**
@@ -299,9 +282,8 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('volunteer/{id}/validate','AdminController@assignValidator');
 
-
     /**
-     * Admin view organizations.
+     * Validator view org   anizations.
      */
     Route::get('organizations', 'AdminController@viewOrganizations');
 
@@ -317,7 +299,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('volunteer/{id}/ban','AdminController@banVolunteer');
 
     /**
-     * Valiadator view event review reports
+     * Valiadator view event review reports.
      */
     Route::get('review/reports/event','AdminController@viewEventReviewReports');
 
@@ -326,6 +308,9 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::post('review/reports/event/{id}/{viewed?}','AdminController@setEventReviewReportViewed');
 
+    /**
+     * Volunteer view feedbacks.
+     */
     Route::get('feedbacks', 'AdminController@viewFeedbacks');
 
 /*
@@ -333,7 +318,7 @@ Route::group(['middleware' => ['web']], function () {
 | API Routes
 |==========================================================================
 |
-| API routes are used by Android or IOS applications.
+| API routes are used by mobile applications.
 |   - Authentication API Routes
 |   - Organization API Routes
 |   - Volunteer API Routes
@@ -366,31 +351,31 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-     *  subscriptions API routes
+     * Organization Subscription.
      */
     Route::post('api/organization/{id}/subscribe', 'API\OrganizationAPIController@subscribe');
     Route::post('api/organization/{id}/unsubscribe', 'API\OrganizationAPIController@unsubscribe');
 
     /**
-     * Recommendations API routes
+     * Organization Recommendation.
      */
     Route::post('api/organization/{id}/recommend' , 'API\OrganizationAPIController@storeRecommendation');
     Route::get('api/organization/{id}/recommendations', 'API\OrganizationAPIController@viewRecommendations');
 
     /**
-     * Organization Review API routes.
+     * Organization Reviewing.
      */
     Route::post('api/organization/{id}/review' , 'API\OrganizationReviewAPIController@store');
     Route::get('api/organization/{id}/review/{r_id}/report','API\OrganizationReviewAPIController@report');
 
     /**
-     * blocking API routes
+     * Organizaton Blocking.
      */
     Route::post('api/organization/{id}/block','API\OrganizationAPIController@block');
     Route::post('api/organization/{id}/unblock','API\OrganizationAPIController@unblock');
 
     /**
-     *  Organization API resource
+     *  Organization API CRUD.
      */
     Route::resource('api/organization','API\OrganizationAPIController', ['only' => [
         'index', 'show', 'update',
@@ -404,7 +389,7 @@ Route::group(['middleware' => ['web']], function () {
     */
 
     /**
-     *  Challenges Routes.
+     *  Volunteer challenges.
      */
     Route::get('api/volunteer/challenge', 'API\ChallengeAPIController@index');
     Route::post('api/volunteer/challenge', 'API\ChallengeAPIController@store');
@@ -413,18 +398,18 @@ Route::group(['middleware' => ['web']], function () {
                 'API\ChallengeAPIController@viewCurrentYearAttendedEvents');
 
     /**
-     * Notification Routes.
+     * Volunteer notifications.
      */
      Route::get('api/notifications', 'API\VolunteerAPIController@showNotifications');
      Route::post('api/notifications', 'API\VolunteerAPIController@unreadNotification');
 
-    /**
-     * Feedback to Admin route
-     */
+     /**
+      * Send feedback to the admin.
+      */
     Route::post('api/feedback' , 'API\VolunteerAPIController@storeFeedback');
 
     /**
-    * Volunteer API resource.
+    * Volunteer API CRUD.
     */
     Route::resource('api/volunteer','API\VolunteerAPIController', ['only' => [
         'show', 'update',
@@ -475,7 +460,7 @@ Route::group(['middleware' => ['web']], function () {
      Route::post('api/review/event' , 'API\EventReviewAPIController@store');
 
     /**
-     * Event API resource.
+     * Event API CRUD.
      */
      Route::resource('api/event','API\EventAPIController');
 });

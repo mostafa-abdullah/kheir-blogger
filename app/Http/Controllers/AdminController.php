@@ -18,6 +18,10 @@ class AdminController  extends Controller
 {
     private $eventService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions.
+     */
     public function __construct()
     {
         $this->eventService = new EventService();
@@ -26,7 +30,8 @@ class AdminController  extends Controller
     }
 
     /**
-     * Admin can assign or unAssign validators.
+     * Admin can assign or unassign validators.
+     * @param int $id volunteer id
      */
     public function assignValidator($id)
     {
@@ -59,6 +64,7 @@ class AdminController  extends Controller
 
     /**
      * Validator can ban or unban volunteers.
+     * @param int $id volunteer id
      */
      public function banVolunteer($id)
      {
@@ -118,7 +124,8 @@ class AdminController  extends Controller
       }
 
       /**
-       * validator mark report to be viewed
+       * validator mark report to be viewed/unviewed.
+       * @param int $id event review id
        */
       public function setEventReviewReportViewed($id, $viewed)
       {
@@ -131,6 +138,9 @@ class AdminController  extends Controller
           return redirect()->action('AdminController@viewEventReviewReports');
       }
 
+      /**
+       * Validator view feedbacks.
+       */
       public function viewFeedbacks()
       {
           $feedbacks = Feedback::latest()->get();

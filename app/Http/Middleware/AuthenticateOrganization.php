@@ -9,7 +9,7 @@ use JWTAuth;
 use Closure;
 
 /**
- * Handles requests that are only allowed for volunteers
+ * Authenticate organizations.
  */
 class AuthenticateOrganization
 {

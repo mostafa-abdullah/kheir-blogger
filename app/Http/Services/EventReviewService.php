@@ -18,6 +18,7 @@ class EventReviewService
 
     /*
     * Store Event Review.
+    * @param int $id event id
     */
     public function store(EventReviewRequest $request, $id)
     {
@@ -29,6 +30,7 @@ class EventReviewService
 
     /**
      * Update Event Review.
+     * @param int $id event review
      */
     public function update(Request $request, $id)
     {
@@ -47,7 +49,7 @@ class EventReviewService
     }
 
     /*
-    * Report event review.
+    * Report event review to admin.
     */
     public function report($event_id, $review_id, $volunteer)
     {

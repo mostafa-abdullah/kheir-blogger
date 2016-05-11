@@ -15,6 +15,7 @@ class OrganizationReviewService
 {
   /**
    * Store the created organization review.
+   * @param int $id organization id
    */
   public function store(OrganizationReviewRequest $request, $id)
   {
@@ -26,6 +27,7 @@ class OrganizationReviewService
 
   /**
    * Update Organization Review.
+   * @param int id organization review id
    */
   public function update(Request $request, $id)
   {
@@ -43,6 +45,9 @@ class OrganizationReviewService
       return $validator;
   }
 
+  /**
+   * Report organization review to admin.
+   */
   public function report($organization_id, $review_id, $volunteer)
   {
       $review = Organization::findOrFail($organization_id)->reviews()->findOrFail($review_id);

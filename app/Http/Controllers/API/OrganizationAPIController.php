@@ -16,27 +16,26 @@ class OrganizationAPIController extends Controller
 
     private $organizationService;
 
+    /**
+     * Constructor.
+     * Sets middlewares for controller functions and initializes organization service.
+     */
     public function __construct()
     {
         $this->organizationService = new OrganizationService();
 
         $this->middleware('auth_volunteer', ['only' => [
-            'subscribe', 'unsubscribe',
-            'recommend', 'storeRecommendation',
-            'block', 'unblock'
+            'subscribe', 'unsubscribe', 'block', 'unblock',
+            'recommend', 'storeRecommendation'
         ]]);
 
         $this->middleware('auth_organization', ['only' => [
-            'edit', 'update', 'viewRecommendations'
-        ]]);
-
-        $this->middleware('auth_admin', ['only' => [
-            'destroy',
+            'update', 'viewRecommendations'
         ]]);
     }
 
     /**
-     *  get json list of all organizations
+     *  Get json list of all organizations.
      */
     public function index()
     {
@@ -46,7 +45,8 @@ class OrganizationAPIController extends Controller
 
 
     /**
-     *  show a json of an organization and all its events, reviews and subscribers
+     *  Show a json of an organization and all its events, reviews and subscribers.
+     *  @param int $id organization id
      */
     public function show($id)
     {
@@ -58,7 +58,8 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     *  update organization information
+     *  Update organization information.
+     *  @param int $id organization id
      */
     public function update(OrganizationRequest $request , $id)
     {
@@ -67,7 +68,8 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     *  volunteer subscribe to a certain organization
+     *  Volunteer subscribe to a certain organization.
+     *  @param int $id organization id
      */
     public function subscribe(Request $request, $id)
     {
@@ -76,7 +78,8 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     *  volunteer unsubscribe to a certain organization
+     *  Volunteer unsubscribe from a certain organization.
+     *  @param int $id organization id
      */
     public function unsubscribe(Request $request, $id)
     {
@@ -85,7 +88,7 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     * volunteer block an organization
+     * Volunteer block an organization.
      */
     public function block(Request $request, $organization_id)
     {
@@ -94,7 +97,7 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     * volunteer unblock an organization
+     * Volunteer unblock an organization.
      */
     public function unblock(Request $request, $organization_id)
     {
@@ -103,7 +106,7 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     *  store a recommendation into the database
+     * Store a recommendation into the database.
      */
     public function storeRecommendation(RecommendationRequest $request, $id)
     {
@@ -112,7 +115,8 @@ class OrganizationAPIController extends Controller
     }
 
     /**
-     *  view all recommendations sent to the organization
+     * View all recommendations sent to the organization.
+     *  @param int $id organization id
      */
     public function viewRecommendations($id)
     {

@@ -20,6 +20,7 @@ class VolunteerService
 {
     /**
     * Update volunteer profile.
+    * @param int $id volunteer id
     */
     public function update(VolunteerRequest $request, $id)
     {
@@ -27,6 +28,9 @@ class VolunteerService
         $volunteer->update($request->all());
     }
 
+    /**
+     * Update locations where volunteer can contribute.
+     */
     public function assignLocations(Request $request)
     {
 
