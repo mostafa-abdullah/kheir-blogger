@@ -27,8 +27,10 @@ class EventAPIController extends Controller
       ]]);
 
       $this->middleware('auth_organization', ['only' => [
-    	   'store', 'update', 'destroy',
+    	   'store', 'update', 'cancel'
       ]]);
+
+      $this->middleware('auth_admin', ['only' => ['destroy']]);
   }
 
 /*
@@ -77,14 +79,27 @@ class EventAPIController extends Controller
         return response()->json(['message' => 'Success.'], 200);
   	}
 
-  	/**
-  	 * Cancel an event.
-  	 */
-  	public function destroy(Request $request, $id)
-  	{
-  		  $this->eventService->destroy($id, $request->get('organization'));
-        return response()->json(['message' => 'Success.'], 200);
-  	}
+    /**
+     * Organization cancel an event
+     * @param int $id event id.
+     */
+    public function cancel($id)
+    {
+        $success = $this->eventService->cancel($id, auth()->guard('organization')->user());
+        if($success)
+            return response()->json(['message' => 'Success.'], 200);
+        return response()->json(['message' => 'You are not authorized to cancel this event.'], 400);
+    }
+
+    /**
+     * Admin Delete an event.
+     * @param int $id event id.
+     */
+    public function destroy($id)
+    {
+         $this->eventService->destroy($id);
+         return response()->json(['message' => 'Success.'], 200);
+    }
 
 /*
 |==========================================================================

@@ -56,15 +56,30 @@ class EventService
 	 * Cancel an event.
 	 * @param int $id event id
 	 */
-	public function destroy($id, $organization)
+	public function cancel($id, $organization)
 	{
 		$event = Event::findOrFail($id);
-		if($organization->id == $event->organization()->id)
+		if($event->organization()->id == $organization->id)
 		{
 			$event->delete();
 			Notification::notify($event->volunteers, 3, null,
-								"Event ".($event->name)."has been cancelled", url("/"));
+				"Event " . ($event->name) . "has been cancelled", url("/"));
+			$this->unindexEvent($event->id);
+			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Delete an event.
+	 * @param int $id event id
+	 */
+	public function destroy($id)
+	{
+		$event = Event::findOrFail($id);
+		$event->forceDelete();
+		Notification::notify($event->volunteers, 3, null,
+			"Event ".($event->name)."has been cancelled", url("/"));
 		$this->unindexEvent($event->id);
 	}
 
@@ -112,7 +127,7 @@ class EventService
 	  if($validator->passes() || !($event->required_contact_info))
 	  {
 		if ($event->timing > carbon::now())
-			Auth::user()->registerEvent($id);
+			$volunteer->registerEvent($id);
 	  }
 	  return $validator;
     }
@@ -162,18 +177,7 @@ class EventService
 							'location'    => $event->location
 						]
 	  	];
-
-	  	try
-		{
-			$client->index($parameters);
-		}
-		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
-		{
-			echo "Error";
-			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
-			$last['response']['error'] = [];
-			dd($last);
-		}
+		$client->index($parameters);
 	}
 
 	/**
