@@ -127,7 +127,7 @@ class EventService
 	  if($validator->passes() || !($event->required_contact_info))
 	  {
 		if ($event->timing > carbon::now())
-			Auth::user()->registerEvent($id);
+			$volunteer->registerEvent($id);
 	  }
 	  return $validator;
     }
@@ -177,18 +177,7 @@ class EventService
 							'location'    => $event->location
 						]
 	  	];
-
-	  	try
-		{
-			$client->index($parameters);
-		}
-		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
-		{
-			echo "Error";
-			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
-			$last['response']['error'] = [];
-			dd($last);
-		}
+		$client->index($parameters);
 	}
 
 	/**
