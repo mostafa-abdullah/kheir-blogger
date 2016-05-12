@@ -56,17 +56,23 @@ class EventService
 	 * Cancel an event.
 	 * @param int $id event id
 	 */
-	public function cancel($id)
+	public function cancel($id, $organization)
 	{
 		$event = Event::findOrFail($id);
-		$event->delete();
-		Notification::notify($event->volunteers, 3, null,
-			"Event ".($event->name)."has been cancelled", url("/"));
-		$this->unindexEvent($event->id);
+		if($event->organization()->id == $organization->id)
+		{
+			$event->delete();
+			Notification::notify($event->volunteers, 3, null,
+				"Event " . ($event->name) . "has been cancelled", url("/"));
+			$this->unindexEvent($event->id);
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Delete an event.
+	 * @param int $id event id
 	 */
 	public function destroy($id)
 	{

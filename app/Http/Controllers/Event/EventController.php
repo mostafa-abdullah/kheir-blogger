@@ -39,7 +39,7 @@ class EventController extends Controller
             'create', 'store', 'edit', 'update', 'cancel'
         ]]);
 
-		$this->middleware('auth_admin', ['only' => ['destroy']]);
+	    $this->middleware('auth_admin', ['only' => ['destroy']]);
 	}
 
 /*
@@ -119,20 +119,18 @@ class EventController extends Controller
 
 	/**
 	 * Organization cancel an event
+	 * @param int $id event id.
 	 */
 	public function cancel($id)
 	{
-		if(auth()->guard('organization')->user()->id == Event::findorfail($id)->organization()->id)
-		{
-			$this->eventService->cancel($id);
-			return redirect('/');
-		}
-		return redirect()->action('Event\EventController@show', [$id]);
+		$this->eventService->cancel($id, auth()->guard('organization')->user());
+		return redirect('/');
 	}
 
 	/**
 	 * Admin Delete an event.
-	*/
+	 * @param int $id event id.
+	 */
 	public function destroy($id)
 	{
 		$this->eventService->destroy($id);
