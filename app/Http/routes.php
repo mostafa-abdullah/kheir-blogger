@@ -254,6 +254,7 @@ Route::group(['middleware' => ['web']], function () {
     /**
      *  Event CRUD.
      */
+    Route::delete('event/{id}/cancel', 'Event\EventController@cancel');
     Route::resource('event','Event\EventController', ['except' => 'index']);
 
 
@@ -462,5 +463,6 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Event API CRUD.
      */
+     Route::delete('api/event/{id}/cancel', 'API\EventAPIController@cancel');
      Route::resource('api/event','API\EventAPIController');
 });
