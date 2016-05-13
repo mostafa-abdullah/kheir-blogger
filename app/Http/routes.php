@@ -291,8 +291,8 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Admin view and restore deleted events
      */
-    Route::get('deleted_events', 'AdminController@viewDeletedEvents');
-    Route::post('restore_event/{id}', 'AdminController@restoreEvent');
+    Route::get('admin/canceled_events', 'AdminController@viewCanceledEvents');
+    Route::get('event/{id}/restore', 'AdminController@restoreEvent');
 
     /**
      * Validator ban volunteer.

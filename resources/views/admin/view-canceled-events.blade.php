@@ -30,7 +30,7 @@
                 @if($event->needed_membership)  <td>YES</td>    @else <td>NO</td>   @endif
                 <td>{{$event->rating}}</td>
                 <td>
-                    <form method="POST" action="{{url('restore_event/'.$event->id)}}">
+                    <form method="GET" action="{{url('event/'.$event->id.'/restore')}}">
                         {!! csrf_field() !!}
                         <input type="submit" value="Restore Event" class="btn btn-success">
                     </form>

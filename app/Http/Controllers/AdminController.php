@@ -25,7 +25,7 @@ class AdminController  extends Controller
     public function __construct()
     {
         $this->eventService = new EventService();
-        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewDeletedEvents', 'restoreEvent']]);
+        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewCanceledEvents', 'restoreEvent']]);
         $this->middleware('auth_validator');
     }
 
@@ -47,19 +47,20 @@ class AdminController  extends Controller
     /**
      * Admin view canceled events
      */
-    public function viewDeletedEvents()
+    public function viewCanceledEvents()
     {
         $events =  Event::onlyTrashed()->get();
-        return view('admin.view-deleted-events', compact('events'));
+        return view('admin.view-canceled-events', compact('events'));
     }
 
     /**
      * Admin restore canceled event
+     * @param int $id event id
      */
     public function restoreEvent($id)
     {
-        $this->eventService->restore($id, Auth::user());
-        return redirect()->action('AdminController@viewDeletedEvents');
+        $this->eventService->restore($id);
+        return redirect()->action('AdminController@viewCanceledEvents');
     }
 
     /**

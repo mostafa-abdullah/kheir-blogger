@@ -84,16 +84,14 @@ class EventService
 	}
 
 	/**
-	 * Restoring soft-deleted event
+	 * Restoring canceled event
+	* @param int $id event id
 	 */
-	public function restore($id, $user)
+	public function restore($id)
 	{
-		if($user->role >= 8)
-		{
-			Event::withTrashed()->where('id', $id)->restore();
-			$event = Event::findorfail($id);
-			$this->indexEvent($event);
-		}
+		Event::withTrashed()->where('id', $id)->restore();
+		$event = Event::findorfail($id);
+		$this->indexEvent($event);
 	}
 
 /*
