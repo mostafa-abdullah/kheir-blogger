@@ -127,16 +127,6 @@ class EventController extends Controller
 		return redirect('/');
 	}
 
-	/**
-	 * Admin Delete an event.
-	 * @param int $id event id.
-	 */
-	public function destroy($id)
-	{
-		$this->eventService->destroy($id);
-		return redirect('/');
-	}
-
 /*
 |==========================================================================
 | Volunteers' Interaction with Event

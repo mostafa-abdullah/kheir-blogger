@@ -25,7 +25,12 @@ class AdminController  extends Controller
     public function __construct()
     {
         $this->eventService = new EventService();
-        $this->middleware('auth_admin', ['only' => ['assignValidator', 'viewCanceledEvents', 'restoreEvent']]);
+
+        $this->middleware('auth_admin', ['only' => [
+            'assignValidator', 'viewCanceledEvents', 'restoreEvent',
+            'destroy'
+        ]]);
+
         $this->middleware('auth_validator');
     }
 
@@ -44,6 +49,16 @@ class AdminController  extends Controller
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
     }
 
+    /**
+     * Admin Delete an event.
+     * @param int $id event id.
+     */
+    public function destroy($id)
+    {
+        $this->eventService->destroy($id);
+        return redirect('/');
+    }
+    
     /**
      * Admin view canceled events
      */

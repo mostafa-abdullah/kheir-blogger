@@ -255,16 +255,16 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::delete('event/{id}/cancel', 'Event\EventController@cancel');
-    Route::resource('event','Event\EventController', ['except' => 'index']);
+    Route::resource('event','Event\EventController', ['except' => ['index', 'destroy'] ]);
+    Route::resource('event','AdminController', ['only' => 'destroy']);
 
-
-/*
-|==========================================================================
-| Search Routes
-|==========================================================================
-|
-| These routes are related to search on organizations or events.
-*/
+    /*
+    |==========================================================================
+    | Search Routes
+    |==========================================================================
+    |
+    | These routes are related to search on organizations or events.
+    */
 
     Route::post('search', 'SearchController@searchAll');
 
