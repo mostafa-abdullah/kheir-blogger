@@ -187,7 +187,18 @@ class EventService
 							'location'    => $event->location
 						]
 	  	];
-		$client->index($parameters);
+		
+		try
+ 		{
+					$client->index($parameters);
+		}
+ 		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
+ 		{
+			echo "Error";
+ 			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+ 			$last['response']['error'] = [];
+ 			dd($last);
+ 		}
 	}
 
 	/**
