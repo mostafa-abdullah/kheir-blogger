@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Organization;
 use Illuminate\Http\Request;
 use App\Http\Requests\VolunteerRequest;
+use App\Http\Services\EventService;
 
 use App\User;
 use App\Event;
@@ -13,7 +14,9 @@ use App\EventReview;
 use Carbon\Carbon;
 use Auth;
 
-class AdminController  extends Controller{
+class AdminController  extends Controller
+{
+    private $eventService;
 
     /**
      * Constructor.
@@ -21,7 +24,13 @@ class AdminController  extends Controller{
      */
     public function __construct()
     {
-        $this->middleware('auth_admin', ['only' => ['assignValidator']]);
+        $this->eventService = new EventService();
+
+        $this->middleware('auth_admin', ['only' => [
+            'assignValidator', 'viewCanceledEvents', 'restoreEvent',
+            'destroy'
+        ]]);
+
         $this->middleware('auth_validator');
     }
 
@@ -38,6 +47,35 @@ class AdminController  extends Controller{
             $volunteer->role = 5 ;
         $volunteer->save();
         return redirect()->action('Volunteer\VolunteerController@show', [$id]);
+    }
+
+    /**
+     * Admin Delete an event.
+     * @param int $id event id.
+     */
+    public function destroy($id)
+    {
+        $this->eventService->destroy($id);
+        return redirect('/');
+    }
+    
+    /**
+     * Admin view canceled events
+     */
+    public function viewCanceledEvents()
+    {
+        $events =  Event::onlyTrashed()->get();
+        return view('admin.view-canceled-events', compact('events'));
+    }
+
+    /**
+     * Admin restore canceled event
+     * @param int $id event id
+     */
+    public function restoreEvent($id)
+    {
+        $this->eventService->restore($id);
+        return redirect()->action('AdminController@viewCanceledEvents');
     }
 
     /**

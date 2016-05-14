@@ -83,6 +83,16 @@ class EventService
 		$this->unindexEvent($event->id);
 	}
 
+	/**
+	 * Restoring canceled event
+	* @param int $id event id
+	 */
+	public function restore($id)
+	{
+		Event::withTrashed()->where('id', $id)->restore();
+		$event = Event::findorfail($id);
+		$this->indexEvent($event);
+	}
 
 /*
 |==========================================================================
@@ -177,7 +187,18 @@ class EventService
 							'location'    => $event->location
 						]
 	  	];
-		$client->index($parameters);
+		
+		try
+ 		{
+					$client->index($parameters);
+		}
+ 		catch (Elasticsearch\Common\Exceptions\Curl\CouldNotConnectToHost $e)
+ 		{
+			echo "Error";
+ 			$last = $elastic->transport->getLastConnection()->getLastRequestInfo();
+ 			$last['response']['error'] = [];
+ 			dd($last);
+ 		}
 	}
 
 	/**

@@ -255,16 +255,16 @@ Route::group(['middleware' => ['web']], function () {
      *  Event CRUD.
      */
     Route::delete('event/{id}/cancel', 'Event\EventController@cancel');
-    Route::resource('event','Event\EventController', ['except' => 'index']);
+    Route::resource('event','Event\EventController', ['except' => ['index', 'destroy'] ]);
+    Route::resource('event','AdminController', ['only' => 'destroy']);
 
-
-/*
-|==========================================================================
-| Search Routes
-|==========================================================================
-|
-| These routes are related to search on organizations or events.
-*/
+    /*
+    |==========================================================================
+    | Search Routes
+    |==========================================================================
+    |
+    | These routes are related to search on organizations or events.
+    */
 
     Route::post('search', 'SearchController@searchAll');
 
@@ -287,6 +287,12 @@ Route::group(['middleware' => ['web']], function () {
      * Validator view org   anizations.
      */
     Route::get('organizations', 'AdminController@viewOrganizations');
+
+    /**
+     * Admin view and restore deleted events
+     */
+    Route::get('admin/canceled_events', 'AdminController@viewCanceledEvents');
+    Route::get('event/{id}/restore', 'AdminController@restoreEvent');
 
     /**
      * Validator ban volunteer.

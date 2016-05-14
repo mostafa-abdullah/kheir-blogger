@@ -47,6 +47,15 @@
             </div>
         </div>
     </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <form method="" action="{{url('admin/canceled_events')}}">
+                        <input type="submit" value="See Canceled Events" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
